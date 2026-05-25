@@ -87,6 +87,7 @@ const PACKAGES = [
       'Voliteľné ubytovanie hostí',
       'Voliteľná doprava hostí',
       'Vlastné RSVP otázky na mieru',
+      'Personalizované QR kódy pre hostí (už čoskoro)',
       'Bohatšia personalizácia a max 3 fotografie',
       'Galéria po svadbe',
     ],
