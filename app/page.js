@@ -13,51 +13,51 @@ const sans = Montserrat({
 
 const BENEFITS = [
   {
-    title: 'Vsetko dolezite v jednom QR kode',
+    title: 'Všetko dôležité v jednom QR kóde',
     description:
-      'Hostia naskenuju QR kod na pozvanke a okamzite sa dostanu ku klucovym informaciam - od harmonogramu po prakticke detaily.',
+      'Hostia naskenujú QR kód na pozvánke a okamžite sa dostanú ku kľúčovým informáciám - od harmonogramu po praktické detaily.',
   },
   {
-    title: 'Dokonaly vizualny sulad',
+    title: 'Dokonalý vizuálny súlad',
     description:
-      'Pozvanka, svadobny web a dalsie vystupy mozu posobit ako jeden premysleny celok s jednotnym stylom.',
+      'Pozvánka, svadobný web a ďalšie výstupy môžu pôsobiť ako jeden premyslený celok s jednotným štýlom.',
   },
   {
     title: 'Menej chaosu okolo RSVP',
     description:
-      'Odpovede hosti vidite prehladne na jednom mieste bez telefonatov, tabuliek a nejasnosti.',
+      'Odpovede hostí vidíte prehľadne na jednom mieste bez telefonátov, tabuliek a nejasností.',
   },
   {
-    title: 'Flexibilne riesenie bez stresu',
+    title: 'Flexibilné riešenie bez stresu',
     description:
-      'Ak sa nieco zmeni, informacie na webe upravite rychlo. Komunikacia ostava aktualna a cista.',
+      'Ak sa niečo zmení, informácie na webe upravíte rýchlo. Komunikácia ostáva aktuálna a čistá.',
   },
 ]
 
 const TEMPLATES = [
   {
     name: 'Editorial',
-    tone: 'Cisty kontrast, sofistikovana typografia, moderny luxus',
+    tone: 'Čistý kontrast, sofistikovaná typografia, moderný luxus',
     preview: 'linear-gradient(145deg, #f8f4eb 0%, #e9decd 100%)',
   },
   {
     name: 'Romantic',
-    tone: 'Jemny rytmus, vzdusnost a tepla intimna atmosfera',
+    tone: 'Jemný rytmus, vzdušnosť a teplá intímna atmosféra',
     preview: 'linear-gradient(145deg, #fbf2ec 0%, #ecddd2 100%)',
   },
   {
     name: 'Minimal',
-    tone: 'Striedmy poriadok, nadcasove proporcie, tichy luxus',
+    tone: 'Striedmy poriadok, nadčasové proporcie, tichý luxus',
     preview: 'linear-gradient(145deg, #f8f8f6 0%, #ecebe8 100%)',
   },
   {
     name: 'Chateau',
-    tone: 'Noblesa, ceremonialna elegancia a old money nalada',
+    tone: 'Noblesa, ceremoniálna elegancia a old money nálada',
     preview: 'linear-gradient(145deg, #f7f0e5 0%, #dfd1bb 100%)',
   },
   {
-    name: 'Provenzal',
-    tone: 'Prirodne textury, svetlo a romanticky rustikalny feeling',
+    name: 'Provenzál',
+    tone: 'Prírodné textúry, svetlo a romantický rustikálny feeling',
     preview: 'linear-gradient(145deg, #f4f0e9 0%, #ded5c8 100%)',
   },
 ]
@@ -65,43 +65,43 @@ const TEMPLATES = [
 const PACKAGES = [
   {
     name: 'Essential',
-    label: 'Elegantny digitalny zaklad',
+    label: 'Elegantný digitálny základ',
     description:
-      'Pre pary, ktore chcu krasny a funkcny svadobny web s praktickym RSVP zakladom.',
+      'Pre páry, ktoré chcú krásny a funkčný svadobný web s praktickým RSVP základom.',
     items: [
-      'RSVP s menami hosti, poctom dospelych a deti',
-      'Menu moznosti: masove, vegetarianske, veganske, detske',
+      'RSVP s menami hostí, počtom dospelých a detí',
+      'Menu možnosti: mäsové, vegetariánske, vegánske, detské',
       'Alergie a stravovacie obmedzenia',
-      'Svadobny web s klucovymi informaciami',
-      'Zdielany QR kod na web',
+      'Svadobný web s kľúčovými informáciami',
+      'Zdieľaný QR kód na web',
     ],
     featured: false,
   },
   {
     name: 'Signature',
-    label: 'Najoblubenejsia volba',
+    label: 'Najobľúbenejšia voľba',
     description:
-      'Pre pary, ktore okrem dizajnu chcu rozsirene RSVP moznosti a viac personalizacie.',
+      'Pre páry, ktoré okrem dizajnu chcú rozšírené RSVP možnosti a viac personalizácie.',
     items: [
-      'Vsetko z balika Essential',
-      'Volitelne ubytovanie hosti',
-      'Volitelna doprava hosti',
-      'Vlastne RSVP otazky na mieru',
-      'Bohatsia personalizacia a max 3 fotografie',
-      'Galeria po svadbe',
+      'Všetko z balíka Essential',
+      'Voliteľné ubytovanie hostí',
+      'Voliteľná doprava hostí',
+      'Vlastné RSVP otázky na mieru',
+      'Bohatšia personalizácia a max 3 fotografie',
+      'Galéria po svadbe',
     ],
     featured: true,
   },
   {
     name: 'Atelier',
-    label: 'Kompletne riesenie na mieru',
+    label: 'Kompletné riešenie na mieru',
     description:
-      'Bespoke varianta pre vynimocne svadby s plnou tvorbou na mieru.',
+      'Bespoke varianta pre výnimočné svadby s plnou tvorbou na mieru.',
     items: [
-      'Vsetko z balika Signature',
-      'Bespoke plna personalizacia webu',
-      'Unikatne guest QR pre hosti alebo skupiny',
-      'Individualne navrhnuty obsah a flow',
+      'Všetko z balíka Signature',
+      'Bespoke plná personalizácia webu',
+      'Unikátne guest QR pre hostí alebo skupiny',
+      'Individuálne navrhnutý obsah a flow',
     ],
     featured: false,
   },
@@ -126,7 +126,7 @@ function Nav() {
     <header style={navStyle}>
       <nav style={navInnerStyle}>
         <Link href="#portfolio" style={navLinkStyle}>
-          Sablony
+          Šablóny
         </Link>
         <Link href="#cennik" style={navLinkStyle}>
           Ponuka
@@ -135,7 +135,7 @@ function Nav() {
           Kontakty
         </Link>
         <Link href="/login" style={navLinkStyle}>
-          Klientska zona
+          Klientska zóna
         </Link>
       </nav>
     </header>
@@ -153,7 +153,7 @@ function Hero() {
           <p style={heroSubBrandStyle}>STUDIO</p>
         </div>
 
-        <p style={heroEyebrowStyle}>Digitalne svadobne riesenia na mieru v zladenom style</p>
+        <p style={heroEyebrowStyle}>Digitálne svadobné riešenia na mieru v zladenom štýle</p>
 
         <h1 className={serif.className} style={heroHeadingStyle}>
           Viac radosti zo svadby,
@@ -164,17 +164,17 @@ function Hero() {
         <div style={heroDividerStyle} />
 
         <p style={heroLeadStyle}>
-          Elegantny digitalny priestor pre vas svadobny web, hosti a organizaciu.
-          Prepojte svadobne pozvanky s vyhodami moderneho svadobneho webu.
-          Vdaka jednemu QR kodu budu mat hostia vsetko dolezite vzdy po ruke.
+          Elegantný digitálny priestor pre váš svadobný web, hostí a organizáciu.
+          Prepojte svadobné pozvánky s výhodami moderného svadobného webu.
+          Vďaka jednému QR kódu budú mať hostia všetko dôležité vždy po ruke.
         </p>
 
         <div style={heroActionsStyle}>
           <Link href="#portfolio" style={heroPrimaryButtonStyle}>
-            Pozriet sablony
+            Pozrieť šablóny
           </Link>
           <Link href="#cennik" style={heroSecondaryButtonStyle}>
-            Porovnat baliky
+            Porovnať balíky
           </Link>
         </div>
       </div>
@@ -186,13 +186,13 @@ function Benefits() {
   return (
     <section style={sectionStyle}>
       <div style={sectionHeadingBlockStyle}>
-        <p style={sectionLabelStyle}>Preco spojit pozvanku a svadobny web</p>
+        <p style={sectionLabelStyle}>Prečo spojiť pozvánku a svadobný web</p>
         <h2 className={serif.className} style={sectionHeadingStyle}>
-          Premysleny system pre par aj hosti
+          Premyslený systém pre pár aj hostí
         </h2>
         <p style={sectionIntroStyle}>
-          Nekupujete len pekny dizajn. Ziskavate pokojnu organizaciu, jasnu
-          komunikaciu a jednotny vysledok, ktory posobi kvalitne od prveho dojmu.
+          Nekupujete len pekný dizajn. Získavate pokojnú organizáciu, jasnú
+          komunikáciu a jednotný výsledok, ktorý pôsobí kvalitne od prvého dojmu.
         </p>
       </div>
 
@@ -217,8 +217,8 @@ function Templates() {
         Templates / Design families
       </h2>
       <p style={sectionIntroStyle}>
-        Namiesto klasickeho portfolia si vyberte dizajnovu rodinu, ktoru doladime
-        na vas pribeh, atmosferu a styl komunikacie.
+        Namiesto klasického portfólia si vyberte dizajnovú rodinu, ktorú doladíme
+        na váš príbeh, atmosféru a štýl komunikácie.
       </p>
 
       <div style={templatesGridStyle}>
@@ -241,11 +241,11 @@ function Pricing() {
     <section id="cennik" style={pricingSectionStyle}>
       <div style={pricingInnerStyle}>
         <h2 className={serif.className} style={sectionHeadingStyle}>
-          Ponuka sluzieb
+          Ponuka služieb
         </h2>
         <p style={sectionIntroStyle}>
-          Vyberte si uroven digitalneho svadobneho riesenia podla toho, ci chcete
-          elegantny zaklad alebo plne personalizovany system.
+          Vyberte si úroveň digitálneho svadobného riešenia podľa toho, či chcete
+          elegantný základ alebo plne personalizovaný systém.
         </p>
 
         <div style={pricingGridStyle}>
@@ -270,7 +270,7 @@ function Pricing() {
                 ))}
               </ul>
               <Link href="/login" style={priceButtonStyle}>
-                Klientska zona
+                Klientska zóna
               </Link>
             </article>
           ))}
@@ -287,25 +287,25 @@ function Contact() {
         Kontakty
       </h2>
       <p style={sectionIntroStyle}>
-        Ak mate otazky alebo chcete potvrdit detaily pred spustenim, ozvite sa nam.
+        Ak máte otázky alebo chcete potvrdiť detaily pred spustením, ozvite sa nám.
       </p>
       <div style={contactGridStyle}>
         <article style={contactCardStyle}>
           <p style={sectionLabelStyle}>E-mail</p>
           <h3 className={serif.className} style={contactTitleStyle}>
-            Napis nam
+            Napíš nám
           </h3>
           <a href="mailto:info.yesdaystudio@gmail.com" style={contactLinkStyle}>
             info.yesdaystudio@gmail.com
           </a>
         </article>
         <article style={contactCardStyle}>
-          <p style={sectionLabelStyle}>Klientska zona</p>
+          <p style={sectionLabelStyle}>Klientska zóna</p>
           <h3 className={serif.className} style={contactTitleStyle}>
             Vstup pre klientov
           </h3>
           <Link href="/login" style={contactLinkStyle}>
-            Otvorit /login
+            Otvoriť /login
           </Link>
         </article>
       </div>
