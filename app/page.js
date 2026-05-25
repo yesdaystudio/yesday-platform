@@ -1,127 +1,143 @@
 import Link from 'next/link'
+import { Montserrat, Playfair_Display } from 'next/font/google'
 
-export const metadata = {
-  title: 'YesDay Studio — Svadobné weby s charakterom',
-  description:
-    'Elegantný digitálny priestor pre váš svadobný web, hostí a organizáciu. Prepojte svadobné pozvánky s výhodami moderného svadobného webu.',
-}
+const serif = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+})
 
-const FEATURES = [
+const sans = Montserrat({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600'],
+})
+
+const BENEFITS = [
   {
-    title: 'Svadobný web',
+    title: 'Vsetko dolezite v jednom QR kode',
     description:
-      'Elegantná stránka s príbehom páru, programom dňa a všetkými informáciami pre hostí na jednom mieste.',
+      'Hostia naskenuju QR kod na pozvanke a okamzite sa dostanu ku klucovym informaciam - od harmonogramu po prakticke detaily.',
   },
   {
-    title: 'RSVP',
+    title: 'Dokonaly vizualny sulad',
     description:
-      'Digitálne potvrdenia účasti s prehľadom odpovedí v reálnom čase. Žiadne telefonovanie, žiadny chaos.',
+      'Pozvanka, svadobny web a dalsie vystupy mozu posobit ako jeden premysleny celok s jednotnym stylom.',
   },
   {
-    title: 'Správa hostí',
+    title: 'Menej chaosu okolo RSVP',
     description:
-      'Prehľad všetkých hostí, ich potvrdení, jedálneho výberu a špeciálnych požiadaviek na jednom mieste.',
+      'Odpovede hosti vidite prehladne na jednom mieste bez telefonatov, tabuliek a nejasnosti.',
   },
   {
-    title: 'QR kód',
+    title: 'Flexibilne riesenie bez stresu',
     description:
-      'Jeden QR kód na svadobné oznámenie otvorí hosťom kompletný svadobný web. Moderné, jednoduché, elegantné.',
+      'Ak sa nieco zmeni, informacie na webe upravite rychlo. Komunikacia ostava aktualna a cista.',
+  },
+]
+
+const TEMPLATES = [
+  {
+    name: 'Editorial',
+    tone: 'Cisty kontrast, sofistikovana typografia, moderny luxus',
+    preview: 'linear-gradient(145deg, #f8f4eb 0%, #e9decd 100%)',
   },
   {
-    title: 'Klientska zóna',
-    description:
-      'Súkromný portál pre editáciu webu, sledovanie RSVP a správu hostí kedykoľvek a kdekoľvek.',
+    name: 'Romantic',
+    tone: 'Jemny rytmus, vzdusnost a tepla intimna atmosfera',
+    preview: 'linear-gradient(145deg, #fbf2ec 0%, #ecddd2 100%)',
   },
   {
-    title: 'Ubytovanie',
-    badge: 'Signature+',
-    description:
-      'Správa ubytovacích kapacít a priradenie izieb priamo v klientskej zóne bez ďalšej réžie.',
+    name: 'Minimal',
+    tone: 'Striedmy poriadok, nadcasove proporcie, tichy luxus',
+    preview: 'linear-gradient(145deg, #f8f8f6 0%, #ecebe8 100%)',
   },
   {
-    title: 'Galéria po svadbe',
-    badge: 'Signature+',
-    description:
-      'Zdieľajte svadobné fotografie s hosťami v privátnej galérii priamo na vašom svadobnom webe.',
+    name: 'Chateau',
+    tone: 'Noblesa, ceremonialna elegancia a old money nalada',
+    preview: 'linear-gradient(145deg, #f7f0e5 0%, #dfd1bb 100%)',
+  },
+  {
+    name: 'Provenzal',
+    tone: 'Prirodne textury, svetlo a romanticky rustikalny feeling',
+    preview: 'linear-gradient(145deg, #f4f0e9 0%, #ded5c8 100%)',
   },
 ]
 
 const PACKAGES = [
   {
     name: 'Essential',
-    description: 'Elegantný základ pre každú svadbu.',
+    label: 'Elegantny digitalny zaklad',
+    description:
+      'Pre pary, ktore chcu krasny a funkcny svadobny web s praktickym RSVP zakladom.',
     items: [
-      'Svadobný web',
-      'RSVP',
-      'Zdieľaný QR kód',
-      'Kurátorovaná personalizácia',
-      'Max 1 fotografia',
+      'RSVP s menami hosti, poctom dospelych a deti',
+      'Menu moznosti: masove, vegetarianske, veganske, detske',
+      'Alergie a stravovacie obmedzenia',
+      'Svadobny web s klucovymi informaciami',
+      'Zdielany QR kod na web',
     ],
-    highlight: false,
+    featured: false,
   },
   {
     name: 'Signature',
-    description: 'Plný zážitok pre náročných párov.',
+    label: 'Najoblubenejsia volba',
+    description:
+      'Pre pary, ktore okrem dizajnu chcu rozsirene RSVP moznosti a viac personalizacie.',
     items: [
-      'Všetko z Essential',
-      'Bohatšia personalizácia',
-      'Max 3 fotografie',
-      'Voliteľné ubytovanie hostí',
-      'Vlastné RSVP otázky',
-      'Galéria po svadbe',
-      'Voliteľný unikátny QR',
+      'Vsetko z balika Essential',
+      'Volitelne ubytovanie hosti',
+      'Volitelna doprava hosti',
+      'Vlastne RSVP otazky na mieru',
+      'Bohatsia personalizacia a max 3 fotografie',
+      'Galeria po svadbe',
     ],
-    highlight: true,
+    featured: true,
   },
   {
     name: 'Atelier',
-    description: 'Riešenie na mieru pre výnimočné svadby.',
+    label: 'Kompletne riesenie na mieru',
+    description:
+      'Bespoke varianta pre vynimocne svadby s plnou tvorbou na mieru.',
     items: [
-      'Riešenie na mieru',
-      'Plná personalizácia',
-      'Unikátne QR pre každého hosťa',
-      'Premium guest logistics',
+      'Vsetko z balika Signature',
+      'Bespoke plna personalizacia webu',
+      'Unikatne guest QR pre hosti alebo skupiny',
+      'Individualne navrhnuty obsah a flow',
     ],
-    highlight: false,
+    featured: false,
   },
-]
-
-const TEMPLATES = [
-  { name: 'Editorial', tone: 'Čistý, kontrastný, moderný' },
-  { name: 'Romantic', tone: 'Jemný, vzdušný, srdečný' },
-  { name: 'Minimal', tone: 'Strohý, presný, nadčasový' },
-  { name: 'Provençal', tone: 'Teplý, rustikálny, organický' },
-  { name: 'Modern', tone: 'Dynamický, odvážny, výrazný' },
 ]
 
 export default function HomePage() {
   return (
-    <div style={rootStyle}>
+    <main className={sans.className} style={pageStyle}>
       <Nav />
       <Hero />
-      <Features />
-      <Pricing />
+      <Benefits />
       <Templates />
-      <CtaSection />
+      <Pricing />
+      <Contact />
       <Footer />
-    </div>
+    </main>
   )
 }
 
 function Nav() {
   return (
     <header style={navStyle}>
-      <div style={navInnerStyle}>
-        <Link href="/" style={logoStyle}>
-          YesDay Studio
+      <nav style={navInnerStyle}>
+        <Link href="#portfolio" style={navLinkStyle}>
+          Sablony
         </Link>
-        <nav style={navLinksStyle}>
-          <Link href="#sablony" style={navLinkStyle}>Šablóny</Link>
-          <Link href="#ponuka" style={navLinkStyle}>Ponuka</Link>
-          <Link href="#kontakt" style={navLinkStyle}>Kontakt</Link>
-          <Link href="/login" style={navCTAStyle}>Klientska zóna</Link>
-        </nav>
-      </div>
+        <Link href="#cennik" style={navLinkStyle}>
+          Ponuka
+        </Link>
+        <Link href="#kontakt" style={navLinkStyle}>
+          Kontakty
+        </Link>
+        <Link href="/login" style={navLinkStyle}>
+          Klientska zona
+        </Link>
+      </nav>
     </header>
   )
 }
@@ -130,91 +146,65 @@ function Hero() {
   return (
     <section style={heroStyle}>
       <div style={heroInnerStyle}>
-        <p style={heroEyebrowStyle}>Svadobné weby s charakterom</p>
-        <h1 style={heroHeadlineStyle}>
-          Viac radosti zo svadby,<br />menej chaosu.
+        <div style={heroBrandStyle}>
+          <p className={serif.className} style={heroLogoStyle}>
+            YES DAY
+          </p>
+          <p style={heroSubBrandStyle}>STUDIO</p>
+        </div>
+
+        <p style={heroEyebrowStyle}>Digitalne svadobne riesenia na mieru v zladenom style</p>
+
+        <h1 className={serif.className} style={heroHeadingStyle}>
+          Viac radosti zo svadby,
+          <br />
+          menej chaosu.
         </h1>
-        <p style={heroSubStyle}>
-          Elegantný digitálny priestor pre váš svadobný web, hostí a organizáciu.
+
+        <div style={heroDividerStyle} />
+
+        <p style={heroLeadStyle}>
+          Elegantny digitalny priestor pre vas svadobny web, hosti a organizaciu.
+          Prepojte svadobne pozvanky s vyhodami moderneho svadobneho webu.
+          Vdaka jednemu QR kodu budu mat hostia vsetko dolezite vzdy po ruke.
         </p>
-        <p style={heroBodyStyle}>
-          Prepojte svadobné pozvánky s výhodami moderného svadobného webu.
-          Vďaka jednému QR kódu budú mať vaši hostia všetky dôležité informácie
-          vždy po ruke — a vy získate viac prehľadu, menej stresu
-          a harmonický priebeh príprav.
-        </p>
+
         <div style={heroActionsStyle}>
-          <Link href="#sablony" style={primaryButtonStyle}>Pozrieť šablóny</Link>
-          <Link href="#ponuka" style={secondaryButtonStyle}>Porovnať balíky</Link>
+          <Link href="#portfolio" style={heroPrimaryButtonStyle}>
+            Pozriet sablony
+          </Link>
+          <Link href="#cennik" style={heroSecondaryButtonStyle}>
+            Porovnat baliky
+          </Link>
         </div>
       </div>
-      <div style={heroDividerStyle} />
     </section>
   )
 }
 
-function Features() {
+function Benefits() {
   return (
     <section style={sectionStyle}>
-      <div style={sectionInnerStyle}>
-        <SectionLabel>Čo získate</SectionLabel>
-        <h2 style={sectionHeadingStyle}>Všetko, čo vaša svadba potrebuje.</h2>
-        <div style={featuresGridStyle}>
-          {FEATURES.map((f) => (
-            <div key={f.title} style={featureCardStyle}>
-              <div style={featureCardTopStyle}>
-                <span style={featureTitleStyle}>{f.title}</span>
-                {f.badge ? <span style={badgeStyle}>{f.badge}</span> : null}
-              </div>
-              <p style={featureDescStyle}>{f.description}</p>
-            </div>
-          ))}
-        </div>
+      <div style={sectionHeadingBlockStyle}>
+        <p style={sectionLabelStyle}>Preco spojit pozvanku a svadobny web</p>
+        <h2 className={serif.className} style={sectionHeadingStyle}>
+          Premysleny system pre par aj hosti
+        </h2>
+        <p style={sectionIntroStyle}>
+          Nekupujete len pekny dizajn. Ziskavate pokojnu organizaciu, jasnu
+          komunikaciu a jednotny vysledok, ktory posobi kvalitne od prveho dojmu.
+        </p>
       </div>
-    </section>
-  )
-}
 
-function Pricing() {
-  return (
-    <section id="ponuka" style={{ ...sectionStyle, background: '#f0e9e0' }}>
-      <div style={sectionInnerStyle}>
-        <SectionLabel>Cenové balíky</SectionLabel>
-        <h2 style={sectionHeadingStyle}>Zvoľte, čo vám sedí.</h2>
-        <div style={pricingGridStyle}>
-          {PACKAGES.map((pkg) => (
-            <div
-              key={pkg.name}
-              style={{
-                ...pricingCardStyle,
-                ...(pkg.highlight ? pricingCardHighlightStyle : {}),
-              }}
-            >
-              {pkg.highlight ? (
-                <p style={pricingPopularStyle}>Najobľúbenejší</p>
-              ) : null}
-              <h3 style={pricingNameStyle}>{pkg.name}</h3>
-              <p style={pricingDescStyle}>{pkg.description}</p>
-              <ul style={pricingListStyle}>
-                {pkg.items.map((item) => (
-                  <li key={item} style={pricingItemStyle}>
-                    <span style={pricingCheckStyle}>—</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                href="#kontakt"
-                style={{
-                  ...pricingCTAStyle,
-                  ...(pkg.highlight ? pricingCTAHighlightStyle : {}),
-                }}
-              >
-                Mám záujem
-              </Link>
-            </div>
-          ))}
-        </div>
+      <div style={benefitsGridStyle}>
+        {BENEFITS.map((benefit) => (
+          <article key={benefit.title} style={benefitCardStyle}>
+            <h3 className={serif.className} style={benefitTitleStyle}>
+              {benefit.title}
+            </h3>
+            <p style={benefitDescriptionStyle}>{benefit.description}</p>
+          </article>
+        ))}
       </div>
     </section>
   )
@@ -222,24 +212,67 @@ function Pricing() {
 
 function Templates() {
   return (
-    <section id="sablony" style={sectionStyle}>
-      <div style={sectionInnerStyle}>
-        <SectionLabel>Šablóny</SectionLabel>
-        <h2 style={sectionHeadingStyle}>Váš deň, váš štýl.</h2>
-        <p style={sectionLeadStyle}>
-          Každá šablóna je navrhnutá s dôrazom na detail, čitateľnosť
-          a vizuálnu harmóniu. Vyberáte tón, my zabezpečíme dokonalé
-          spracovanie.
+    <section id="portfolio" style={sectionStyle}>
+      <h2 className={serif.className} style={sectionHeadingStyle}>
+        Templates / Design families
+      </h2>
+      <p style={sectionIntroStyle}>
+        Namiesto klasickeho portfolia si vyberte dizajnovu rodinu, ktoru doladime
+        na vas pribeh, atmosferu a styl komunikacie.
+      </p>
+
+      <div style={templatesGridStyle}>
+        {TEMPLATES.map((template) => (
+          <article key={template.name} style={templateCardStyle}>
+            <div style={{ ...templatePreviewStyle, background: template.preview }} />
+            <h3 className={serif.className} style={templateNameStyle}>
+              {template.name}
+            </h3>
+            <p style={templateToneStyle}>{template.tone}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+function Pricing() {
+  return (
+    <section id="cennik" style={pricingSectionStyle}>
+      <div style={pricingInnerStyle}>
+        <h2 className={serif.className} style={sectionHeadingStyle}>
+          Ponuka sluzieb
+        </h2>
+        <p style={sectionIntroStyle}>
+          Vyberte si uroven digitalneho svadobneho riesenia podla toho, ci chcete
+          elegantny zaklad alebo plne personalizovany system.
         </p>
-        <div style={templatesGridStyle}>
-          {TEMPLATES.map((t) => (
-            <div key={t.name} style={templateCardStyle}>
-              <div style={templatePreviewStyle} />
-              <div style={templateInfoStyle}>
-                <span style={templateNameStyle}>{t.name}</span>
-                <span style={templateToneStyle}>{t.tone}</span>
-              </div>
-            </div>
+
+        <div style={pricingGridStyle}>
+          {PACKAGES.map((pkg) => (
+            <article
+              key={pkg.name}
+              style={{
+                ...priceCardStyle,
+                ...(pkg.featured ? priceCardFeaturedStyle : {}),
+              }}
+            >
+              <p style={priceLabelStyle}>{pkg.label}</p>
+              <h3 className={serif.className} style={priceNameStyle}>
+                {pkg.name}
+              </h3>
+              <p style={priceIntroStyle}>{pkg.description}</p>
+              <ul style={priceListStyle}>
+                {pkg.items.map((item) => (
+                  <li key={item} style={priceListItemStyle}>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <Link href="/login" style={priceButtonStyle}>
+                Klientska zona
+              </Link>
+            </article>
           ))}
         </div>
       </div>
@@ -247,21 +280,34 @@ function Templates() {
   )
 }
 
-function CtaSection() {
+function Contact() {
   return (
-    <section id="kontakt" style={ctaSectionStyle}>
-      <div style={ctaInnerStyle}>
-        <p style={heroEyebrowStyle}>Začnite ešte dnes</p>
-        <h2 style={ctaHeadlineStyle}>
-          Váš svadobný web je len jedno rozhodnutie ďaleko.
-        </h2>
-        <p style={ctaBodyStyle}>
-          Napíšte nám a spoločne navrhneme digitálny priestor,
-          ktorý odráža váš deň presne tak, ako si ho predstavujete.
-        </p>
-        <a href="mailto:hello@yesdaystudio.com" style={primaryButtonStyle}>
-          Napísať nám
-        </a>
+    <section id="kontakt" style={sectionStyle}>
+      <h2 className={serif.className} style={sectionHeadingStyle}>
+        Kontakty
+      </h2>
+      <p style={sectionIntroStyle}>
+        Ak mate otazky alebo chcete potvrdit detaily pred spustenim, ozvite sa nam.
+      </p>
+      <div style={contactGridStyle}>
+        <article style={contactCardStyle}>
+          <p style={sectionLabelStyle}>E-mail</p>
+          <h3 className={serif.className} style={contactTitleStyle}>
+            Napis nam
+          </h3>
+          <a href="mailto:info.yesdaystudio@gmail.com" style={contactLinkStyle}>
+            info.yesdaystudio@gmail.com
+          </a>
+        </article>
+        <article style={contactCardStyle}>
+          <p style={sectionLabelStyle}>Klientska zona</p>
+          <h3 className={serif.className} style={contactTitleStyle}>
+            Vstup pre klientov
+          </h3>
+          <Link href="/login" style={contactLinkStyle}>
+            Otvorit /login
+          </Link>
+        </article>
       </div>
     </section>
   )
@@ -270,457 +316,374 @@ function CtaSection() {
 function Footer() {
   return (
     <footer style={footerStyle}>
-      <div style={footerInnerStyle}>
-        <span style={footerLogoStyle}>YesDay Studio</span>
-        <p style={footerTextStyle}>
-          &copy; {new Date().getFullYear()} YesDay Studio. Všetky práva vyhradené.
-        </p>
-        <Link href="/login" style={footerLinkStyle}>Klientska zóna</Link>
-      </div>
+      <a href="https://www.instagram.com/yesdaystudio/" target="_blank" rel="noreferrer" style={footerLinkStyle}>
+        @yesdaystudio
+      </a>
+      <p style={footerTextStyle}>&copy; {new Date().getFullYear()} YesDay Studio</p>
     </footer>
   )
 }
 
-function SectionLabel({ children }) {
-  return <p style={sectionLabelStyle}>{children}</p>
-}
+const COLOR_CREAM = '#f4f1ea'
+const COLOR_GOLD = '#d4af37'
+const COLOR_DARK = '#1a1a1a'
+const COLOR_WHITE = '#ffffff'
+const COLOR_GREY = '#666'
+const COLOR_BORDER = '#e9e9e9'
 
-// — Styles —
-
-const FONT_SERIF = "Georgia, 'Times New Roman', serif"
-const FONT_SANS = "system-ui, -apple-system, sans-serif"
-const COLOR_INK = '#2c2118'
-const COLOR_INK_SOFT = '#5c4a38'
-const COLOR_ACCENT = '#8a6f54'
-const COLOR_ACCENT_LIGHT = '#b89880'
-const COLOR_BG = '#faf6f0'
-const COLOR_BORDER = 'rgba(138,111,84,0.16)'
-
-const rootStyle = {
-  background: COLOR_BG,
-  color: COLOR_INK,
-  fontFamily: FONT_SANS,
-  minHeight: '100vh',
+const pageStyle = {
+  margin: 0,
+  backgroundColor: COLOR_CREAM,
+  color: COLOR_DARK,
+  lineHeight: 1.6,
 }
 
 const navStyle = {
+  background: 'rgba(255, 255, 255, 0.96)',
+  padding: '18px 20px',
   position: 'sticky',
   top: 0,
-  zIndex: 100,
-  background: 'rgba(250,246,240,0.92)',
-  backdropFilter: 'blur(12px)',
-  borderBottom: `1px solid ${COLOR_BORDER}`,
+  zIndex: 1000,
+  boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
+  backdropFilter: 'blur(8px)',
 }
 
 const navInnerStyle = {
-  maxWidth: '1200px',
-  margin: '0 auto',
-  padding: '0 32px',
-  height: '64px',
   display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-}
-
-const logoStyle = {
-  fontFamily: FONT_SERIF,
-  fontSize: '18px',
-  fontWeight: 'normal',
-  letterSpacing: '0.04em',
-  color: COLOR_INK,
-  textDecoration: 'none',
-}
-
-const navLinksStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '32px',
-}
-
-const navLinkStyle = {
-  fontFamily: FONT_SANS,
-  fontSize: '14px',
-  letterSpacing: '0.06em',
-  color: COLOR_INK_SOFT,
-  textDecoration: 'none',
-}
-
-const navCTAStyle = {
-  fontFamily: FONT_SANS,
-  fontSize: '13px',
-  letterSpacing: '0.1em',
-  textTransform: 'uppercase',
-  color: COLOR_ACCENT,
-  textDecoration: 'none',
-  border: `1px solid ${COLOR_BORDER}`,
-  padding: '8px 20px',
-  borderRadius: '999px',
-}
-
-const heroStyle = {
-  padding: '120px 32px 80px',
-  maxWidth: '1200px',
-  margin: '0 auto',
-}
-
-const heroInnerStyle = {
-  maxWidth: '760px',
-}
-
-const heroEyebrowStyle = {
-  margin: '0 0 24px',
-  fontFamily: FONT_SANS,
-  fontSize: '12px',
-  letterSpacing: '0.28em',
-  textTransform: 'uppercase',
-  color: COLOR_ACCENT,
-}
-
-const heroHeadlineStyle = {
-  margin: '0 0 28px',
-  fontFamily: FONT_SERIF,
-  fontSize: 'clamp(44px, 6vw, 80px)',
-  fontWeight: 'normal',
-  lineHeight: 1.12,
-  letterSpacing: '-0.01em',
-  color: COLOR_INK,
-}
-
-const heroSubStyle = {
-  margin: '0 0 20px',
-  fontFamily: FONT_SANS,
-  fontSize: '20px',
-  lineHeight: 1.5,
-  color: COLOR_INK_SOFT,
-  maxWidth: '600px',
-}
-
-const heroBodyStyle = {
-  margin: '0 0 48px',
-  fontFamily: FONT_SANS,
-  fontSize: '16px',
-  lineHeight: 1.8,
-  color: COLOR_ACCENT,
-  maxWidth: '600px',
-}
-
-const heroActionsStyle = {
-  display: 'flex',
-  gap: '16px',
+  justifyContent: 'center',
+  gap: '28px',
   flexWrap: 'wrap',
 }
 
-const primaryButtonStyle = {
-  display: 'inline-block',
-  fontFamily: FONT_SANS,
-  fontSize: '14px',
-  letterSpacing: '0.08em',
-  textTransform: 'uppercase',
+const navLinkStyle = {
   textDecoration: 'none',
-  color: '#faf6f0',
-  background: COLOR_INK,
-  padding: '15px 36px',
-  borderRadius: '999px',
+  color: COLOR_DARK,
+  fontSize: '12px',
+  letterSpacing: '2px',
+  textTransform: 'uppercase',
+  fontWeight: 500,
 }
 
-const secondaryButtonStyle = {
-  display: 'inline-block',
-  fontFamily: FONT_SANS,
-  fontSize: '14px',
-  letterSpacing: '0.08em',
+const heroStyle = {
+  minHeight: '86vh',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  textAlign: 'center',
+  padding: '150px 20px 90px',
+  background:
+    'radial-gradient(circle at top, rgba(212, 175, 55, 0.10), transparent 35%), linear-gradient(180deg, #fcfaf5 0%, #f7f2e8 100%)',
+}
+
+const heroInnerStyle = {
+  maxWidth: '920px',
+  margin: '0 auto',
+}
+
+const heroBrandStyle = {
+  marginBottom: '26px',
+}
+
+const heroLogoStyle = {
+  fontSize: 'clamp(2.5rem, 6vw, 4.2rem)',
+  letterSpacing: '5px',
+  lineHeight: 1,
+  color: COLOR_DARK,
+  margin: 0,
+}
+
+const heroSubBrandStyle = {
+  fontWeight: 300,
+  letterSpacing: '8px',
+  fontSize: '0.92rem',
+  marginTop: '8px',
   textTransform: 'uppercase',
-  textDecoration: 'none',
-  color: COLOR_INK,
-  background: 'transparent',
-  padding: '15px 36px',
-  borderRadius: '999px',
-  border: `1px solid ${COLOR_BORDER}`,
+  color: COLOR_DARK,
+}
+
+const heroEyebrowStyle = {
+  fontSize: '0.78rem',
+  textTransform: 'uppercase',
+  letterSpacing: '2.4px',
+  color: COLOR_GOLD,
+  fontWeight: 600,
+  marginBottom: '18px',
+}
+
+const heroHeadingStyle = {
+  fontSize: 'clamp(2.8rem, 7vw, 5rem)',
+  lineHeight: 1.08,
+  letterSpacing: '-0.5px',
+  margin: 0,
+  color: COLOR_DARK,
 }
 
 const heroDividerStyle = {
-  maxWidth: '1200px',
-  margin: '0 auto',
+  width: '56px',
   height: '1px',
-  background: COLOR_BORDER,
+  background: COLOR_GOLD,
+  margin: '28px auto',
+}
+
+const heroLeadStyle = {
+  maxWidth: '760px',
+  margin: '0 auto',
+  fontSize: '1.08rem',
+  lineHeight: 1.9,
+  color: '#5f5a52',
+}
+
+const heroActionsStyle = {
+  marginTop: '34px',
+  display: 'flex',
+  justifyContent: 'center',
+  gap: '14px',
+  flexWrap: 'wrap',
+}
+
+const heroButtonBaseStyle = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  minWidth: '220px',
+  padding: '15px 24px',
+  textDecoration: 'none',
+  textTransform: 'uppercase',
+  letterSpacing: '1.8px',
+  fontSize: '0.74rem',
+  fontWeight: 600,
+  border: '1px solid transparent',
+}
+
+const heroPrimaryButtonStyle = {
+  ...heroButtonBaseStyle,
+  background: COLOR_DARK,
+  color: COLOR_WHITE,
+}
+
+const heroSecondaryButtonStyle = {
+  ...heroButtonBaseStyle,
+  background: 'transparent',
+  color: COLOR_DARK,
+  borderColor: COLOR_BORDER,
 }
 
 const sectionStyle = {
-  padding: '96px 32px',
+  padding: '85px 20px',
+  maxWidth: '1140px',
+  margin: '0 auto',
+  textAlign: 'center',
+  scrollMarginTop: '110px',
 }
 
-const sectionInnerStyle = {
-  maxWidth: '1200px',
+const sectionHeadingBlockStyle = {
+  maxWidth: '760px',
   margin: '0 auto',
 }
 
 const sectionLabelStyle = {
-  margin: '0 0 16px',
-  fontFamily: FONT_SANS,
-  fontSize: '11px',
-  letterSpacing: '0.28em',
+  fontSize: '0.72rem',
+  letterSpacing: '2px',
   textTransform: 'uppercase',
-  color: COLOR_ACCENT_LIGHT,
+  color: COLOR_GOLD,
+  marginBottom: '10px',
+  fontWeight: 600,
 }
 
 const sectionHeadingStyle = {
-  margin: '0 0 60px',
-  fontFamily: FONT_SERIF,
-  fontSize: 'clamp(32px, 4vw, 52px)',
-  fontWeight: 'normal',
-  lineHeight: 1.2,
-  color: COLOR_INK,
+  fontSize: 'clamp(2rem, 4vw, 2.8rem)',
+  marginBottom: '18px',
 }
 
-const sectionLeadStyle = {
-  margin: '-36px 0 60px',
-  fontFamily: FONT_SANS,
-  fontSize: '17px',
-  lineHeight: 1.8,
-  color: COLOR_INK_SOFT,
-  maxWidth: '600px',
+const sectionIntroStyle = {
+  maxWidth: '760px',
+  margin: '0 auto 45px',
+  color: COLOR_GREY,
+  fontSize: '0.98rem',
 }
 
-const featuresGridStyle = {
+const benefitsGridStyle = {
+  maxWidth: '1180px',
+  margin: '50px auto 0',
   display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-  gap: '1px',
-  background: COLOR_BORDER,
-  border: `1px solid ${COLOR_BORDER}`,
-  borderRadius: '20px',
-  overflow: 'hidden',
-}
-
-const featureCardStyle = {
-  padding: '36px',
-  background: COLOR_BG,
-}
-
-const featureCardTopStyle = {
-  display: 'flex',
-  alignItems: 'baseline',
-  gap: '10px',
-  marginBottom: '14px',
-}
-
-const featureTitleStyle = {
-  fontFamily: FONT_SERIF,
-  fontSize: '20px',
-  fontWeight: 'normal',
-  color: COLOR_INK,
-}
-
-const badgeStyle = {
-  fontFamily: FONT_SANS,
-  fontSize: '10px',
-  letterSpacing: '0.12em',
-  textTransform: 'uppercase',
-  color: COLOR_ACCENT,
-  border: `1px solid ${COLOR_BORDER}`,
-  padding: '2px 8px',
-  borderRadius: '999px',
-}
-
-const featureDescStyle = {
-  margin: 0,
-  fontFamily: FONT_SANS,
-  fontSize: '14px',
-  lineHeight: 1.75,
-  color: COLOR_INK_SOFT,
-}
-
-const pricingGridStyle = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
   gap: '24px',
-  alignItems: 'start',
 }
 
-const pricingCardStyle = {
-  background: COLOR_BG,
+const benefitCardStyle = {
+  background: COLOR_WHITE,
   border: `1px solid ${COLOR_BORDER}`,
-  borderRadius: '20px',
-  padding: '40px 36px',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '0',
+  padding: '32px 28px',
+  textAlign: 'left',
 }
 
-const pricingCardHighlightStyle = {
-  background: COLOR_INK,
-  border: `1px solid ${COLOR_INK}`,
+const benefitTitleStyle = {
+  fontSize: '1.5rem',
+  margin: '0 0 12px',
+  color: COLOR_DARK,
 }
 
-const pricingPopularStyle = {
-  margin: '0 0 20px',
-  fontFamily: FONT_SANS,
-  fontSize: '11px',
-  letterSpacing: '0.22em',
-  textTransform: 'uppercase',
-  color: COLOR_ACCENT_LIGHT,
-}
-
-const pricingNameStyle = {
-  margin: '0 0 10px',
-  fontFamily: FONT_SERIF,
-  fontSize: '32px',
-  fontWeight: 'normal',
-  color: 'inherit',
-}
-
-const pricingDescStyle = {
-  margin: '0 0 32px',
-  fontFamily: FONT_SANS,
-  fontSize: '14px',
-  lineHeight: 1.6,
-  color: COLOR_ACCENT_LIGHT,
-}
-
-const pricingListStyle = {
-  margin: '0 0 40px',
-  padding: 0,
-  listStyle: 'none',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '14px',
-  flexGrow: 1,
-}
-
-const pricingItemStyle = {
-  display: 'flex',
-  gap: '12px',
-  fontFamily: FONT_SANS,
-  fontSize: '14px',
-  lineHeight: 1.5,
-  color: 'inherit',
-  opacity: 0.85,
-}
-
-const pricingCheckStyle = {
-  color: COLOR_ACCENT_LIGHT,
-  flexShrink: 0,
-}
-
-const pricingCTAStyle = {
-  display: 'block',
-  textAlign: 'center',
-  fontFamily: FONT_SANS,
-  fontSize: '13px',
-  letterSpacing: '0.1em',
-  textTransform: 'uppercase',
-  textDecoration: 'none',
-  color: COLOR_INK,
-  background: 'transparent',
-  border: `1px solid ${COLOR_BORDER}`,
-  padding: '14px 24px',
-  borderRadius: '999px',
-}
-
-const pricingCTAHighlightStyle = {
-  color: COLOR_INK,
-  background: COLOR_BG,
-  border: `1px solid ${COLOR_BG}`,
+const benefitDescriptionStyle = {
+  color: '#5f5a52',
+  lineHeight: 1.8,
+  margin: 0,
 }
 
 const templatesGridStyle = {
   display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-  gap: '24px',
+  gap: '28px',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
 }
 
 const templateCardStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '16px',
+  background: COLOR_WHITE,
+  border: `1px solid ${COLOR_BORDER}`,
+  padding: '36px 30px',
+  textAlign: 'left',
 }
 
 const templatePreviewStyle = {
-  height: '280px',
-  borderRadius: '16px',
-  background: 'linear-gradient(160deg, #e8ddd2 0%, #d4c8bb 100%)',
+  width: '100%',
+  aspectRatio: '4 / 3',
   border: `1px solid ${COLOR_BORDER}`,
-}
-
-const templateInfoStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '4px',
+  marginBottom: '20px',
 }
 
 const templateNameStyle = {
-  fontFamily: FONT_SERIF,
-  fontSize: '18px',
-  fontWeight: 'normal',
-  color: COLOR_INK,
+  marginTop: 0,
+  marginBottom: '14px',
+  fontSize: '1.7rem',
 }
 
 const templateToneStyle = {
-  fontFamily: FONT_SANS,
-  fontSize: '13px',
-  color: COLOR_ACCENT,
+  color: COLOR_GREY,
+  margin: 0,
 }
 
-const ctaSectionStyle = {
-  padding: '120px 32px',
-  background: COLOR_INK,
-  color: '#faf6f0',
+const pricingSectionStyle = {
+  background: COLOR_WHITE,
+  padding: '85px 20px',
 }
 
-const ctaInnerStyle = {
-  maxWidth: '680px',
+const pricingInnerStyle = {
+  maxWidth: '1140px',
   margin: '0 auto',
   textAlign: 'center',
 }
 
-const ctaHeadlineStyle = {
-  margin: '0 0 24px',
-  fontFamily: FONT_SERIF,
-  fontSize: 'clamp(32px, 4vw, 52px)',
-  fontWeight: 'normal',
-  lineHeight: 1.2,
-  color: '#faf6f0',
+const pricingGridStyle = {
+  display: 'grid',
+  gap: '28px',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
+  alignItems: 'stretch',
 }
 
-const ctaBodyStyle = {
-  margin: '0 0 48px',
-  fontFamily: FONT_SANS,
-  fontSize: '16px',
+const priceCardStyle = {
+  padding: '36px 30px',
+  display: 'flex',
+  flexDirection: 'column',
+  textAlign: 'left',
+  background: COLOR_WHITE,
+  border: `1px solid ${COLOR_BORDER}`,
+}
+
+const priceCardFeaturedStyle = {
+  borderWidth: '2px',
+  boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
+  background: '#fffcf5',
+}
+
+const priceLabelStyle = {
+  fontSize: '0.7rem',
+  textTransform: 'uppercase',
+  letterSpacing: '2px',
+  color: COLOR_GOLD,
+  marginBottom: '10px',
+  fontWeight: 600,
+}
+
+const priceNameStyle = {
+  marginTop: 0,
+  marginBottom: '14px',
+  fontSize: '1.7rem',
+}
+
+const priceIntroStyle = {
+  color: COLOR_GREY,
+  minHeight: '68px',
+  marginBottom: '18px',
+  fontSize: '0.95rem',
+}
+
+const priceListStyle = {
+  listStyle: 'none',
+  padding: 0,
+  margin: '0 0 30px',
+  fontSize: '0.92rem',
   lineHeight: 1.8,
-  color: 'rgba(250,246,240,0.65)',
+  flexGrow: 1,
+}
+
+const priceListItemStyle = {
+  marginBottom: '10px',
+  position: 'relative',
+  paddingLeft: '18px',
+}
+
+const priceButtonStyle = {
+  display: 'inline-block',
+  width: '100%',
+  textAlign: 'center',
+  background: COLOR_DARK,
+  color: COLOR_WHITE,
+  textDecoration: 'none',
+  padding: '15px 22px',
+  textTransform: 'uppercase',
+  letterSpacing: '2px',
+  fontSize: '0.72rem',
+  fontWeight: 600,
+}
+
+const contactGridStyle = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+  gap: '24px',
+  marginTop: '30px',
+}
+
+const contactCardStyle = {
+  background: COLOR_WHITE,
+  border: `1px solid ${COLOR_BORDER}`,
+  padding: '36px 30px',
+  textAlign: 'center',
+}
+
+const contactTitleStyle = {
+  marginTop: 0,
+  marginBottom: '14px',
+  fontSize: '1.7rem',
+}
+
+const contactLinkStyle = {
+  color: COLOR_DARK,
+  textDecoration: 'none',
+  fontWeight: 500,
+  wordBreak: 'break-word',
 }
 
 const footerStyle = {
-  padding: '40px 32px',
-  borderTop: `1px solid ${COLOR_BORDER}`,
-}
-
-const footerInnerStyle = {
-  maxWidth: '1200px',
-  margin: '0 auto',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  gap: '24px',
-  flexWrap: 'wrap',
-}
-
-const footerLogoStyle = {
-  fontFamily: FONT_SERIF,
-  fontSize: '15px',
-  fontWeight: 'normal',
-  color: COLOR_INK,
-}
-
-const footerTextStyle = {
-  margin: 0,
-  fontFamily: FONT_SANS,
-  fontSize: '13px',
-  color: COLOR_ACCENT,
+  padding: '60px 20px',
+  background: COLOR_DARK,
+  color: COLOR_WHITE,
+  textAlign: 'center',
 }
 
 const footerLinkStyle = {
-  fontFamily: FONT_SANS,
-  fontSize: '13px',
-  letterSpacing: '0.08em',
-  color: COLOR_ACCENT,
+  color: COLOR_GOLD,
   textDecoration: 'none',
+}
+
+const footerTextStyle = {
+  marginTop: '12px',
+  marginBottom: 0,
 }
