@@ -84,9 +84,8 @@ const PACKAGES = [
       'Pre páry, ktoré okrem dizajnu chcú rozšírené RSVP možnosti a viac personalizácie.',
     items: [
       'Všetko z balíka Essential',
-      'Voliteľné ubytovanie hostí',
-      'Voliteľná doprava hostí',
-      'Vlastné RSVP otázky na mieru',
+      'Obšírnejší RSVP formulár',
+      'Manažment ubytovania – priradenie ubytovania hosťom (už čoskoro)',
       'Personalizované QR kódy pre hostí (už čoskoro)',
       'Bohatšia personalizácia a max 3 fotografie',
       'Galéria po svadbe',
