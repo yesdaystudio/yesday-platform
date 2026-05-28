@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Montserrat, Playfair_Display } from 'next/font/google'
+import PricingSection from './components/PricingSection'
 
 const serif = Playfair_Display({
   subsets: ['latin'],
@@ -62,50 +63,7 @@ const TEMPLATES = [
   },
 ]
 
-const PACKAGES = [
-  {
-    name: 'Essential',
-    label: 'Elegantný digitálny základ',
-    description:
-      'Pre páry, ktoré chcú krásny a funkčný svadobný web s praktickým RSVP základom.',
-    items: [
-      'RSVP s menami hostí, počtom dospelých a detí',
-      'Menu možnosti: mäsové, vegetariánske, vegánske, detské',
-      'Alergie a stravovacie obmedzenia',
-      'Svadobný web s kľúčovými informáciami',
-      'Zdieľaný QR kód na web',
-    ],
-    featured: false,
-  },
-  {
-    name: 'Signature',
-    label: 'Najobľúbenejšia voľba',
-    description:
-      'Pre páry, ktoré okrem dizajnu chcú rozšírené RSVP možnosti a viac personalizácie.',
-    items: [
-      'Všetko z balíka Essential',
-      'Obšírnejší RSVP formulár',
-      'Manažment ubytovania – priradenie ubytovania hosťom (už čoskoro)',
-      'Personalizované QR kódy pre hostí (už čoskoro)',
-      'Bohatšia personalizácia a max 3 fotografie',
-      'Galéria po svadbe',
-    ],
-    featured: true,
-  },
-  {
-    name: 'Atelier',
-    label: 'Kompletné riešenie na mieru',
-    description:
-      'Bespoke varianta pre výnimočné svadby s plnou tvorbou na mieru.',
-    items: [
-      'Všetko z balíka Signature',
-      'Bespoke plná personalizácia webu',
-      'Unikátne guest QR pre hostí alebo skupiny',
-      'Individuálne navrhnutý obsah a flow',
-    ],
-    featured: false,
-  },
-]
+
 
 export default function HomePage() {
   return (
@@ -114,7 +72,7 @@ export default function HomePage() {
       <Hero />
       <Benefits />
       <Templates />
-      <Pricing />
+      <PricingSection />
       <Contact />
       <Footer />
     </main>
@@ -236,49 +194,7 @@ function Templates() {
   )
 }
 
-function Pricing() {
-  return (
-    <section id="cennik" style={pricingSectionStyle}>
-      <div style={pricingInnerStyle}>
-        <h2 className={serif.className} style={sectionHeadingStyle}>
-          Ponuka služieb
-        </h2>
-        <p style={sectionIntroStyle}>
-          Vyberte si úroveň digitálneho svadobného riešenia podľa toho, či chcete
-          elegantný základ alebo plne personalizovaný systém.
-        </p>
 
-        <div style={pricingGridStyle}>
-          {PACKAGES.map((pkg) => (
-            <article
-              key={pkg.name}
-              style={{
-                ...priceCardStyle,
-                ...(pkg.featured ? priceCardFeaturedStyle : {}),
-              }}
-            >
-              <p style={priceLabelStyle}>{pkg.label}</p>
-              <h3 className={serif.className} style={priceNameStyle}>
-                {pkg.name}
-              </h3>
-              <p style={priceIntroStyle}>{pkg.description}</p>
-              <ul style={priceListStyle}>
-                {pkg.items.map((item) => (
-                  <li key={item} style={priceListItemStyle}>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Link href="/login" style={priceButtonStyle}>
-                Klientska zóna
-              </Link>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
 
 function Contact() {
   return (
