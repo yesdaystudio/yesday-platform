@@ -32,6 +32,7 @@ export default function CheckoutModal({ packageName, packageType, onClose }) {
           couple_display_name: coupleName.trim(),
           slug: slug.trim() || undefined,
           customer_email: email.trim(),
+          design_family: 'classic',
         }),
       })
 

@@ -47,7 +47,7 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
   }
 
-  const { package_type, couple_display_name, slug, customer_email } = body
+  const { package_type, couple_display_name, slug, customer_email, design_family } = body
 
   if (!package_type || !ALLOWED_PACKAGES.has(package_type)) {
     return NextResponse.json(
@@ -76,6 +76,7 @@ export async function POST(request) {
   const metadata = {
     package_type,
     couple_display_name: couple_display_name.trim(),
+    design_family: (design_family && typeof design_family === 'string') ? design_family.trim() : 'classic',
   }
   if (slug && typeof slug === 'string') {
     metadata.slug = slug.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-')

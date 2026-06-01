@@ -55,12 +55,16 @@ export async function POST(request) {
   }
 
   const session = event.data.object
-  const metadata = session?.metadata || {}
+  const metadata = session.metadata || {}
 
   const packageType = String(metadata.package_type || '').trim().toLowerCase()
   const clientEmail = String(session?.customer_details?.email || session?.customer_email || '').trim().toLowerCase()
   const coupleDisplayName = String(metadata.couple_display_name || '').trim()
   const stripeCheckoutSessionId = String(session?.id || '').trim()
+  const designFamily =
+    typeof metadata.design_family === 'string' && metadata.design_family.trim()
+      ? metadata.design_family.trim()
+      : 'classic'
 
   if (!packageType || !clientEmail || !coupleDisplayName || !stripeCheckoutSessionId) {
     console.error('[stripe-webhook] Missing required data in checkout session', {
@@ -162,6 +166,7 @@ export async function POST(request) {
       slug,
       payment_status: 'paid',
       project_status: 'onboarding',
+      design_family: designFamily,
     }
 
     if (hasStripeCheckoutSessionColumn) {
@@ -190,6 +195,7 @@ export async function POST(request) {
             slug,
             payment_status: 'paid',
             project_status: 'onboarding',
+            design_family: designFamily,
           })
           .select('id, slug')
           .single()
