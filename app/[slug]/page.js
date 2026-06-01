@@ -42,35 +42,39 @@ export default async function WeddingPage({ params }) {
   const locationParts = [project.venue_name, project.venue_address].filter(Boolean)
   const location = locationParts.join(', ')
   const googleCalendarUrl = buildGoogleCalendarUrl(project, location)
+  const designFamily = resolveDesignFamily(project.design_family)
+  const themeStyles = getThemeStyles(designFamily)
+  const colorVariant = resolveColorVariant(project.color_variant)
+  const colorTheme = getColorTheme(colorVariant)
 
   return (
-    <main style={pageStyle}>
-      <section style={heroSectionStyle}>
-        <div style={heroCardStyle}>
-          <p style={eyebrowStyle}>Svadobný deň</p>
-          <h1 style={heroTitleStyle}>{project.couple_display_name || 'Naša svadba'}</h1>
-          <p style={heroMetaStyle}>{displayDate}</p>
-          <p style={heroLocationStyle}>{project.venue_name || 'Miesto bude doplnené'}</p>
-          <p style={heroAddressStyle}>{project.venue_address || 'Adresa bude doplnená'}</p>
+    <main style={{ ...pageStyle, ...themeStyles.page, ...colorTheme.page }}>
+      <section style={{ ...heroSectionStyle, ...themeStyles.heroSection }}>
+        <div style={{ ...heroCardStyle, ...themeStyles.heroCard, ...colorTheme.heroCard }}>
+          <p style={{ ...eyebrowStyle, ...themeStyles.eyebrow, ...colorTheme.eyebrow }}>Svadobný deň</p>
+          <h1 style={{ ...heroTitleStyle, ...themeStyles.heroTitle, ...colorTheme.heroTitle }}>{project.couple_display_name || 'Naša svadba'}</h1>
+          <p style={{ ...heroMetaStyle, ...themeStyles.heroMeta, ...colorTheme.heroMeta }}>{displayDate}</p>
+          <p style={{ ...heroLocationStyle, ...themeStyles.heroLocation, ...colorTheme.heroLocation }}>{project.venue_name || 'Miesto bude doplnené'}</p>
+          <p style={{ ...heroAddressStyle, ...themeStyles.heroAddress, ...colorTheme.heroAddress }}>{project.venue_address || 'Adresa bude doplnená'}</p>
 
           <a
             href={googleCalendarUrl}
             target="_blank"
             rel="noopener noreferrer"
-            style={buttonStyle}
+            style={{ ...buttonStyle, ...themeStyles.button, ...colorTheme.button }}
           >
             Uložiť do kalendára
           </a>
           <a
   href={`/${slug}/rsvp`}
-  style={{ ...buttonStyle, marginLeft: '12px' }}
+  style={{ ...buttonStyle, ...themeStyles.button, ...colorTheme.button, marginLeft: '12px' }}
 >
   Potvrdiť účasť
 </a>
         </div>
 
         {wc.welcome_text ? (
-          <p style={welcomeTextStyle}>{wc.welcome_text}</p>
+          <p style={{ ...welcomeTextStyle, ...themeStyles.welcomeText, ...colorTheme.welcomeText }}>{wc.welcome_text}</p>
         ) : null}
       </section>
 
@@ -227,6 +231,253 @@ function normalizeTimePart(value) {
 
   const compact = String(value).replaceAll(':', '')
   return compact.padEnd(6, '0').slice(0, 6)
+}
+
+const CLASSIC_LAYOUT_FAMILIES = new Set([
+  'classic',
+  'diana',
+  'botanique',
+  'penelope',
+  'charlotte',
+  'cate',
+  'jewel',
+  'isabel',
+])
+
+function resolveDesignFamily(value) {
+  const normalized = String(value || '').trim().toLowerCase()
+
+  if (normalized === 'editorial') {
+    return 'editorial'
+  }
+
+  if (normalized === 'romantic') {
+    return 'romantic'
+  }
+
+  if (CLASSIC_LAYOUT_FAMILIES.has(normalized)) {
+    return normalized
+  }
+
+  return 'classic'
+}
+
+function resolveColorVariant(value) {
+  const normalized = String(value || '').trim().toLowerCase()
+
+  if (normalized === 'sage') {
+    return 'sage'
+  }
+
+  if (normalized === 'blush') {
+    return 'blush'
+  }
+
+  return 'champagne'
+}
+
+function getThemeStyles(designFamily) {
+  if (designFamily === 'editorial') {
+    return editorialThemeStyles
+  }
+
+  if (designFamily === 'romantic') {
+    return romanticThemeStyles
+  }
+
+  return {}
+}
+
+function getColorTheme(colorVariant) {
+  return colorThemes[colorVariant] || colorThemes.champagne
+}
+
+const colorThemes = {
+  champagne: {
+    page: {
+      color: '#4f4035',
+    },
+    heroCard: {
+      background: 'rgba(255, 250, 244, 0.84)',
+      border: '1px solid rgba(138, 111, 84, 0.15)',
+      boxShadow: '0 20px 60px rgba(106, 82, 58, 0.12)',
+    },
+    eyebrow: {
+      color: '#9b7c62',
+    },
+    heroTitle: {
+      color: '#3f3128',
+    },
+    heroMeta: {
+      color: '#4f4035',
+    },
+    heroLocation: {
+      color: '#4f4035',
+    },
+    heroAddress: {
+      color: '#6f5b4b',
+    },
+    button: {
+      background: '#5f4838',
+      color: '#fffaf5',
+      boxShadow: '0 12px 24px rgba(95, 72, 56, 0.18)',
+    },
+    welcomeText: {
+      color: '#6a5444',
+    },
+  },
+  sage: {
+    page: {
+      color: '#32463f',
+    },
+    heroCard: {
+      background: 'rgba(243, 249, 246, 0.88)',
+      border: '1px solid rgba(103, 137, 124, 0.2)',
+      boxShadow: '0 20px 60px rgba(71, 104, 91, 0.14)',
+    },
+    eyebrow: {
+      color: '#658779',
+    },
+    heroTitle: {
+      color: '#2f433c',
+    },
+    heroMeta: {
+      color: '#3d564d',
+    },
+    heroLocation: {
+      color: '#3d564d',
+    },
+    heroAddress: {
+      color: '#58766a',
+    },
+    button: {
+      background: '#45675c',
+      color: '#f5fbf8',
+      boxShadow: '0 12px 24px rgba(69, 103, 92, 0.22)',
+    },
+    welcomeText: {
+      color: '#4f6b61',
+    },
+  },
+  blush: {
+    page: {
+      color: '#5e3f45',
+    },
+    heroCard: {
+      background: 'rgba(255, 245, 247, 0.9)',
+      border: '1px solid rgba(189, 137, 149, 0.2)',
+      boxShadow: '0 20px 60px rgba(161, 108, 121, 0.16)',
+    },
+    eyebrow: {
+      color: '#b37685',
+    },
+    heroTitle: {
+      color: '#6a4149',
+    },
+    heroMeta: {
+      color: '#7f5560',
+    },
+    heroLocation: {
+      color: '#7f5560',
+    },
+    heroAddress: {
+      color: '#996974',
+    },
+    button: {
+      background: '#865561',
+      color: '#fff7f8',
+      boxShadow: '0 12px 24px rgba(134, 85, 97, 0.24)',
+    },
+    welcomeText: {
+      color: '#825864',
+    },
+  },
+}
+
+const editorialThemeStyles = {
+  page: {
+    backgroundImage: 'linear-gradient(180deg, #ece7df 0%, #f4efe8 38%, #fbf8f3 100%)',
+    color: '#352f2a',
+    fontFamily: "'Cormorant Garamond', Georgia, Times New Roman, serif",
+  },
+  heroSection: {
+    padding: '56px 24px 28px',
+  },
+  heroCard: {
+    textAlign: 'left',
+    padding: '74px 64px',
+    borderRadius: '20px',
+    maxWidth: '940px',
+  },
+  eyebrow: {
+    letterSpacing: '0.24em',
+  },
+  heroTitle: {
+    fontSize: 'clamp(48px, 7vw, 84px)',
+    margin: '18px 0 10px',
+  },
+  heroMeta: {
+    fontSize: '20px',
+    letterSpacing: '0.03em',
+  },
+  heroLocation: {
+    fontSize: '20px',
+  },
+  heroAddress: {
+    fontSize: '17px',
+  },
+  button: {
+    borderRadius: '4px',
+    letterSpacing: '0.08em',
+    textTransform: 'uppercase',
+  },
+  welcomeText: {
+    fontSize: '20px',
+    fontStyle: 'italic',
+    color: '#554a41',
+  },
+}
+
+const romanticThemeStyles = {
+  page: {
+    backgroundImage: 'linear-gradient(180deg, #f7ede9 0%, #fbf4f0 36%, #fffaf7 100%)',
+    color: '#5d4045',
+    fontFamily: "'Playfair Display', Georgia, Times New Roman, serif",
+  },
+  heroSection: {
+    padding: '54px 20px 36px',
+  },
+  heroCard: {
+    maxWidth: '820px',
+    borderRadius: '40px',
+    background: 'rgba(255, 246, 243, 0.9)',
+    boxShadow: '0 24px 56px rgba(149, 106, 113, 0.14)',
+    border: '1px solid rgba(188, 142, 149, 0.2)',
+  },
+  eyebrow: {
+    color: '#b17582',
+    letterSpacing: '0.3em',
+  },
+  heroTitle: {
+    color: '#663f46',
+    fontSize: 'clamp(46px, 8vw, 80px)',
+  },
+  heroMeta: {
+    color: '#8b5f67',
+  },
+  heroLocation: {
+    color: '#7a5058',
+  },
+  heroAddress: {
+    color: '#946972',
+  },
+  button: {
+    background: '#7b525a',
+    boxShadow: '0 14px 28px rgba(123, 82, 90, 0.2)',
+  },
+  welcomeText: {
+    color: '#7f5860',
+  },
 }
 
 const pageStyle = {
