@@ -1,4 +1,32 @@
+import { Cormorant_Garamond, Great_Vibes, Inter, Ms_Madi } from 'next/font/google'
 import supabase from '../../lib/supabase'
+import DianaStickyHeader from './DianaStickyHeader'
+
+const dianaContentFont = Cormorant_Garamond({
+  subsets: ['latin', 'latin-ext'],
+  weight: ['400', '500', '600'],
+  display: 'swap',
+})
+
+const dianaLabelFont = Inter({
+  subsets: ['latin', 'latin-ext'],
+  weight: ['400', '500', '600'],
+  display: 'swap',
+})
+
+const dianaHeroCurrentFont = Great_Vibes({
+  subsets: ['latin'],
+  weight: '400',
+  display: 'swap',
+})
+
+const dianaHeroMsMadiFont = Ms_Madi({
+  subsets: ['latin'],
+  weight: '400',
+  display: 'swap',
+})
+
+const dianaHeroFontVariant = 'current'
 
 export default async function WeddingPage({ params }) {
   const resolvedParams = await params
@@ -46,93 +74,120 @@ export default async function WeddingPage({ params }) {
   const themeStyles = getThemeStyles(designFamily)
   const colorVariant = resolveColorVariant(project.color_variant)
   const colorTheme = getColorTheme(colorVariant)
+  const isDianaHero = designFamily === 'diana'
+  const ceremonyTime = formatScheduleTime(project.ceremony_time || scheduleItems[0]?.item_time || scheduleItems[0]?.time)
+  const celebrationTime = formatScheduleTime(project.end_time)
 
   return (
     <main style={{ ...pageStyle, ...themeStyles.page, ...colorTheme.page }}>
+      {isDianaHero ? <DianaStickyHeader rsvpHref={`/${slug}/rsvp`} /> : null}
       <section style={{ ...heroSectionStyle, ...themeStyles.heroSection }}>
-        <div style={{ ...heroCardStyle, ...themeStyles.heroCard, ...colorTheme.heroCard }}>
-          <p style={{ ...eyebrowStyle, ...themeStyles.eyebrow, ...colorTheme.eyebrow }}>Svadobný deň</p>
-          <h1 style={{ ...heroTitleStyle, ...themeStyles.heroTitle, ...colorTheme.heroTitle }}>{project.couple_display_name || 'Naša svadba'}</h1>
-          <p style={{ ...heroMetaStyle, ...themeStyles.heroMeta, ...colorTheme.heroMeta }}>{displayDate}</p>
-          <p style={{ ...heroLocationStyle, ...themeStyles.heroLocation, ...colorTheme.heroLocation }}>{project.venue_name || 'Miesto bude doplnené'}</p>
-          <p style={{ ...heroAddressStyle, ...themeStyles.heroAddress, ...colorTheme.heroAddress }}>{project.venue_address || 'Adresa bude doplnená'}</p>
+        <div style={{ ...heroCardStyle, ...themeStyles.heroCard, ...(isDianaHero ? {} : colorTheme.heroCard) }}>
+          {isDianaHero ? (
+            <DianaHero coupleName={project.couple_display_name} styles={themeStyles} />
+          ) : (
+            <>
+              <p style={{ ...eyebrowStyle, ...themeStyles.eyebrow, ...colorTheme.eyebrow }}>Svadobný deň</p>
+              <h1 style={{ ...heroTitleStyle, ...themeStyles.heroTitle, ...colorTheme.heroTitle }}>{project.couple_display_name || 'Naša svadba'}</h1>
+              <p style={{ ...heroMetaStyle, ...themeStyles.heroMeta, ...colorTheme.heroMeta }}>{displayDate}</p>
+              <p style={{ ...heroLocationStyle, ...themeStyles.heroLocation, ...colorTheme.heroLocation }}>{project.venue_name || 'Miesto bude doplnené'}</p>
+              <p style={{ ...heroAddressStyle, ...themeStyles.heroAddress, ...colorTheme.heroAddress }}>{project.venue_address || 'Adresa bude doplnená'}</p>
 
-          <a
-            href={googleCalendarUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ ...buttonStyle, ...themeStyles.button, ...colorTheme.button }}
-          >
-            Uložiť do kalendára
-          </a>
-          <a
-  href={`/${slug}/rsvp`}
-  style={{ ...buttonStyle, ...themeStyles.button, ...colorTheme.button, marginLeft: '12px' }}
->
-  Potvrdiť účasť
-</a>
+              <a
+                href={googleCalendarUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ ...buttonStyle, ...themeStyles.button, ...colorTheme.button }}
+              >
+                Uložiť do kalendára
+              </a>
+              <a
+                href={`/${slug}/rsvp`}
+                style={{ ...buttonStyle, ...themeStyles.button, ...colorTheme.button, marginLeft: '12px' }}
+              >
+                Potvrdiť účasť
+              </a>
+            </>
+          )}
         </div>
 
-        {wc.welcome_text ? (
+        {!isDianaHero && wc.welcome_text ? (
           <p style={{ ...welcomeTextStyle, ...themeStyles.welcomeText, ...colorTheme.welcomeText }}>{wc.welcome_text}</p>
         ) : null}
       </section>
 
-      {(wc.story_text) && (
-        <Section title="Náš príbeh">
-          <p style={placeholderStyle}>{wc.story_text}</p>
-        </Section>
+      {isDianaHero ? (
+        <DianaEditorialContent
+          project={project}
+          wc={wc}
+          scheduleItems={scheduleItems}
+          scheduleError={scheduleError}
+          displayDate={displayDate}
+          ceremonyTime={ceremonyTime}
+          celebrationTime={celebrationTime}
+          googleCalendarUrl={googleCalendarUrl}
+          slug={slug}
+          styles={themeStyles}
+        />
+      ) : (
+        <>
+          {wc.story_text ? (
+            <Section title="Náš príbeh">
+              <p style={placeholderStyle}>{wc.story_text}</p>
+            </Section>
+          ) : null}
+
+          <Section title="Harmonogram">
+            {scheduleError ? (
+              <p style={placeholderStyle}>Harmonogram sa momentálne nepodarilo načítať.</p>
+            ) : scheduleItems.length > 0 ? (
+              <div style={scheduleListStyle}>
+                {scheduleItems.map((item) => (
+                  <ScheduleItem key={item.id} item={item} />
+                ))}
+              </div>
+            ) : (
+              <p style={placeholderStyle}>Harmonogram doplníme už čoskoro.</p>
+            )}
+          </Section>
+
+          <Section title="Menu">
+            <p style={placeholderStyle}>
+              {wc.menu_intro_text || 'Informácie o slávnostnom menu, večernom bufete a prípadných alergiách doplníme čoskoro.'}
+            </p>
+          </Section>
+
+          <Section title="Dress code">
+            <p style={placeholderStyle}>
+              {wc.dresscode_text || 'Dress code pre hostí zatiaľ pripravujeme. Prosíme, sledujte túto stránku pre ďalšie informácie.'}
+            </p>
+          </Section>
+
+          <Section title="Ubytovanie">
+            <p style={placeholderStyle}>
+              {wc.accommodation_text || 'Tipy na ubytovanie v okolí zverejníme čoskoro, aby ste si vedeli pobyt pohodlne naplánovať.'}
+            </p>
+          </Section>
+
+          <Section title="Doprava a parkovanie">
+            <p style={placeholderStyle}>
+              {wc.transport_text || 'Detaily o parkovaní a príchode na miesto svadby doplníme v najbližšej aktualizácii.'}
+            </p>
+          </Section>
+
+          {wc.faq_text && (
+            <Section title="FAQ">
+              <p style={placeholderStyle}>{wc.faq_text}</p>
+            </Section>
+          )}
+
+          <Section title="Potvrdenie účasti">
+            <p style={placeholderStyle}>
+              Formulár na potvrdenie účasti bude čoskoro dostupný. Ďakujeme za trpezlivosť.
+            </p>
+          </Section>
+        </>
       )}
-
-      <Section title="Harmonogram">
-        {scheduleError ? (
-          <p style={placeholderStyle}>Harmonogram sa momentálne nepodarilo načítať.</p>
-        ) : scheduleItems.length > 0 ? (
-          <div style={scheduleListStyle}>
-            {scheduleItems.map((item) => (
-              <ScheduleItem key={item.id} item={item} />
-            ))}
-          </div>
-        ) : (
-          <p style={placeholderStyle}>Harmonogram doplníme už čoskoro.</p>
-        )}
-      </Section>
-
-      <Section title="Menu">
-        <p style={placeholderStyle}>
-          {wc.menu_intro_text || 'Informácie o slávnostnom menu, večernom bufete a prípadných alergiách doplníme čoskoro.'}
-        </p>
-      </Section>
-
-      <Section title="Dress code">
-        <p style={placeholderStyle}>
-          {wc.dresscode_text || 'Dress code pre hostí zatiaľ pripravujeme. Prosíme, sledujte túto stránku pre ďalšie informácie.'}
-        </p>
-      </Section>
-
-      <Section title="Ubytovanie">
-        <p style={placeholderStyle}>
-          {wc.accommodation_text || 'Tipy na ubytovanie v okolí zverejníme čoskoro, aby ste si vedeli pobyt pohodlne naplánovať.'}
-        </p>
-      </Section>
-
-      <Section title="Doprava a parkovanie">
-        <p style={placeholderStyle}>
-          {wc.transport_text || 'Detaily o parkovaní a príchode na miesto svadby doplníme v najbližšej aktualizácii.'}
-        </p>
-      </Section>
-
-      {wc.faq_text && (
-        <Section title="FAQ">
-          <p style={placeholderStyle}>{wc.faq_text}</p>
-        </Section>
-      )}
-
-      <Section title="Potvrdenie účasti">
-        <p style={placeholderStyle}>
-          Formulár na potvrdenie účasti bude čoskoro dostupný. Ďakujeme za trpezlivosť.
-        </p>
-      </Section>
     </main>
   )
 }
@@ -160,6 +215,282 @@ function ScheduleItem({ item }) {
       <div>
         <h3 style={scheduleTitleStyle}>{title || 'Program'}</h3>
         {description ? <p style={scheduleDescriptionStyle}>{description}</p> : null}
+      </div>
+    </article>
+  )
+}
+
+function DianaHero({ coupleName, styles }) {
+  const [firstPartner, secondPartner] = splitCoupleName(coupleName)
+
+  return (
+    <div style={styles.heroBackground}>
+      <h1 style={styles.heroTitle} aria-label={formatCoupleNameLabel(firstPartner, secondPartner)}>
+        <span style={{ ...styles.heroNameLine, ...styles.heroFirstName }}>{firstPartner}</span>
+        {secondPartner ? (
+          <>
+            <span style={styles.heroAmpersand}>a</span>
+            <span style={{ ...styles.heroNameLine, ...styles.heroSecondName }}>{secondPartner}</span>
+          </>
+        ) : null}
+      </h1>
+    </div>
+  )
+}
+
+function DianaEditorialContent({
+  project,
+  wc,
+  scheduleItems,
+  scheduleError,
+  displayDate,
+  ceremonyTime,
+  celebrationTime,
+  googleCalendarUrl,
+  slug,
+  styles,
+}) {
+  return (
+    <section id="info" style={styles.editorialSection}>
+      <DianaEditorialBlock title={displayDate} styles={styles} noDivider compact />
+
+      {wc.welcome_text ? (
+        <DianaEditorialBlock eyebrow="Vitajte" title="Srdečne vás pozývame" styles={styles}>
+          <DianaEditorialText styles={styles}>{wc.welcome_text}</DianaEditorialText>
+        </DianaEditorialBlock>
+      ) : null}
+
+      <DianaEditorialBlock eyebrow="Obrad" title="Obrad" styles={styles}>
+        <p style={styles.editorialSplitMeta}>{ceremonyTime}</p>
+        <p style={styles.editorialText}>{project.venue_name || 'Miesto obradu bude doplnené'}</p>
+        <p style={styles.editorialSubText}>{project.venue_address || 'Adresa bude doplnená'}</p>
+      </DianaEditorialBlock>
+
+      <DianaEditorialSplitBlock
+        eyebrow="Oslava"
+        title={celebrationTime}
+        imageSrc="/images/diana/pohar.jpg"
+        imageAlt="Svadobný prípitok so šampanským"
+        imageSide="right"
+        variant="celebration"
+        styles={styles}
+      >
+        <p style={styles.editorialText}>{project.venue_name || 'Miesto oslavy bude doplnené'}</p>
+        <p style={styles.editorialSubText}>{project.venue_address || 'Adresa bude doplnená'}</p>
+      </DianaEditorialSplitBlock>
+
+      {wc.story_text ? (
+        <DianaEditorialBlock id="about" eyebrow="O nás" title="Náš príbeh" styles={styles}>
+          <DianaEditorialText styles={styles}>{wc.story_text}</DianaEditorialText>
+        </DianaEditorialBlock>
+      ) : null}
+
+      <DianaEditorialBlock id="program" eyebrow="Program" title="Harmonogram" styles={styles}>
+        {scheduleError ? (
+          <p style={styles.editorialBody}>Harmonogram sa momentálne nepodarilo načítať.</p>
+        ) : scheduleItems.length > 0 ? (
+          <div style={styles.editorialScheduleList}>
+            {scheduleItems.map((item) => (
+              <DianaScheduleItem key={item.id} item={item} styles={styles} />
+            ))}
+          </div>
+        ) : (
+          <p style={styles.editorialBody}>Harmonogram doplníme už čoskoro.</p>
+        )}
+      </DianaEditorialBlock>
+
+      <DianaEditorialBlock eyebrow="Menu" title="Slávnostné menu" styles={styles} menuBackground>
+        <DianaMenuText styles={styles}>
+          {wc.menu_intro_text || 'Informácie o slávnostnom menu, večernom bufete a prípadných alergiách doplníme čoskoro.'}
+        </DianaMenuText>
+      </DianaEditorialBlock>
+
+      <DianaEditorialBlock eyebrow="Dress code" title="Štýl večera" styles={styles}>
+        <DianaEditorialText styles={styles}>
+          {wc.dresscode_text || 'Dress code pre hostí zatiaľ pripravujeme. Prosíme, sledujte túto stránku pre ďalšie informácie.'}
+        </DianaEditorialText>
+      </DianaEditorialBlock>
+
+      <DianaAccommodationParkingSection wc={wc} styles={styles} />
+
+      {wc.faq_text ? (
+        <DianaEditorialBlock eyebrow="FAQ" title="Otázky hostí" styles={styles}>
+          <DianaEditorialText styles={styles}>{wc.faq_text}</DianaEditorialText>
+        </DianaEditorialBlock>
+      ) : null}
+
+      <DianaEditorialBlock eyebrow="RSVP" title="Potvrdenie účasti" styles={styles}>
+        <p style={styles.editorialBody}>Prosíme, potvrďte svoju účasť a uložte si svadobný deň do kalendára.</p>
+        <div style={styles.editorialActions}>
+          <a href={`/${slug}/rsvp`} style={styles.editorialPrimaryAction}>
+            Potvrdiť účasť
+          </a>
+          <a
+            href={googleCalendarUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={styles.editorialSecondaryAction}
+          >
+            Uložiť do kalendára
+          </a>
+        </div>
+      </DianaEditorialBlock>
+    </section>
+  )
+}
+
+function DianaEditorialBlock({
+  id,
+  eyebrow,
+  title,
+  children,
+  styles,
+  noDivider = false,
+  compact = false,
+  menuBackground = false,
+}) {
+  return (
+    <article
+      id={id}
+      style={{
+        ...styles.editorialBlock,
+        ...(noDivider ? styles.editorialBlockFirst : {}),
+        ...(compact ? styles.editorialBlockCompact : {}),
+        ...(menuBackground ? styles.editorialMenuBlock : {}),
+      }}
+    >
+      {eyebrow ? <p style={styles.editorialEyebrow}>{eyebrow}</p> : null}
+      <h2 style={{ ...styles.editorialTitle, ...(compact ? styles.editorialTitleCompact : {}) }}>{title}</h2>
+      {children ? <div style={styles.editorialContent}>{children}</div> : null}
+    </article>
+  )
+}
+
+function DianaEditorialSplitBlock({
+  eyebrow,
+  title,
+  meta,
+  imageSrc,
+  imageAlt,
+  imageSide = 'left',
+  variant,
+  children,
+  styles,
+}) {
+  const imageRight = imageSide === 'right'
+  const isCeremony = variant === 'ceremony'
+  const className = [
+    'dianaEditorialSplit',
+    imageRight ? 'dianaEditorialSplit--imageRight' : null,
+    isCeremony ? 'dianaEditorialSplit--ceremony' : null,
+    variant === 'celebration' ? 'dianaEditorialSplit--celebration' : null,
+  ].filter(Boolean).join(' ')
+
+  return (
+    <article
+      className={className}
+      style={{
+        ...styles.editorialBlock,
+        ...styles.editorialSplitBlock,
+        ...(isCeremony ? styles.editorialCeremonySplitBlock : {}),
+      }}
+    >
+      <div className="dianaEditorialSplit__media" style={styles.editorialSplitMedia}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={imageSrc}
+          alt={imageAlt}
+          style={styles.editorialSplitImage}
+        />
+      </div>
+      <div className="dianaEditorialSplit__copy" style={styles.editorialSplitCopy}>
+        {eyebrow ? <p style={styles.editorialEyebrow}>{eyebrow}</p> : null}
+        <h2 style={styles.editorialTitle}>{title}</h2>
+        {meta ? <p style={styles.editorialSplitMeta}>{meta}</p> : null}
+        {children ? <div style={styles.editorialContent}>{children}</div> : null}
+      </div>
+    </article>
+  )
+}
+
+function DianaEditorialText({ children, styles }) {
+  return (
+    <p className="whitespace-pre-line" style={styles.editorialBody}>
+      {children}
+    </p>
+  )
+}
+
+function DianaAccommodationParkingSection({ wc, styles }) {
+  return (
+    <article style={{ ...styles.editorialBlock, ...styles.editorialTwoColumnBlock }}>
+      <div className="dianaEditorialTwoColumn" style={styles.editorialTwoColumnGrid}>
+        <section style={styles.editorialTwoColumnItem}>
+          <p style={styles.editorialEyebrow}>Ubytovanie</p>
+          <h2 style={styles.editorialColumnTitle}>Pobyt v okolí</h2>
+          <p className="whitespace-pre-line" style={styles.editorialColumnBody}>
+            {wc.accommodation_text || 'Tipy na ubytovanie v okolí zverejníme čoskoro, aby ste si vedeli pobyt pohodlne naplánovať.'}
+          </p>
+        </section>
+
+        <section style={styles.editorialTwoColumnItem}>
+          <p style={styles.editorialEyebrow}>Parkovanie</p>
+          <h2 style={styles.editorialColumnTitle}>Príchod a parkovanie</h2>
+          <p className="whitespace-pre-line" style={styles.editorialColumnBody}>
+            {wc.transport_text || 'Detaily o parkovaní a príchode na miesto svadby doplníme v najbližšej aktualizácii.'}
+          </p>
+        </section>
+      </div>
+    </article>
+  )
+}
+
+function DianaMenuText({ children, styles }) {
+  const lines = String(children || '').split(/\r?\n/)
+  const courses = lines.reduce((groups, line) => {
+    if (line.trim() === '') {
+      if (groups[groups.length - 1]?.length) {
+        groups.push([])
+      }
+      return groups
+    }
+
+    groups[groups.length - 1].push(line)
+    return groups
+  }, [[]]).filter((group) => group.length > 0)
+
+  return (
+    <div style={styles.editorialMenuText}>
+      {courses.map((course, index) => {
+        const [heading, ...details] = course
+        return (
+          <div key={`${index}-${heading}`} style={{ ...styles.editorialMenuCourse, ...(index === 0 ? styles.editorialMenuCourseFirst : {}) }}>
+            <p className="whitespace-pre-line" style={styles.editorialMenuHeading}>{heading}</p>
+            <div style={styles.editorialMenuDescription}>
+              {details.map((line, lineIndex) => (
+                <p key={`${lineIndex}-${line}`} className="whitespace-pre-line" style={styles.editorialMenuLine}>
+                  {line}
+                </p>
+              ))}
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+function DianaScheduleItem({ item, styles }) {
+  const time = item.item_time ?? item.time
+  const title = item.item_title ?? item.title
+  const description = item.item_description ?? item.description
+
+  return (
+    <article style={styles.editorialScheduleItem}>
+      <p style={styles.editorialScheduleTime}>{formatScheduleTime(time)}</p>
+      <div>
+        <h3 style={styles.editorialScheduleTitle}>{title || 'Program'}</h3>
+        {description ? <p style={styles.editorialScheduleDescription}>{description}</p> : null}
       </div>
     </article>
   )
@@ -233,6 +564,33 @@ function normalizeTimePart(value) {
   return compact.padEnd(6, '0').slice(0, 6)
 }
 
+function splitCoupleName(value) {
+  const normalized = String(value || '').trim()
+  if (!normalized) {
+    return ['Naša svadba', '']
+  }
+
+  const parts = normalized
+    .split(/\s*(?:&|\+|\/|\band\b|\ba\b)\s*/i)
+    .map((part) => part.trim())
+    .filter(Boolean)
+
+  if (parts.length >= 2) {
+    return [parts[0], parts.slice(1).join(' ')]
+  }
+
+  const words = normalized.split(/\s+/).filter(Boolean)
+  if (words.length >= 2) {
+    return [words[0], words.slice(1).join(' ')]
+  }
+
+  return [normalized, '']
+}
+
+function formatCoupleNameLabel(firstPartner, secondPartner) {
+  return [firstPartner, secondPartner].filter(Boolean).join(' & ')
+}
+
 const CLASSIC_LAYOUT_FAMILIES = new Set([
   'classic',
   'diana',
@@ -279,6 +637,10 @@ function resolveColorVariant(value) {
 function getThemeStyles(designFamily) {
   if (designFamily === 'editorial') {
     return editorialThemeStyles
+  }
+
+  if (designFamily === 'diana') {
+    return dianaThemeStyles
   }
 
   if (designFamily === 'romantic') {
@@ -391,6 +753,389 @@ const colorThemes = {
     welcomeText: {
       color: '#825864',
     },
+  },
+}
+
+const dianaSerifFont = dianaContentFont.style.fontFamily
+const dianaSectionLabelFont = dianaLabelFont.style.fontFamily
+const dianaHeroFontVariants = {
+  current: dianaHeroCurrentFont.style.fontFamily,
+  brittany: `'Brittany Signature', ${dianaHeroCurrentFont.style.fontFamily}`,
+  msmadi: dianaHeroMsMadiFont.style.fontFamily,
+}
+
+const dianaHeroNameFontFamily =
+  dianaHeroFontVariants[dianaHeroFontVariant] || dianaHeroFontVariants.current
+
+const dianaHeroNameTypography = {
+  fontFamily: dianaHeroNameFontFamily,
+  fontSize: 'min(6.4rem, 13.8cqw)',
+  lineHeight: 0.72,
+  fontWeight: 400,
+  letterSpacing: '-0.015em',
+  transform: 'translateY(-7%)',
+}
+
+const dianaThemeStyles = {
+  page: {
+    backgroundColor: '#f8f2e9',
+    backgroundImage:
+      'radial-gradient(circle at 14% 8%, rgba(197,165,118,0.14) 0%, rgba(197,165,118,0) 36%), linear-gradient(180deg, #f8f2e9 0%, #fbf7f2 42%, #fffcf8 100%)',
+    fontFamily: dianaSerifFont,
+  },
+  heroSection: {
+    width: '100%',
+    padding: '0',
+    position: 'relative',
+    overflow: 'hidden',
+    backgroundColor: '#f8f2e9',
+  },
+  heroCard: {
+    position: 'relative',
+    zIndex: 2,
+    width: '100%',
+    maxWidth: 'none',
+    margin: 0,
+    padding: 0,
+    borderRadius: '0',
+    background: 'transparent',
+    border: '0',
+    boxShadow: 'none',
+    overflow: 'visible',
+    textAlign: 'center',
+  },
+  heroBackground: {
+    aspectRatio: '1366 / 768',
+    backgroundColor: '#f1e7d8',
+    backgroundImage: 'url("/templates/diana/diana-hero-bg.png")',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    containerType: 'inline-size',
+  },
+  heroNameLine: {
+    display: 'block',
+  },
+  heroFirstName: {
+    transform: 'translateX(-18%) translateY(-8%)',
+  },
+  heroSecondName: {
+    transform: 'translateX(18%) translateY(calc(8% + 42px))',
+  },
+  heroAmpersand: {
+    display: 'block',
+    margin: 'min(0.9rem, 2cqw) 0 min(1rem, 2.2cqw)',
+    fontFamily: dianaSerifFont,
+    fontSize: '0.36em',
+    fontStyle: 'italic',
+    fontWeight: 400,
+    lineHeight: 0.9,
+    textAlign: 'center',
+    transform: 'translateY(2%)',
+  },
+  eyebrow: {
+    marginBottom: 'clamp(24px, 5vw, 42px)',
+    letterSpacing: '0.32em',
+    color: '#9b805c',
+    fontFamily: dianaSectionLabelFont,
+    fontWeight: 400,
+  },
+  heroTitle: {
+    margin: 0,
+    ...dianaHeroNameTypography,
+    color: '#704a43',
+    textTransform: 'none',
+  },
+  heroMeta: {
+    fontSize: 'clamp(21px, 2.8vw, 30px)',
+    color: '#6e5945',
+  },
+  heroLocation: {
+    marginTop: '0',
+    color: '#564637',
+    fontSize: 'clamp(19px, 2.6vw, 25px)',
+    fontWeight: 400,
+  },
+  heroAddress: {
+    color: '#806d59',
+    fontSize: 'clamp(15px, 2vw, 18px)',
+  },
+  button: {
+    background: 'transparent',
+    color: '#6f5c47',
+    border: '1px solid rgba(166, 132, 86, 0.3)',
+    boxShadow: 'none',
+    borderRadius: '0',
+    marginTop: 0,
+    marginLeft: '0',
+    letterSpacing: '0.16em',
+    textTransform: 'uppercase',
+    padding: '9px 16px',
+    fontSize: '10px',
+    fontWeight: 400,
+  },
+  welcomeText: { maxWidth: '760px', fontSize: 'clamp(18px, 2.2vw, 24px)', color: '#6f5c49' },
+  editorialSection: {
+    padding: 'clamp(36px, 7vw, 72px) 0 clamp(72px, 10vw, 118px)',
+  },
+  editorialBlock: {
+    width: 'min(calc(100% - 40px), 920px)',
+    maxWidth: 'none',
+    margin: '0 auto',
+    padding: 'clamp(54px, 8vw, 84px) 0',
+    textAlign: 'center',
+    borderTop: '1px solid rgba(180, 160, 120, 0.25)',
+  },
+  editorialBlockFirst: {
+    borderTop: '0',
+  },
+  editorialBlockCompact: {
+    padding: 'clamp(10px, 1.8vw, 18px) 0',
+  },
+  editorialMenuBlock: {
+    width: '100%',
+    maxWidth: 'none',
+    padding: 'clamp(72px, 9vw, 112px) 24px',
+    backgroundImage:
+      'linear-gradient(rgba(255, 250, 242, 0.85), rgba(255, 250, 242, 0.85)), url("/images/drapery.jpg")',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+  },
+  editorialSplitBlock: {
+    display: 'grid',
+    alignItems: 'center',
+    width: 'min(100%, 1200px)',
+    maxWidth: '1200px',
+    margin: '0 auto',
+    padding: 0,
+    textAlign: 'left',
+  },
+  editorialCeremonySplitBlock: {
+    padding: 0,
+  },
+  editorialSplitMedia: {
+    position: 'relative',
+    width: '100%',
+    height: 'auto',
+    overflow: 'visible',
+  },
+  editorialSplitImage: {
+    display: 'block',
+    width: '100%',
+    height: 'auto',
+    maxHeight: '85vh',
+    objectFit: 'contain',
+  },
+  editorialSplitCopy: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    width: '100%',
+    maxWidth: 'none',
+    minHeight: '100%',
+  },
+  editorialSplitMeta: {
+    margin: '18px 0 0',
+    fontSize: 'clamp(32px, 4.4vw, 48px)',
+    lineHeight: 1.08,
+    fontWeight: 400,
+    color: '#4e4134',
+    fontFamily: dianaSerifFont,
+  },
+  editorialEyebrow: {
+    margin: '0 0 20px',
+    fontSize: 'clamp(12px, 1.2vw, 14px)',
+    lineHeight: 1.4,
+    letterSpacing: '0.18em',
+    textTransform: 'uppercase',
+    color: '#9b805c',
+    fontFamily: dianaSerifFont,
+    fontStyle: 'italic',
+    fontVariantCaps: 'small-caps',
+    fontWeight: 400,
+  },
+  editorialTitle: {
+    margin: 0,
+    fontSize: 'clamp(40px, 5.8vw, 64px)',
+    lineHeight: 1.08,
+    fontWeight: 400,
+    color: '#3f352b',
+    fontFamily: dianaSerifFont,
+  },
+  editorialTitleCompact: {
+    fontSize: 'clamp(30px, 4.2vw, 48px)',
+  },
+  editorialTwoColumnBlock: {
+    width: 'min(calc(100% - 40px), 1120px)',
+    padding: 'clamp(72px, 9vw, 112px) 0',
+    textAlign: 'center',
+  },
+  editorialTwoColumnGrid: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gap: '80px',
+    alignItems: 'start',
+  },
+  editorialTwoColumnItem: {
+    display: 'grid',
+    justifyItems: 'center',
+    minWidth: 0,
+    textAlign: 'center',
+  },
+  editorialColumnTitle: {
+    margin: 0,
+    fontSize: 'clamp(34px, 4.6vw, 52px)',
+    lineHeight: 1.1,
+    fontWeight: 400,
+    color: '#3f352b',
+    fontFamily: dianaSerifFont,
+  },
+  editorialColumnBody: {
+    maxWidth: '420px',
+    margin: '24px auto 0',
+    fontSize: 'clamp(18px, 2.2vw, 22px)',
+    lineHeight: 1.85,
+    color: '#5d4d3d',
+    fontFamily: dianaSerifFont,
+  },
+  editorialContent: {
+    marginTop: '26px',
+  },
+  editorialText: {
+    maxWidth: '850px',
+    margin: '0 auto',
+    fontSize: 'clamp(22px, 3vw, 31px)',
+    lineHeight: 1.35,
+    color: '#4e4134',
+    fontFamily: dianaSerifFont,
+  },
+  editorialSubText: {
+    maxWidth: '850px',
+    margin: '8px auto 0',
+    fontSize: 'clamp(16px, 2vw, 19px)',
+    lineHeight: 1.75,
+    color: '#75634f',
+    fontFamily: dianaSerifFont,
+  },
+  editorialBody: {
+    maxWidth: '850px',
+    margin: '0 auto',
+    fontSize: 'clamp(18px, 2.2vw, 22px)',
+    lineHeight: 1.85,
+    color: '#5d4d3d',
+    fontFamily: dianaSerifFont,
+    textAlign: 'center',
+  },
+  editorialMenuText: {
+    maxWidth: '850px',
+    margin: '0 auto',
+    textAlign: 'center',
+  },
+  editorialMenuCourse: {
+    marginTop: '48px',
+  },
+  editorialMenuCourseFirst: {
+    marginTop: 0,
+  },
+  editorialMenuHeading: {
+    margin: '0 0 12px',
+    fontSize: 'clamp(12px, 1.2vw, 14px)',
+    lineHeight: 1.4,
+    letterSpacing: '0.25em',
+    textTransform: 'uppercase',
+    fontWeight: 500,
+    color: '#b08d67',
+    fontFamily: dianaSectionLabelFont,
+    textAlign: 'center',
+  },
+  editorialMenuDescription: {
+    maxWidth: '850px',
+    margin: '0 auto',
+  },
+  editorialMenuLine: {
+    margin: '0 0 0.4rem',
+    fontSize: 'clamp(18px, 2.2vw, 22px)',
+    lineHeight: 1.9,
+    color: '#5d4d3d',
+    fontFamily: dianaSerifFont,
+    textAlign: 'center',
+  },
+  editorialScheduleList: {
+    display: 'grid',
+    gap: '28px',
+    marginTop: '8px',
+  },
+  editorialScheduleItem: {
+    display: 'grid',
+    gap: '8px',
+    justifyItems: 'center',
+  },
+  editorialScheduleTime: {
+    margin: 0,
+    fontSize: '12px',
+    letterSpacing: '0.22em',
+    textTransform: 'uppercase',
+    color: '#9b805c',
+    fontFamily: dianaSectionLabelFont,
+  },
+  editorialScheduleTitle: {
+    margin: 0,
+    fontSize: 'clamp(22px, 3vw, 30px)',
+    lineHeight: 1.25,
+    fontWeight: 400,
+    color: '#42362b',
+    fontFamily: dianaSerifFont,
+  },
+  editorialScheduleDescription: {
+    maxWidth: '560px',
+    margin: '8px auto 0',
+    fontSize: 'clamp(16px, 2vw, 18px)',
+    lineHeight: 1.75,
+    color: '#6e5c49',
+    fontFamily: dianaSerifFont,
+  },
+  editorialActions: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: '12px',
+    marginTop: '30px',
+  },
+  editorialPrimaryAction: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: '42px',
+    padding: '10px 20px',
+    border: '1px solid rgba(126, 96, 58, 0.42)',
+    color: '#fffaf2',
+    background: '#5f4838',
+    textDecoration: 'none',
+    textTransform: 'uppercase',
+    letterSpacing: '0.16em',
+    fontSize: '10px',
+    fontFamily: dianaSectionLabelFont,
+  },
+  editorialSecondaryAction: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: '42px',
+    padding: '10px 20px',
+    border: '1px solid rgba(180, 160, 120, 0.35)',
+    color: '#5f4838',
+    background: 'transparent',
+    textDecoration: 'none',
+    textTransform: 'uppercase',
+    letterSpacing: '0.16em',
+    fontSize: '10px',
+    fontFamily: dianaSectionLabelFont,
   },
 }
 

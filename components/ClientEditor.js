@@ -20,6 +20,7 @@ export default function ClientEditor({ slug: slugProp }) {
     couple_display_name: "",
     wedding_date: "",
     ceremony_time: "",
+    end_time: "",
     venue_name: "",
     venue_address: "",
   })
@@ -76,6 +77,9 @@ export default function ClientEditor({ slug: slugProp }) {
         wedding_date: projectData.wedding_date || "",
         ceremony_time: projectData.ceremony_time
           ? String(projectData.ceremony_time).slice(0, 5)
+          : "",
+        end_time: projectData.end_time
+          ? String(projectData.end_time).slice(0, 5)
           : "",
         venue_name: projectData.venue_name || "",
         venue_address: projectData.venue_address || "",
@@ -162,6 +166,9 @@ export default function ClientEditor({ slug: slugProp }) {
       ...projectForm,
       ceremony_time: projectForm.ceremony_time
         ? `${projectForm.ceremony_time}:00`
+        : null,
+      end_time: projectForm.end_time
+        ? `${projectForm.end_time}:00`
         : null,
     }
 
@@ -252,6 +259,7 @@ export default function ClientEditor({ slug: slugProp }) {
         <InputField label="Mená páru" name="couple_display_name" value={projectForm.couple_display_name} onChange={handleProjectChange} />
         <InputField label="Dátum svadby" name="wedding_date" type="date" value={projectForm.wedding_date} onChange={handleProjectChange} />
         <InputField label="Čas obradu" name="ceremony_time" type="time" value={projectForm.ceremony_time} onChange={handleProjectChange} />
+        <InputField label="Čas oslavy" name="end_time" type="time" value={projectForm.end_time} onChange={handleProjectChange} />
         <InputField label="Miesto svadby" name="venue_name" value={projectForm.venue_name} onChange={handleProjectChange} />
         <InputField label="Adresa miesta" name="venue_address" value={projectForm.venue_address} onChange={handleProjectChange} />
 
