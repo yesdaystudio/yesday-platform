@@ -379,11 +379,12 @@ function DianaEditorialSplitBlock({
 }) {
   const imageRight = imageSide === 'right'
   const isCeremony = variant === 'ceremony'
+  const isCelebration = variant === 'celebration'
   const className = [
     'dianaEditorialSplit',
     imageRight ? 'dianaEditorialSplit--imageRight' : null,
     isCeremony ? 'dianaEditorialSplit--ceremony' : null,
-    variant === 'celebration' ? 'dianaEditorialSplit--celebration' : null,
+    isCelebration ? 'dianaEditorialSplit--celebration' : null,
   ].filter(Boolean).join(' ')
 
   return (
@@ -400,7 +401,8 @@ function DianaEditorialSplitBlock({
         <img
           src={imageSrc}
           alt={imageAlt}
-          style={styles.editorialSplitImage}
+          className={isCelebration ? 'dianaEditorialSplit__image--celebration' : undefined}
+          style={isCelebration ? styles.editorialCelebrationImage : styles.editorialSplitImage}
         />
       </div>
       <div className="dianaEditorialSplit__copy" style={styles.editorialSplitCopy}>
@@ -930,6 +932,11 @@ const dianaThemeStyles = {
     width: '100%',
     height: 'auto',
     maxHeight: '85vh',
+    objectFit: 'contain',
+  },
+  editorialCelebrationImage: {
+    display: 'block',
+    height: 'auto',
     objectFit: 'contain',
   },
   editorialSplitCopy: {

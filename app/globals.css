@@ -24,3 +24,94 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.dianaEditorialSplit {
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 500px);
+  gap: clamp(48px, 6vw, 80px);
+  min-height: 0;
+  align-items: center;
+}
+
+.dianaEditorialSplit--ceremony {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.dianaEditorialSplit .dianaEditorialSplit__media {
+  align-self: center;
+  justify-self: end;
+  max-width: 500px;
+  max-height: 85vh;
+}
+
+.dianaEditorialSplit .dianaEditorialSplit__media img {
+  margin-left: auto;
+}
+
+.dianaEditorialSplit .dianaEditorialSplit__copy {
+  align-self: center;
+  padding: clamp(54px, 7vw, 96px) 0;
+}
+
+.dianaEditorialSplit--imageRight {
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 500px);
+}
+
+.dianaEditorialSplit--imageRight .dianaEditorialSplit__media {
+  order: 2;
+}
+
+.dianaEditorialSplit--imageRight .dianaEditorialSplit__copy {
+  order: 1;
+}
+
+.dianaEditorialSplit--celebration .dianaEditorialSplit__media img.dianaEditorialSplit__image--celebration {
+  width: clamp(360px, 34vw, 520px);
+  height: auto;
+  max-height: 82vh;
+  object-fit: contain;
+}
+
+@media (max-width: 760px) {
+  .dianaEditorialTwoColumn {
+    grid-template-columns: 1fr !important;
+    gap: 56px !important;
+  }
+
+  .dianaEditorialSplit,
+  .dianaEditorialSplit--ceremony {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    text-align: center !important;
+  }
+
+  .dianaEditorialSplit--imageRight {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    text-align: center !important;
+  }
+
+  .dianaEditorialSplit .dianaEditorialSplit__media,
+  .dianaEditorialSplit--imageRight .dianaEditorialSplit__media {
+    order: 1;
+    min-height: 0;
+  }
+
+  .dianaEditorialSplit .dianaEditorialSplit__media img,
+  .dianaEditorialSplit--imageRight .dianaEditorialSplit__media img {
+    height: auto !important;
+  }
+
+  .dianaEditorialSplit .dianaEditorialSplit__copy,
+  .dianaEditorialSplit--imageRight .dianaEditorialSplit__copy,
+  .dianaEditorialSplit--ceremony .dianaEditorialSplit__copy {
+    order: 2;
+    min-height: 0;
+    padding: 36px 20px 0;
+  }
+
+  .dianaEditorialSplit--celebration .dianaEditorialSplit__media img.dianaEditorialSplit__image--celebration {
+    width: 100%;
+    max-width: 100%;
+    max-height: 80vh;
+  }
+}
