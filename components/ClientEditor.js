@@ -15,12 +15,14 @@ export default function ClientEditor({ slug: slugProp }) {
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState("")
   const [error, setError] = useState("")
+  const [receptionVenueName, setReceptionVenueName] = useState("")
+  const [receptionVenueAddress, setReceptionVenueAddress] = useState("")
 
   const [projectForm, setProjectForm] = useState({
     couple_display_name: "",
     wedding_date: "",
     ceremony_time: "",
-    end_time: "",
+    reception_time: "",
     venue_name: "",
     venue_address: "",
   })
@@ -78,12 +80,15 @@ export default function ClientEditor({ slug: slugProp }) {
         ceremony_time: projectData.ceremony_time
           ? String(projectData.ceremony_time).slice(0, 5)
           : "",
-        end_time: projectData.end_time
-          ? String(projectData.end_time).slice(0, 5)
+        reception_time: projectData.reception_time
+          ? String(projectData.reception_time).slice(0, 5)
           : "",
         venue_name: projectData.venue_name || "",
         venue_address: projectData.venue_address || "",
       })
+
+      setReceptionVenueName(projectData.reception_venue_name || "")
+      setReceptionVenueAddress(projectData.reception_venue_address || "")
 
       const { data: contentData } = await supabase
         .from("website_content")
@@ -163,21 +168,50 @@ export default function ClientEditor({ slug: slugProp }) {
     setError("")
 
     const projectPayload = {
-      ...projectForm,
+      couple_display_name: projectForm.couple_display_name,
+      wedding_date: projectForm.wedding_date || null,
       ceremony_time: projectForm.ceremony_time
         ? `${projectForm.ceremony_time}:00`
         : null,
-      end_time: projectForm.end_time
-        ? `${projectForm.end_time}:00`
+      reception_time: projectForm.reception_time
+        ? `${projectForm.reception_time}:00`
         : null,
+      venue_name: projectForm.venue_name,
+      venue_address: projectForm.venue_address,
+      reception_venue_name: receptionVenueName,
+      reception_venue_address: receptionVenueAddress,
     }
 
-    const { error: projectUpdateError } = await supabase
+    console.error("PROJECT DATA CREATED AT", "ClientEditor.handleSubmit -> const projectPayload")
+    console.error("PROJECT FORM VALUES", {
+      couple_display_name: projectForm.couple_display_name,
+      wedding_date: projectForm.wedding_date,
+      ceremony_time: projectForm.ceremony_time,
+      reception_time: projectForm.reception_time,
+      venue_name: projectForm.venue_name,
+      venue_address: projectForm.venue_address,
+      receptionVenueName,
+      receptionVenueAddress,
+    })
+    console.error("PROJECT DATA BEFORE UPDATE", projectPayload)
+    console.error("PROJECT SAVE PAYLOAD", projectPayload)
+    console.error("PROJECT SAVE TARGET", {
+      projectId: project?.id,
+      projectSlug: project?.slug,
+      routeSlug: slug,
+    })
+
+    const { data: projectData, error } = await supabase
       .from("projects")
       .update(projectPayload)
       .eq("id", project.id)
 
-    if (projectUpdateError) {
+    if (error) {
+      console.error("PROJECT SAVE ERROR MESSAGE", error?.message)
+      console.error("PROJECT SAVE ERROR DETAILS", error?.details)
+      console.error("PROJECT SAVE ERROR HINT", error?.hint)
+      console.error("PROJECT SAVE ERROR CODE", error?.code)
+      console.error("PROJECT SAVE PAYLOAD JSON", JSON.stringify(projectData, null, 2))
       setError("Základné údaje sa nepodarilo uložiť.")
       setSaving(false)
       return
@@ -259,9 +293,11 @@ export default function ClientEditor({ slug: slugProp }) {
         <InputField label="Mená páru" name="couple_display_name" value={projectForm.couple_display_name} onChange={handleProjectChange} />
         <InputField label="Dátum svadby" name="wedding_date" type="date" value={projectForm.wedding_date} onChange={handleProjectChange} />
         <InputField label="Čas obradu" name="ceremony_time" type="time" value={projectForm.ceremony_time} onChange={handleProjectChange} />
-        <InputField label="Čas oslavy" name="end_time" type="time" value={projectForm.end_time} onChange={handleProjectChange} />
-        <InputField label="Miesto svadby" name="venue_name" value={projectForm.venue_name} onChange={handleProjectChange} />
-        <InputField label="Adresa miesta" name="venue_address" value={projectForm.venue_address} onChange={handleProjectChange} />
+        <InputField label="Čas oslavy" name="reception_time" type="time" value={projectForm.reception_time} onChange={handleProjectChange} />
+        <InputField label="Miesto obradu" name="venue_name" value={projectForm.venue_name} onChange={handleProjectChange} />
+        <InputField label="Adresa obradu" name="venue_address" value={projectForm.venue_address} onChange={handleProjectChange} />
+        <InputField label="Miesto oslavy" value={receptionVenueName} onChange={(event) => setReceptionVenueName(event.target.value)} />
+        <InputField label="Adresa oslavy" value={receptionVenueAddress} onChange={(event) => setReceptionVenueAddress(event.target.value)} />
 
         <h2 style={subtitleStyle}>Texty na webe</h2>
 

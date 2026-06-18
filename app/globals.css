@@ -27,7 +27,7 @@ body {
 
 .dianaEditorialSplit {
   grid-template-columns: minmax(0, 1fr) minmax(320px, 500px);
-  gap: clamp(48px, 6vw, 80px);
+  gap: clamp(44px, 5.2vw, 70px);
   min-height: 0;
   align-items: center;
 }
@@ -49,7 +49,7 @@ body {
 
 .dianaEditorialSplit .dianaEditorialSplit__copy {
   align-self: center;
-  padding: clamp(54px, 7vw, 96px) 0;
+  padding: clamp(38px, 5.4vw, 68px) 0;
 }
 
 .dianaEditorialSplit--imageRight {
@@ -65,10 +65,53 @@ body {
 }
 
 .dianaEditorialSplit--celebration .dianaEditorialSplit__media img.dianaEditorialSplit__image--celebration {
-  width: clamp(360px, 34vw, 520px);
+  width: clamp(389px, 36.7vw, 562px);
   height: auto;
   max-height: 82vh;
   object-fit: contain;
+}
+
+@media (min-width: 761px) {
+  .dianaEditorialSplit--menu {
+    --menu-image-overhang-right: clamp(118px, 12.5vw, 172px);
+    width: 100% !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    grid-template-columns: max-content minmax(0, 1fr);
+    column-gap: 0;
+    row-gap: 0;
+    padding-left: 0 !important;
+  }
+
+  .dianaEditorialSplit--menu .dianaEditorialSplit__media {
+    justify-self: start;
+    width: 509.922px !important;
+    max-width: none;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    transform: translateX(-140px) !important;
+  }
+
+  .dianaEditorialSplit--menu .dianaEditorialSplit__media img {
+    width: 176% !important;
+    max-width: 176% !important;
+    max-height: 101.2vh !important;
+    margin-left: 0 !important;
+    margin-right: auto;
+    padding-left: 0 !important;
+    transform: scale(1.21) !important;
+    transform-origin: left center;
+    object-fit: contain;
+  }
+
+  .dianaEditorialSplit--menu .dianaEditorialSplit__copy {
+    justify-self: stretch;
+    width: min(100%, 440px) !important;
+    margin-left: auto;
+    margin-right: auto;
+    transform: translateX(-200px) !important;
+  }
 }
 
 @media (max-width: 760px) {
@@ -113,5 +156,20 @@ body {
     width: 100%;
     max-width: 100%;
     max-height: 80vh;
+  }
+
+  .dianaEditorialSplit--menu .dianaEditorialSplit__media {
+    transform: none !important;
+  }
+
+  .dianaEditorialSplit--menu .dianaEditorialSplit__media img {
+    width: 100% !important;
+    max-width: 100% !important;
+    transform: none;
+  }
+
+  .dianaEditorialSplit--menu .dianaEditorialSplit__copy {
+    width: 100% !important;
+    transform: none;
   }
 }

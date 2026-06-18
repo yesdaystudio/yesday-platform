@@ -76,7 +76,7 @@ export default async function WeddingPage({ params }) {
   const colorTheme = getColorTheme(colorVariant)
   const isDianaHero = designFamily === 'diana'
   const ceremonyTime = formatScheduleTime(project.ceremony_time || scheduleItems[0]?.item_time || scheduleItems[0]?.time)
-  const celebrationTime = formatScheduleTime(project.end_time)
+  const celebrationTime = formatScheduleTime(project.reception_time)
 
   return (
     <main style={{ ...pageStyle, ...themeStyles.page, ...colorTheme.page }}>
@@ -250,20 +250,26 @@ function DianaEditorialContent({
   slug,
   styles,
 }) {
+  const receptionVenueName = project.reception_venue_name || project.venue_name || 'Miesto oslavy bude doplnené'
+  const receptionVenueAddress = project.reception_venue_address || project.venue_address || 'Adresa bude doplnená'
+
   return (
     <section id="info" style={styles.editorialSection}>
       <DianaEditorialBlock title={displayDate} styles={styles} noDivider compact />
 
       {wc.welcome_text ? (
-        <DianaEditorialBlock eyebrow="Vitajte" title="Srdečne vás pozývame" styles={styles}>
-          <DianaEditorialText styles={styles}>{wc.welcome_text}</DianaEditorialText>
-        </DianaEditorialBlock>
+        <DianaEditorialBlock eyebrow="Vitajte" title={wc.welcome_text} styles={styles} />
       ) : null}
 
-      <DianaEditorialBlock eyebrow="Obrad" title="Obrad" styles={styles}>
-        <p style={styles.editorialSplitMeta}>{ceremonyTime}</p>
-        <p style={styles.editorialText}>{project.venue_name || 'Miesto obradu bude doplnené'}</p>
-        <p style={styles.editorialSubText}>{project.venue_address || 'Adresa bude doplnená'}</p>
+      <DianaEditorialBlock
+        eyebrow="Obrad"
+        title={ceremonyTime}
+        styles={styles}
+        titleStyle={styles.editorialTimingTitle}
+        contentStyle={styles.editorialTimingContent}
+      >
+        <p style={styles.editorialTimingVenue}>{project.venue_name || 'Miesto obradu bude doplnené'}</p>
+        <p style={styles.editorialTimingAddress}>{project.venue_address || 'Adresa bude doplnená'}</p>
       </DianaEditorialBlock>
 
       <DianaEditorialSplitBlock
@@ -274,9 +280,13 @@ function DianaEditorialContent({
         imageSide="right"
         variant="celebration"
         styles={styles}
+        titleStyle={{ ...styles.editorialTimingTitle, ...styles.editorialCelebrationTitle }}
+        contentStyle={styles.editorialTimingContent}
+        copyStyle={styles.editorialTimingSplitCopy}
+        mediaStyle={styles.editorialCelebrationMedia}
       >
-        <p style={styles.editorialText}>{project.venue_name || 'Miesto oslavy bude doplnené'}</p>
-        <p style={styles.editorialSubText}>{project.venue_address || 'Adresa bude doplnená'}</p>
+        <p style={styles.editorialCelebrationVenue}>{receptionVenueName}</p>
+        <p style={styles.editorialCelebrationAddress}>{receptionVenueAddress}</p>
       </DianaEditorialSplitBlock>
 
       {wc.story_text ? (
@@ -285,7 +295,7 @@ function DianaEditorialContent({
         </DianaEditorialBlock>
       ) : null}
 
-      <DianaEditorialBlock id="program" eyebrow="Program" title="Harmonogram" styles={styles}>
+      <DianaEditorialBlock id="program" title="Harmonogram" styles={styles}>
         {scheduleError ? (
           <p style={styles.editorialBody}>Harmonogram sa momentálne nepodarilo načítať.</p>
         ) : scheduleItems.length > 0 ? (
@@ -299,11 +309,34 @@ function DianaEditorialContent({
         )}
       </DianaEditorialBlock>
 
-      <DianaEditorialBlock eyebrow="Menu" title="Slávnostné menu" styles={styles} menuBackground>
+      <DianaEditorialSplitBlock
+        title="Slávnostné menu"
+        imageSrc="/images/diana/menu.jpg"
+        imageAlt="Slávnostné menu"
+        variant="menu"
+        styles={styles}
+        mediaStyle={styles.editorialMenuMedia}
+        imageStyle={styles.editorialMenuImage}
+        copyStyle={styles.editorialMenuCopy}
+      >
         <DianaMenuText styles={styles}>
-          {wc.menu_intro_text || 'Informácie o slávnostnom menu, večernom bufete a prípadných alergiách doplníme čoskoro.'}
+          {wc.menu_intro_text || `PREDJEDLO
+
+Kozí syr v pistáciovej kruste
+s medovo-horčicovým dressingom
+a mladými šalátovými lístkami
+
+POLIEVKA
+
+Consommé z bažanta
+s koreňovou zeleninou a bylinkami
+
+HLAVNÉ JEDLO
+
+Hovädzie líčka braizované
+na červenom víne`}
         </DianaMenuText>
-      </DianaEditorialBlock>
+      </DianaEditorialSplitBlock>
 
       <DianaEditorialBlock eyebrow="Dress code" title="Štýl večera" styles={styles}>
         <DianaEditorialText styles={styles}>
@@ -314,12 +347,12 @@ function DianaEditorialContent({
       <DianaAccommodationParkingSection wc={wc} styles={styles} />
 
       {wc.faq_text ? (
-        <DianaEditorialBlock eyebrow="FAQ" title="Otázky hostí" styles={styles}>
+        <DianaEditorialBlock eyebrow="Faq" title="Otázky hostí" styles={styles}>
           <DianaEditorialText styles={styles}>{wc.faq_text}</DianaEditorialText>
         </DianaEditorialBlock>
       ) : null}
 
-      <DianaEditorialBlock eyebrow="RSVP" title="Potvrdenie účasti" styles={styles}>
+      <DianaEditorialBlock eyebrow="Rsvp" title="Potvrdenie účasti" styles={styles}>
         <p style={styles.editorialBody}>Prosíme, potvrďte svoju účasť a uložte si svadobný deň do kalendára.</p>
         <div style={styles.editorialActions}>
           <a href={`/${slug}/rsvp`} style={styles.editorialPrimaryAction}>
@@ -345,6 +378,9 @@ function DianaEditorialBlock({
   title,
   children,
   styles,
+  eyebrowStyle,
+  titleStyle,
+  contentStyle,
   noDivider = false,
   compact = false,
   menuBackground = false,
@@ -359,9 +395,9 @@ function DianaEditorialBlock({
         ...(menuBackground ? styles.editorialMenuBlock : {}),
       }}
     >
-      {eyebrow ? <p style={styles.editorialEyebrow}>{eyebrow}</p> : null}
-      <h2 style={{ ...styles.editorialTitle, ...(compact ? styles.editorialTitleCompact : {}) }}>{title}</h2>
-      {children ? <div style={styles.editorialContent}>{children}</div> : null}
+      {eyebrow ? <p style={{ ...styles.editorialEyebrow, ...eyebrowStyle }}>{eyebrow}</p> : null}
+      <h2 style={{ ...styles.editorialTitle, ...(compact ? styles.editorialTitleCompact : {}), ...titleStyle }}>{title}</h2>
+      {children ? <div style={{ ...styles.editorialContent, ...contentStyle }}>{children}</div> : null}
     </article>
   )
 }
@@ -376,15 +412,31 @@ function DianaEditorialSplitBlock({
   variant,
   children,
   styles,
+  eyebrowStyle,
+  titleStyle,
+  contentStyle,
+  copyStyle,
+  mediaStyle,
+  imageStyle,
 }) {
   const imageRight = imageSide === 'right'
   const isCeremony = variant === 'ceremony'
   const isCelebration = variant === 'celebration'
+  const isMenu = variant === 'menu'
+  const splitBlockStyle = isMenu
+    ? {
+      ...styles.editorialSplitBlock,
+      width: '100%',
+      maxWidth: 'none',
+      margin: '0',
+    }
+    : styles.editorialSplitBlock
   const className = [
     'dianaEditorialSplit',
     imageRight ? 'dianaEditorialSplit--imageRight' : null,
     isCeremony ? 'dianaEditorialSplit--ceremony' : null,
     isCelebration ? 'dianaEditorialSplit--celebration' : null,
+    isMenu ? 'dianaEditorialSplit--menu' : null,
   ].filter(Boolean).join(' ')
 
   return (
@@ -392,24 +444,24 @@ function DianaEditorialSplitBlock({
       className={className}
       style={{
         ...styles.editorialBlock,
-        ...styles.editorialSplitBlock,
+        ...splitBlockStyle,
         ...(isCeremony ? styles.editorialCeremonySplitBlock : {}),
       }}
     >
-      <div className="dianaEditorialSplit__media" style={styles.editorialSplitMedia}>
+      <div className="dianaEditorialSplit__media" style={{ ...styles.editorialSplitMedia, ...(mediaStyle || {}) }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={imageSrc}
           alt={imageAlt}
           className={isCelebration ? 'dianaEditorialSplit__image--celebration' : undefined}
-          style={isCelebration ? styles.editorialCelebrationImage : styles.editorialSplitImage}
+          style={{ ...(isCelebration ? styles.editorialCelebrationImage : styles.editorialSplitImage), ...(imageStyle || {}) }}
         />
       </div>
-      <div className="dianaEditorialSplit__copy" style={styles.editorialSplitCopy}>
-        {eyebrow ? <p style={styles.editorialEyebrow}>{eyebrow}</p> : null}
-        <h2 style={styles.editorialTitle}>{title}</h2>
+      <div className="dianaEditorialSplit__copy" style={{ ...styles.editorialSplitCopy, ...copyStyle }}>
+        {eyebrow ? <p style={{ ...styles.editorialEyebrow, ...eyebrowStyle }}>{eyebrow}</p> : null}
+        <h2 style={{ ...styles.editorialTitle, ...titleStyle }}>{title}</h2>
         {meta ? <p style={styles.editorialSplitMeta}>{meta}</p> : null}
-        {children ? <div style={styles.editorialContent}>{children}</div> : null}
+        {children ? <div style={{ ...styles.editorialContent, ...contentStyle }}>{children}</div> : null}
       </div>
     </article>
   )
@@ -465,15 +517,12 @@ function DianaMenuText({ children, styles }) {
     <div style={styles.editorialMenuText}>
       {courses.map((course, index) => {
         const [heading, ...details] = course
+        const description = details.join('\n').trim()
         return (
           <div key={`${index}-${heading}`} style={{ ...styles.editorialMenuCourse, ...(index === 0 ? styles.editorialMenuCourseFirst : {}) }}>
             <p className="whitespace-pre-line" style={styles.editorialMenuHeading}>{heading}</p>
             <div style={styles.editorialMenuDescription}>
-              {details.map((line, lineIndex) => (
-                <p key={`${lineIndex}-${line}`} className="whitespace-pre-line" style={styles.editorialMenuLine}>
-                  {line}
-                </p>
-              ))}
+              {description ? <p className="whitespace-pre-line" style={styles.editorialMenuLine}>{description}</p> : null}
             </div>
           </div>
         )
@@ -927,12 +976,31 @@ const dianaThemeStyles = {
     height: 'auto',
     overflow: 'visible',
   },
+  editorialCelebrationMedia: {
+    transform: 'translateX(calc((100vw - min(100vw, 1200px)) / 2 + 14px))',
+  },
+  editorialMenuMedia: {
+    justifySelf: 'start',
+    maxWidth: '620px',
+    transform: 'translateX(-140px)',
+  },
   editorialSplitImage: {
     display: 'block',
     width: '100%',
     height: 'auto',
     maxHeight: '85vh',
     objectFit: 'contain',
+  },
+  editorialMenuImage: {
+    width: '118%',
+    maxWidth: '118%',
+    marginLeft: 0,
+    marginRight: 'auto',
+  },
+  editorialMenuCopy: {
+    width: 'min(100%, 460px)',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
   editorialCelebrationImage: {
     display: 'block',
@@ -960,7 +1028,7 @@ const dianaThemeStyles = {
     fontSize: 'clamp(12px, 1.2vw, 14px)',
     lineHeight: 1.4,
     letterSpacing: '0.18em',
-    textTransform: 'uppercase',
+    textTransform: 'none',
     color: '#9b805c',
     fontFamily: dianaSerifFont,
     fontStyle: 'italic',
@@ -1014,6 +1082,55 @@ const dianaThemeStyles = {
   editorialContent: {
     marginTop: '26px',
   },
+  editorialTimingTitle: {
+    marginBottom: '36px',
+  },
+  editorialTimingContent: {
+    marginTop: 0,
+  },
+  editorialTimingSplitCopy: {
+    width: 'min(100%, 430px)',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    paddingTop: 0,
+    paddingBottom: 0,
+    transform: 'translateX(-12px)',
+  },
+  editorialCelebrationTitle: {
+    fontSize: 'clamp(36px, 5.2vw, 58px)',
+  },
+  editorialCelebrationVenue: {
+    maxWidth: '520px',
+    margin: '0 auto',
+    fontSize: 'clamp(23px, 2.9vw, 31px)',
+    lineHeight: 1.32,
+    color: '#4e4134',
+    fontFamily: dianaSerifFont,
+  },
+  editorialCelebrationAddress: {
+    maxWidth: '520px',
+    margin: '4px auto 0',
+    fontSize: 'clamp(14px, 1.75vw, 17px)',
+    lineHeight: 1.62,
+    color: '#7a6854',
+    fontFamily: dianaSerifFont,
+  },
+  editorialTimingVenue: {
+    maxWidth: '850px',
+    margin: '0 auto',
+    fontSize: 'clamp(24px, 3.2vw, 34px)',
+    lineHeight: 1.3,
+    color: '#4e4134',
+    fontFamily: dianaSerifFont,
+  },
+  editorialTimingAddress: {
+    maxWidth: '850px',
+    margin: '4px auto 0',
+    fontSize: 'clamp(15px, 1.9vw, 18px)',
+    lineHeight: 1.65,
+    color: '#7a6854',
+    fontFamily: dianaSerifFont,
+  },
   editorialText: {
     maxWidth: '850px',
     margin: '0 auto',
@@ -1045,13 +1162,17 @@ const dianaThemeStyles = {
     textAlign: 'center',
   },
   editorialMenuCourse: {
-    marginTop: '48px',
+    marginTop: '40px',
+    paddingTop: '24px',
+    borderTop: '1px solid rgba(176, 139, 105, 0.24)',
   },
   editorialMenuCourseFirst: {
     marginTop: 0,
+    paddingTop: 0,
+    borderTop: 'none',
   },
   editorialMenuHeading: {
-    margin: '0 0 12px',
+    margin: '0 0 9px',
     fontSize: 'clamp(12px, 1.2vw, 14px)',
     lineHeight: 1.4,
     letterSpacing: '0.25em',
@@ -1066,9 +1187,9 @@ const dianaThemeStyles = {
     margin: '0 auto',
   },
   editorialMenuLine: {
-    margin: '0 0 0.4rem',
+    margin: 0,
     fontSize: 'clamp(18px, 2.2vw, 22px)',
-    lineHeight: 1.9,
+    lineHeight: 1.75,
     color: '#5d4d3d',
     fontFamily: dianaSerifFont,
     textAlign: 'center',
