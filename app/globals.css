@@ -72,12 +72,6 @@ body {
 }
 
 @media (min-width: 761px) {
-  .dianaEditorialSplit--celebration .dianaEditorialSplit__media img.dianaEditorialSplit__image--celebration {
-    width: clamp(780px, 74vw, 1120px);
-    max-width: none;
-    max-height: none;
-  }
-
   .dianaEditorialSplit--menu {
     --menu-image-overhang-right: clamp(118px, 12.5vw, 172px);
     width: 100% !important;

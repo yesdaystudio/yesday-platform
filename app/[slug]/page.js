@@ -283,7 +283,6 @@ function DianaEditorialContent({
         titleStyle={{ ...styles.editorialTimingTitle, ...styles.editorialCelebrationTitle }}
         contentStyle={styles.editorialTimingContent}
         copyStyle={styles.editorialTimingSplitCopy}
-        mediaStyle={styles.editorialCelebrationMedia}
       >
         <p style={styles.editorialCelebrationVenue}>{receptionVenueName}</p>
         <p style={styles.editorialCelebrationAddress}>{receptionVenueAddress}</p>
@@ -975,9 +974,6 @@ const dianaThemeStyles = {
     width: '100%',
     height: 'auto',
     overflow: 'visible',
-  },
-  editorialCelebrationMedia: {
-    transform: 'translateX(calc((100vw - min(100vw, 1200px)) / 2 + 14px))',
   },
   editorialMenuMedia: {
     justifySelf: 'start',
