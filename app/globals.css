@@ -100,14 +100,13 @@ body {
   }
 
   .dianaEditorialSplit--menu .dianaEditorialSplit__media img {
-    width: 176% !important;
-    max-width: 176% !important;
-    max-height: 101.2vh !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 85vh !important;
     margin-left: 0 !important;
     margin-right: auto;
     padding-left: 0 !important;
-    transform: scale(1.21) !important;
-    transform-origin: left center;
+    transform: none !important;
     object-fit: contain;
   }
 

@@ -1001,7 +1001,6 @@ const dianaThemeStyles = {
     width: 'min(100%, 460px)',
     marginLeft: 'auto',
     marginRight: 'auto',
-    transform: 'translateX(-150px)',
   },
   editorialCelebrationImage: {
     display: 'block',
