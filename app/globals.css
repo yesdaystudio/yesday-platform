@@ -94,7 +94,7 @@ body {
     max-width: none;
     margin-left: 0 !important;
     padding-left: 0 !important;
-    transform: translateX(0) !important;
+    transform: translateX(-140px) !important;
   }
 
   .dianaEditorialSplit--menu .dianaEditorialSplit__media img {
