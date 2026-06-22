@@ -252,6 +252,9 @@ function DianaEditorialContent({
 }) {
   const receptionVenueName = project.reception_venue_name || project.venue_name || 'Miesto oslavy bude doplnené'
   const receptionVenueAddress = project.reception_venue_address || project.venue_address || 'Adresa bude doplnená'
+  const chronologicalScheduleItems = [...scheduleItems].sort(
+    (first, second) => getScheduleTimeMinutes(first) - getScheduleTimeMinutes(second)
+  )
 
   return (
     <section id="info" style={styles.editorialSection}>
@@ -297,9 +300,9 @@ function DianaEditorialContent({
       <DianaEditorialBlock id="program" title="Harmonogram" styles={styles}>
         {scheduleError ? (
           <p style={styles.editorialBody}>Harmonogram sa momentálne nepodarilo načítať.</p>
-        ) : scheduleItems.length > 0 ? (
+        ) : chronologicalScheduleItems.length > 0 ? (
           <div style={styles.editorialScheduleList}>
-            {scheduleItems.map((item) => (
+            {chronologicalScheduleItems.map((item) => (
               <DianaScheduleItem key={item.id} item={item} styles={styles} />
             ))}
           </div>
@@ -544,6 +547,17 @@ function DianaScheduleItem({ item, styles }) {
       </div>
     </article>
   )
+}
+
+function getScheduleTimeMinutes(item) {
+  const value = item?.item_time ?? item?.time
+  const match = String(value || '').match(/^(\d{1,2}):(\d{2})/)
+
+  if (!match) {
+    return Number.POSITIVE_INFINITY
+  }
+
+  return Number(match[1]) * 60 + Number(match[2])
 }
 
 function buildGoogleCalendarUrl(project, location) {
