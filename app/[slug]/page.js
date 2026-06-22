@@ -1,5 +1,6 @@
 import { Cormorant_Garamond, Great_Vibes, Inter, Ms_Madi } from 'next/font/google'
 import supabase from '../../lib/supabase'
+import { sortScheduleItemsChronologically } from '../../lib/schedule'
 import DianaStickyHeader from './DianaStickyHeader'
 
 const dianaContentFont = Cormorant_Garamond({
@@ -52,11 +53,12 @@ export default async function WeddingPage({ params }) {
     )
   }
 
-  const { data: scheduleItems = [], error: scheduleError } = await supabase
+  const { data: loadedScheduleItems = [], error: scheduleError } = await supabase
     .from('schedule_items')
     .select('*')
     .eq('project_id', project.id)
     .order('sort_order', { ascending: true })
+  const scheduleItems = sortScheduleItemsChronologically(loadedScheduleItems)
 
   const { data: websiteContent } = await supabase
     .from('website_content')
@@ -252,10 +254,6 @@ function DianaEditorialContent({
 }) {
   const receptionVenueName = project.reception_venue_name || project.venue_name || 'Miesto oslavy bude doplnené'
   const receptionVenueAddress = project.reception_venue_address || project.venue_address || 'Adresa bude doplnená'
-  const chronologicalScheduleItems = [...scheduleItems].sort(
-    (first, second) => getScheduleTimeMinutes(first) - getScheduleTimeMinutes(second)
-  )
-
   return (
     <section id="info" style={styles.editorialSection}>
       <DianaEditorialBlock title={displayDate} styles={styles} noDivider compact />
@@ -300,9 +298,9 @@ function DianaEditorialContent({
       <DianaEditorialBlock id="program" title="Harmonogram" styles={styles}>
         {scheduleError ? (
           <p style={styles.editorialBody}>Harmonogram sa momentálne nepodarilo načítať.</p>
-        ) : chronologicalScheduleItems.length > 0 ? (
+        ) : scheduleItems.length > 0 ? (
           <div style={styles.editorialScheduleList}>
-            {chronologicalScheduleItems.map((item) => (
+            {scheduleItems.map((item) => (
               <DianaScheduleItem key={item.id} item={item} styles={styles} />
             ))}
           </div>
@@ -547,17 +545,6 @@ function DianaScheduleItem({ item, styles }) {
       </div>
     </article>
   )
-}
-
-function getScheduleTimeMinutes(item) {
-  const value = item?.item_time ?? item?.time
-  const match = String(value || '').match(/^(\d{1,2}):(\d{2})/)
-
-  if (!match) {
-    return Number.POSITIVE_INFINITY
-  }
-
-  return Number(match[1]) * 60 + Number(match[2])
 }
 
 function buildGoogleCalendarUrl(project, location) {

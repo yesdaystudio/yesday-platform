@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import supabase from "../lib/supabase"
+import { sortScheduleItemsChronologically } from "../lib/schedule"
 
 export default function ClientEditor({ slug: slugProp }) {
   const params = useParams()
@@ -115,11 +116,11 @@ export default function ClientEditor({ slug: slugProp }) {
         .order("sort_order", { ascending: true })
 
       setScheduleForm(
-        scheduleData?.map((item) => ({
+        sortScheduleItemsChronologically(scheduleData?.map((item) => ({
           item_time: item.item_time || "",
           item_title: item.item_title || "",
           item_description: item.item_description || "",
-        })) || []
+        })) || [])
       )
 
       setLoading(false)
@@ -246,8 +247,10 @@ export default function ClientEditor({ slug: slugProp }) {
       .delete()
       .eq("project_id", project.id)
 
-    if (scheduleForm.length > 0) {
-      const schedulePayload = scheduleForm.map((item, index) => ({
+    const chronologicalScheduleForm = sortScheduleItemsChronologically(scheduleForm)
+
+    if (chronologicalScheduleForm.length > 0) {
+      const schedulePayload = chronologicalScheduleForm.map((item, index) => ({
         project_id: project.id,
         sort_order: index + 1,
         item_time: item.item_time,
@@ -266,6 +269,7 @@ export default function ClientEditor({ slug: slugProp }) {
       }
     }
 
+    setScheduleForm(chronologicalScheduleForm)
     setMessage("Zmeny boli uložené.")
     setSaving(false)
   }
