@@ -275,7 +275,7 @@ function DianaEditorialContent({
       <DianaEditorialSplitBlock
         eyebrow="Oslava"
         title={celebrationTime}
-        imageSrc="/images/diana/pohar.jpg"
+        imageSrc="/images/diana/champagne-tower.jpg"
         imageAlt="Svadobný prípitok so šampanským"
         imageSide="right"
         variant="celebration"
@@ -1001,6 +1001,7 @@ const dianaThemeStyles = {
     width: 'min(100%, 460px)',
     marginLeft: 'auto',
     marginRight: 'auto',
+    transform: 'translateX(-150px)',
   },
   editorialCelebrationImage: {
     display: 'block',
