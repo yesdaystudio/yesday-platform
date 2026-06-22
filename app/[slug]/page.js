@@ -978,7 +978,6 @@ const dianaThemeStyles = {
   editorialMenuMedia: {
     justifySelf: 'start',
     maxWidth: '620px',
-    transform: 'translateX(-140px)',
   },
   editorialSplitImage: {
     display: 'block',

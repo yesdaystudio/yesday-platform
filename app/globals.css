@@ -72,6 +72,10 @@ body {
 }
 
 @media (min-width: 761px) {
+  .dianaEditorialSplit--celebration .dianaEditorialSplit__media {
+    transform: translateX(calc((100vw - min(100vw, 1200px)) / 2));
+  }
+
   .dianaEditorialSplit--menu {
     --menu-image-overhang-right: clamp(118px, 12.5vw, 172px);
     width: 100% !important;
