@@ -151,6 +151,10 @@ body {
     display: none;
   }
 
+  .dianaEditorialSection {
+    padding-top: 0 !important;
+  }
+
   .dianaEditorialTwoColumn {
     grid-template-columns: 1fr !important;
     gap: 56px !important;

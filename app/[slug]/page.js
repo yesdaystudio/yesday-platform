@@ -271,7 +271,7 @@ function DianaEditorialContent({
   const receptionVenueName = project.reception_venue_name || project.venue_name || 'Miesto oslavy bude doplnené'
   const receptionVenueAddress = project.reception_venue_address || project.venue_address || 'Adresa bude doplnená'
   return (
-    <section id="info" style={styles.editorialSection}>
+    <section id="info" className="dianaEditorialSection" style={styles.editorialSection}>
       <DianaEditorialBlock
         className="dianaEditorialDate"
         title={displayDate}
