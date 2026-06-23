@@ -4,6 +4,11 @@ import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import supabase from "../lib/supabase"
 import { sortScheduleItemsChronologically } from "../lib/schedule"
+import {
+  DRESSCODE_PALETTE_OPTIONS,
+  MAX_DRESSCODE_PALETTE_COLORS,
+  normalizeDresscodePalette,
+} from "../lib/dresscodePalette"
 
 export default function ClientEditor({ slug: slugProp }) {
   const params = useParams()
@@ -33,6 +38,8 @@ export default function ClientEditor({ slug: slugProp }) {
     story_text: "",
     menu_intro_text: "",
     dresscode_text: "",
+    dresscode_palette_enabled: false,
+    dresscode_palette: [],
     accommodation_text: "",
     transport_text: "",
     faq_text: "",
@@ -103,6 +110,8 @@ export default function ClientEditor({ slug: slugProp }) {
           story_text: contentData.story_text || "",
           menu_intro_text: contentData.menu_intro_text || "",
           dresscode_text: contentData.dresscode_text || "",
+          dresscode_palette_enabled: contentData.dresscode_palette_enabled === true,
+          dresscode_palette: normalizeDresscodePalette(contentData.dresscode_palette),
           accommodation_text: contentData.accommodation_text || "",
           transport_text: contentData.transport_text || "",
           faq_text: contentData.faq_text || "",
@@ -135,8 +144,46 @@ export default function ClientEditor({ slug: slugProp }) {
   }
 
   function handleContentChange(event) {
-    const { name, value } = event.target
-    setContentForm((current) => ({ ...current, [name]: value }))
+    const { name, type, checked, value } = event.target
+    setContentForm((current) => ({
+      ...current,
+      [name]: type === "checkbox" ? checked : value,
+    }))
+  }
+
+  function togglePaletteColor(color) {
+    setContentForm((current) => {
+      const isSelected = current.dresscode_palette.some(
+        (selectedColor) => selectedColor.hex === color.hex
+      )
+
+      if (isSelected) {
+        return {
+          ...current,
+          dresscode_palette: current.dresscode_palette.filter(
+            (selectedColor) => selectedColor.hex !== color.hex
+          ),
+        }
+      }
+
+      if (current.dresscode_palette.length >= MAX_DRESSCODE_PALETTE_COLORS) {
+        return current
+      }
+
+      return {
+        ...current,
+        dresscode_palette: [...current.dresscode_palette, color],
+      }
+    })
+  }
+
+  function removePaletteColor(hex) {
+    setContentForm((current) => ({
+      ...current,
+      dresscode_palette: current.dresscode_palette.filter(
+        (color) => color.hex !== hex
+      ),
+    }))
   }
 
   function handleScheduleChange(index, field, value) {
@@ -227,14 +274,19 @@ export default function ClientEditor({ slug: slugProp }) {
     const contentPayload = {
       project_id: project.id,
       ...contentForm,
+      dresscode_palette: normalizeDresscodePalette(
+        contentForm.dresscode_palette
+      ),
     }
 
-    const contentResult = existingContent
-      ? await supabase
-          .from("website_content")
-          .update(contentPayload)
-          .eq("project_id", project.id)
-      : await supabase.from("website_content").insert(contentPayload)
+    let contentResult = await saveWebsiteContent(existingContent, contentPayload)
+
+    if (isMissingDresscodePaletteColumnError(contentResult.error)) {
+      const legacyContentPayload = { ...contentPayload }
+      delete legacyContentPayload.dresscode_palette_enabled
+      delete legacyContentPayload.dresscode_palette
+      contentResult = await saveWebsiteContent(existingContent, legacyContentPayload)
+    }
 
     if (contentResult.error) {
       setError("Textový obsah sa nepodarilo uložiť.")
@@ -315,6 +367,13 @@ export default function ClientEditor({ slug: slugProp }) {
           onChange={handleContentChange}
         />
         <TextField label="Dress code" name="dresscode_text" value={contentForm.dresscode_text} onChange={handleContentChange} />
+        <DresscodePaletteField
+          enabled={contentForm.dresscode_palette_enabled}
+          selectedColors={contentForm.dresscode_palette}
+          onEnabledChange={handleContentChange}
+          onToggleColor={togglePaletteColor}
+          onRemoveColor={removePaletteColor}
+        />
         <TextField label="Ubytovanie" name="accommodation_text" value={contentForm.accommodation_text} onChange={handleContentChange} />
         <TextField label="Doprava a parkovanie" name="transport_text" value={contentForm.transport_text} onChange={handleContentChange} />
         <TextField label="FAQ" name="faq_text" value={contentForm.faq_text} onChange={handleContentChange} />
@@ -377,6 +436,118 @@ export default function ClientEditor({ slug: slugProp }) {
         {error ? <p style={errorStyle}>{error}</p> : null}
       </form>
     </main>
+  )
+}
+
+async function saveWebsiteContent(existingContent, contentPayload) {
+  return existingContent
+    ? await supabase
+        .from("website_content")
+        .update(contentPayload)
+        .eq("project_id", contentPayload.project_id)
+    : await supabase.from("website_content").insert(contentPayload)
+}
+
+function isMissingDresscodePaletteColumnError(error) {
+  if (!error) {
+    return false
+  }
+
+  const details = [error.message, error.details, error.hint]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase()
+
+  return (
+    error.code === "42703" ||
+    error.code === "PGRST204" ||
+    details.includes("dresscode_palette")
+  )
+}
+
+function DresscodePaletteField({
+  enabled,
+  selectedColors,
+  onEnabledChange,
+  onToggleColor,
+  onRemoveColor,
+}) {
+  const selectionLimitReached =
+    selectedColors.length >= MAX_DRESSCODE_PALETTE_COLORS
+
+  return (
+    <fieldset style={paletteFieldsetStyle}>
+      <label style={paletteToggleStyle}>
+        <input
+          type="checkbox"
+          name="dresscode_palette_enabled"
+          checked={enabled}
+          onChange={onEnabledChange}
+          style={paletteCheckboxStyle}
+        />
+        <span>Zobraziť farebnú paletu</span>
+      </label>
+
+      {enabled ? (
+        <div style={paletteSelectorStyle}>
+          <p style={paletteHelperStyle}>
+            Vyberte najviac {MAX_DRESSCODE_PALETTE_COLORS} farieb.
+          </p>
+
+          {selectedColors.length > 0 ? (
+            <div style={selectedPaletteStyle}>
+              {selectedColors.map((color) => (
+                <div key={color.hex} style={selectedColorStyle}>
+                  <span
+                    aria-hidden="true"
+                    style={{ ...selectedSwatchStyle, backgroundColor: color.hex }}
+                  />
+                  <span>{color.name}</span>
+                  <button
+                    type="button"
+                    aria-label={`Odstrániť farbu ${color.name}`}
+                    onClick={() => onRemoveColor(color.hex)}
+                    style={paletteRemoveButtonStyle}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : null}
+
+          <div style={paletteOptionsStyle}>
+            {DRESSCODE_PALETTE_OPTIONS.map((color) => {
+              const isSelected = selectedColors.some(
+                (selectedColor) => selectedColor.hex === color.hex
+              )
+              const isDisabled = selectionLimitReached && !isSelected
+
+              return (
+                <button
+                  key={color.hex}
+                  type="button"
+                  aria-pressed={isSelected}
+                  disabled={isDisabled}
+                  onClick={() => onToggleColor(color)}
+                  style={{
+                    ...paletteOptionStyle,
+                    ...(isSelected ? paletteOptionSelectedStyle : {}),
+                    ...(isDisabled ? paletteOptionDisabledStyle : {}),
+                  }}
+                >
+                  <span
+                    aria-hidden="true"
+                    style={{ ...paletteOptionSwatchStyle, backgroundColor: color.hex }}
+                  />
+                  <span>{color.name}</span>
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      ) : null}
+    </fieldset>
   )
 }
 
@@ -478,6 +649,119 @@ const inputStyle = {
 const textareaStyle = {
   ...inputStyle,
   lineHeight: 1.6,
+}
+
+const paletteFieldsetStyle = {
+  margin: "-4px 0 22px",
+  padding: 0,
+  border: 0,
+}
+
+const paletteToggleStyle = {
+  display: "flex",
+  alignItems: "center",
+  gap: "10px",
+  cursor: "pointer",
+}
+
+const paletteCheckboxStyle = {
+  width: "18px",
+  height: "18px",
+  accentColor: "#7f6652",
+}
+
+const paletteSelectorStyle = {
+  marginTop: "14px",
+  padding: "18px",
+  border: "1px solid rgba(138,111,84,0.18)",
+  borderRadius: "18px",
+  background: "#fffaf5",
+}
+
+const paletteHelperStyle = {
+  margin: "0 0 14px",
+  color: "#6f5b4b",
+  fontSize: "14px",
+}
+
+const selectedPaletteStyle = {
+  display: "flex",
+  flexWrap: "wrap",
+  gap: "10px",
+  marginBottom: "16px",
+}
+
+const selectedColorStyle = {
+  display: "inline-flex",
+  alignItems: "center",
+  gap: "8px",
+  padding: "7px 10px",
+  borderRadius: "999px",
+  background: "#f3eadf",
+  fontSize: "14px",
+}
+
+const selectedSwatchStyle = {
+  width: "18px",
+  height: "18px",
+  flex: "0 0 18px",
+  border: "1px solid rgba(79,64,53,0.16)",
+  borderRadius: "50%",
+}
+
+const paletteRemoveButtonStyle = {
+  display: "grid",
+  placeItems: "center",
+  width: "22px",
+  height: "22px",
+  padding: 0,
+  border: 0,
+  borderRadius: "50%",
+  background: "rgba(95,72,56,0.1)",
+  color: "#5f4838",
+  cursor: "pointer",
+  fontSize: "17px",
+  lineHeight: 1,
+}
+
+const paletteOptionsStyle = {
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+  gap: "10px",
+}
+
+const paletteOptionStyle = {
+  display: "flex",
+  alignItems: "center",
+  gap: "9px",
+  minWidth: 0,
+  padding: "10px 12px",
+  border: "1px solid rgba(138,111,84,0.18)",
+  borderRadius: "12px",
+  background: "#fffdf9",
+  color: "#4f4035",
+  cursor: "pointer",
+  fontFamily: "inherit",
+  textAlign: "left",
+}
+
+const paletteOptionSelectedStyle = {
+  borderColor: "#7f6652",
+  background: "#f3eadf",
+  boxShadow: "0 0 0 1px rgba(127,102,82,0.18)",
+}
+
+const paletteOptionDisabledStyle = {
+  cursor: "not-allowed",
+  opacity: 0.45,
+}
+
+const paletteOptionSwatchStyle = {
+  width: "24px",
+  height: "24px",
+  flex: "0 0 24px",
+  border: "1px solid rgba(79,64,53,0.16)",
+  borderRadius: "50%",
 }
 
 const scheduleCardStyle = {

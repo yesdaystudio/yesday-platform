@@ -1,6 +1,7 @@
 import { Cormorant_Garamond, Great_Vibes, Inter, Ms_Madi } from 'next/font/google'
 import supabase from '../../lib/supabase'
 import { sortScheduleItemsChronologically } from '../../lib/schedule'
+import { normalizeDresscodePalette } from '../../lib/dresscodePalette'
 import DianaStickyHeader from './DianaStickyHeader'
 
 const dianaContentFont = Cormorant_Garamond({
@@ -67,6 +68,9 @@ export default async function WeddingPage({ params }) {
     .single()
 
   const wc = websiteContent || {}
+  const dresscodePalette = wc.dresscode_palette_enabled === true
+    ? normalizeDresscodePalette(wc.dresscode_palette)
+    : []
 
   const displayDate = formatWeddingDate(project.wedding_date)
   const locationParts = [project.venue_name, project.venue_address].filter(Boolean)
@@ -122,6 +126,7 @@ export default async function WeddingPage({ params }) {
         <DianaEditorialContent
           project={project}
           wc={wc}
+          dresscodePalette={dresscodePalette}
           scheduleItems={scheduleItems}
           scheduleError={scheduleError}
           displayDate={displayDate}
@@ -163,6 +168,7 @@ export default async function WeddingPage({ params }) {
             <p style={placeholderStyle}>
               {wc.dresscode_text || 'Dress code pre hostí zatiaľ pripravujeme. Prosíme, sledujte túto stránku pre ďalšie informácie.'}
             </p>
+            <DresscodePalette colors={dresscodePalette} />
           </Section>
 
           <Section title="Ubytovanie">
@@ -243,6 +249,7 @@ function DianaHero({ coupleName, styles }) {
 function DianaEditorialContent({
   project,
   wc,
+  dresscodePalette,
   scheduleItems,
   scheduleError,
   displayDate,
@@ -342,6 +349,7 @@ na červenom víne`}
         <DianaEditorialText styles={styles}>
           {wc.dresscode_text || 'Dress code pre hostí zatiaľ pripravujeme. Prosíme, sledujte túto stránku pre ďalšie informácie.'}
         </DianaEditorialText>
+        <DresscodePalette colors={dresscodePalette} isDiana />
       </DianaEditorialBlock>
 
       <DianaAccommodationParkingSection wc={wc} styles={styles} />
@@ -369,6 +377,43 @@ na červenom víne`}
         </div>
       </DianaEditorialBlock>
     </section>
+  )
+}
+
+function DresscodePalette({ colors, isDiana = false }) {
+  if (!colors?.length) {
+    return null
+  }
+
+  return (
+    <div
+      aria-label="Odporúčaná farebná paleta"
+      style={{
+        ...dresscodePaletteStyle,
+        ...(isDiana ? dianaDresscodePaletteStyle : {}),
+      }}
+    >
+      {colors.map((color) => (
+        <div key={color.hex} style={dresscodePaletteColorStyle}>
+          <span
+            aria-hidden="true"
+            style={{
+              ...dresscodePaletteSwatchStyle,
+              ...(isDiana ? dianaDresscodePaletteSwatchStyle : {}),
+              backgroundColor: color.hex,
+            }}
+          />
+          <span
+            style={{
+              ...dresscodePaletteNameStyle,
+              ...(isDiana ? dianaDresscodePaletteNameStyle : {}),
+            }}
+          >
+            {color.name}
+          </span>
+        </div>
+      ))}
+    </div>
   )
 }
 
@@ -1484,6 +1529,56 @@ const scheduleDescriptionStyle = {
 const placeholderStyle = {
   margin: 0,
   color: '#6f5b4b',
+}
+
+const dresscodePaletteStyle = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+  gap: '18px 24px',
+  margin: '28px auto 0',
+}
+
+const dianaDresscodePaletteStyle = {
+  marginTop: '34px',
+  gap: '22px 30px',
+}
+
+const dresscodePaletteColorStyle = {
+  display: 'grid',
+  justifyItems: 'center',
+  gap: '9px',
+  minWidth: '72px',
+}
+
+const dresscodePaletteSwatchStyle = {
+  display: 'block',
+  width: '46px',
+  height: '46px',
+  borderRadius: '50%',
+  border: '1px solid rgba(79, 64, 53, 0.14)',
+  boxShadow: '0 7px 18px rgba(79, 64, 53, 0.09)',
+}
+
+const dianaDresscodePaletteSwatchStyle = {
+  width: '52px',
+  height: '52px',
+  border: '1px solid rgba(111, 92, 71, 0.16)',
+  boxShadow: '0 9px 24px rgba(91, 69, 48, 0.1)',
+}
+
+const dresscodePaletteNameStyle = {
+  color: '#6f5b4b',
+  fontSize: '13px',
+  lineHeight: 1.3,
+  textAlign: 'center',
+}
+
+const dianaDresscodePaletteNameStyle = {
+  color: '#75634f',
+  fontFamily: dianaSerifFont,
+  fontSize: '15px',
+  fontStyle: 'italic',
 }
 
 const buttonStyle = {
