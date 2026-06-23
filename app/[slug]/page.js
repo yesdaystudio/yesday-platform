@@ -90,7 +90,11 @@ export default async function WeddingPage({ params }) {
       <section style={{ ...heroSectionStyle, ...themeStyles.heroSection }}>
         <div style={{ ...heroCardStyle, ...themeStyles.heroCard, ...(isDianaHero ? {} : colorTheme.heroCard) }}>
           {isDianaHero ? (
-            <DianaHero coupleName={project.couple_display_name} styles={themeStyles} />
+            <DianaHero
+              coupleName={project.couple_display_name}
+              displayDate={displayDate}
+              styles={themeStyles}
+            />
           ) : (
             <>
               <p style={{ ...eyebrowStyle, ...themeStyles.eyebrow, ...colorTheme.eyebrow }}>Svadobný deň</p>
@@ -228,12 +232,16 @@ function ScheduleItem({ item }) {
   )
 }
 
-function DianaHero({ coupleName, styles }) {
+function DianaHero({ coupleName, displayDate, styles }) {
   const [firstPartner, secondPartner] = splitCoupleName(coupleName)
 
   return (
-    <div style={styles.heroBackground}>
-      <h1 style={styles.heroTitle} aria-label={formatCoupleNameLabel(firstPartner, secondPartner)}>
+    <div className="dianaHero" style={styles.heroBackground}>
+      <h1
+        className="dianaHero__names"
+        style={styles.heroTitle}
+        aria-label={formatCoupleNameLabel(firstPartner, secondPartner)}
+      >
         <span style={{ ...styles.heroNameLine, ...styles.heroFirstName }}>{firstPartner}</span>
         {secondPartner ? (
           <>
@@ -242,6 +250,7 @@ function DianaHero({ coupleName, styles }) {
           </>
         ) : null}
       </h1>
+      <p className="dianaHero__date" style={styles.heroDate}>{displayDate}</p>
     </div>
   )
 }
@@ -263,7 +272,13 @@ function DianaEditorialContent({
   const receptionVenueAddress = project.reception_venue_address || project.venue_address || 'Adresa bude doplnená'
   return (
     <section id="info" style={styles.editorialSection}>
-      <DianaEditorialBlock title={displayDate} styles={styles} noDivider compact />
+      <DianaEditorialBlock
+        className="dianaEditorialDate"
+        title={displayDate}
+        styles={styles}
+        noDivider
+        compact
+      />
 
       {wc.welcome_text ? (
         <DianaEditorialBlock eyebrow="Vitajte" title={wc.welcome_text} styles={styles} />
@@ -418,6 +433,7 @@ function DresscodePalette({ colors, isDiana = false }) {
 }
 
 function DianaEditorialBlock({
+  className,
   id,
   eyebrow,
   title,
@@ -432,6 +448,7 @@ function DianaEditorialBlock({
 }) {
   return (
     <article
+      className={className}
       id={id}
       style={{
         ...styles.editorialBlock,
@@ -950,6 +967,12 @@ const dianaThemeStyles = {
   heroMeta: {
     fontSize: 'clamp(21px, 2.8vw, 30px)',
     color: '#6e5945',
+  },
+  heroDate: {
+    display: 'none',
+    color: '#704a43',
+    fontFamily: dianaSerifFont,
+    fontWeight: 400,
   },
   heroLocation: {
     marginTop: '0',
