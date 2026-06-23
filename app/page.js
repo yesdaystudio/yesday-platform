@@ -37,29 +37,27 @@ const BENEFITS = [
 
 const TEMPLATES = [
   {
-    name: 'Editorial',
-    tone: 'Čistý kontrast, sofistikovaná typografia, moderný luxus',
-    preview: 'linear-gradient(145deg, #f8f4eb 0%, #e9decd 100%)',
+    name: 'Diana',
+    description:
+      'Luxury editorial, old money Italy, black tie elegance and timeless villa atmosphere.',
+    previewImage: '/templates/diana/diana-anton-hero.png',
+    href: '/diana-anton',
   },
   {
-    name: 'Romantic',
-    tone: 'Jemný rytmus, vzdušnosť a teplá intímna atmosféra',
-    preview: 'linear-gradient(145deg, #fbf2ec 0%, #ecddd2 100%)',
+    name: 'Penelope',
+    description:
+      'Romantic floral design family inspired by softness, femininity and fairytale wedding atmosphere.',
+    preview:
+      'radial-gradient(circle at 18% 15%, rgba(255,255,255,0.9), transparent 28%), linear-gradient(145deg, #f8eee9 0%, #e8d4d1 100%)',
+    comingSoon: true,
   },
   {
-    name: 'Minimal',
-    tone: 'Striedmy poriadok, nadčasové proporcie, tichý luxus',
-    preview: 'linear-gradient(145deg, #f8f8f6 0%, #ecebe8 100%)',
-  },
-  {
-    name: 'Chateau',
-    tone: 'Noblesa, ceremoniálna elegancia a old money nálada',
-    preview: 'linear-gradient(145deg, #f7f0e5 0%, #dfd1bb 100%)',
-  },
-  {
-    name: 'Provenzál',
-    tone: 'Prírodné textúry, svetlo a romantický rustikálny feeling',
-    preview: 'linear-gradient(145deg, #f4f0e9 0%, #ded5c8 100%)',
+    name: 'Botanique',
+    description:
+      'Natural garden design family with relaxed authentic styling, greenery, brick, ivy and wild garden atmosphere.',
+    preview:
+      'radial-gradient(circle at 82% 18%, rgba(255,255,255,0.38), transparent 30%), linear-gradient(145deg, #dfe4d7 0%, #aeb9a4 100%)',
+    comingSoon: true,
   },
 ]
 
@@ -175,18 +173,46 @@ function Templates() {
         Templates / Design families
       </h2>
       <p style={sectionIntroStyle}>
-        Namiesto klasického portfólia si vyberte dizajnovú rodinu, ktorú doladíme
-        na váš príbeh, atmosféru a štýl komunikácie.
+        Vyberte si dizajnovú rodinu, ktorá určí atmosféru vášho svadobného webu.
+        Každú z nich doladíme na váš príbeh, štýl komunikácie a svadobný deň.
       </p>
 
       <div style={templatesGridStyle}>
         {TEMPLATES.map((template) => (
           <article key={template.name} style={templateCardStyle}>
-            <div style={{ ...templatePreviewStyle, background: template.preview }} />
+            <div
+              style={{
+                ...templatePreviewStyle,
+                background: template.preview,
+                ...(template.previewImage
+                  ? {
+                    backgroundImage: `url("${template.previewImage}")`,
+                    backgroundPosition: 'center',
+                    backgroundSize: 'cover',
+                  }
+                  : {}),
+              }}
+            >
+              {!template.previewImage ? (
+                <span className={serif.className} style={templatePreviewNameStyle}>
+                  {template.name}
+                </span>
+              ) : null}
+            </div>
             <h3 className={serif.className} style={templateNameStyle}>
               {template.name}
             </h3>
-            <p style={templateToneStyle}>{template.tone}</p>
+            <p style={templateToneStyle}>{template.description}</p>
+
+            <div style={templateActionStyle}>
+              {template.href ? (
+                <Link href={template.href} style={templateLinkStyle}>
+                  Pozrieť ukážku
+                </Link>
+              ) : (
+                <span style={templateComingSoonStyle}>Pripravujeme</span>
+              )}
+            </div>
           </article>
         ))}
       </div>
@@ -456,6 +482,8 @@ const templateCardStyle = {
   border: `1px solid ${COLOR_BORDER}`,
   padding: '36px 30px',
   textAlign: 'left',
+  display: 'flex',
+  flexDirection: 'column',
 }
 
 const templatePreviewStyle = {
@@ -463,6 +491,15 @@ const templatePreviewStyle = {
   aspectRatio: '4 / 3',
   border: `1px solid ${COLOR_BORDER}`,
   marginBottom: '20px',
+  display: 'grid',
+  placeItems: 'center',
+  overflow: 'hidden',
+}
+
+const templatePreviewNameStyle = {
+  color: 'rgba(62, 57, 49, 0.7)',
+  fontSize: 'clamp(1.8rem, 4vw, 2.7rem)',
+  letterSpacing: '0.04em',
 }
 
 const templateNameStyle = {
@@ -474,6 +511,35 @@ const templateNameStyle = {
 const templateToneStyle = {
   color: COLOR_GREY,
   margin: 0,
+  lineHeight: 1.8,
+  flexGrow: 1,
+}
+
+const templateActionStyle = {
+  marginTop: '26px',
+}
+
+const templateLinkStyle = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: '11px 18px',
+  border: `1px solid ${COLOR_DARK}`,
+  color: COLOR_DARK,
+  textDecoration: 'none',
+  textTransform: 'uppercase',
+  letterSpacing: '1.5px',
+  fontSize: '0.68rem',
+  fontWeight: 600,
+}
+
+const templateComingSoonStyle = {
+  display: 'inline-block',
+  color: '#8a7a61',
+  textTransform: 'uppercase',
+  letterSpacing: '1.6px',
+  fontSize: '0.68rem',
+  fontWeight: 600,
 }
 
 const pricingSectionStyle = {
