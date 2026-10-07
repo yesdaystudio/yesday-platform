@@ -7,6 +7,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
+  const [resetting, setResetting] = useState(false)
   const [message, setMessage] = useState("")
   const [error, setError] = useState("")
 
@@ -59,6 +60,31 @@ export default function LoginPage() {
     setLoading(false)
   }
 
+  async function handlePasswordReset() {
+    const normalizedEmail = email.trim()
+
+    if (!normalizedEmail) {
+      setError("Najprv zadajte e-mail, ku ktorému chcete obnoviť heslo.")
+      return
+    }
+
+    setResetting(true)
+    setError("")
+    setMessage("")
+
+    const { error: resetError } = await supabase.auth.resetPasswordForEmail(normalizedEmail, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    })
+
+    if (resetError) {
+      setError("Resetovací e-mail sa nepodarilo odoslať. Skúste to, prosím, znova.")
+    } else {
+      setMessage("Ak účet s týmto e-mailom existuje, poslali sme naň odkaz na nastavenie nového hesla.")
+    }
+
+    setResetting(false)
+  }
+
   return (
     <main style={pageStyle}>
       <form onSubmit={handleLogin} style={cardStyle}>
@@ -89,6 +115,15 @@ export default function LoginPage() {
 
         <button type="submit" disabled={loading} style={buttonStyle}>
           {loading ? "Prihlasujem..." : "Prihlásiť sa"}
+        </button>
+
+        <button
+          type="button"
+          onClick={handlePasswordReset}
+          disabled={loading || resetting}
+          style={resetButtonStyle}
+        >
+          {resetting ? "Odosielam resetovací e-mail..." : "Zabudli ste heslo?"}
         </button>
 
         {message ? <p style={successStyle}>{message}</p> : null}
@@ -162,6 +197,19 @@ const buttonStyle = {
   background: "#5f4838",
   color: "white",
   fontSize: "16px",
+  cursor: "pointer",
+}
+
+const resetButtonStyle = {
+  width: "100%",
+  marginTop: "14px",
+  padding: "8px",
+  border: "none",
+  background: "transparent",
+  color: "#6f5b4b",
+  fontSize: "15px",
+  fontFamily: "inherit",
+  textDecoration: "underline",
   cursor: "pointer",
 }
 

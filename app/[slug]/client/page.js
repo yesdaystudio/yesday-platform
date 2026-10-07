@@ -1,12 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Image from "next/image"
 import { useParams, useRouter } from "next/navigation"
 import ClientEditor from "../../../components/ClientEditor"
 import ClientDashboard from "../../../components/ClientDashboard"
 import ClientGuests from "../../../components/ClientGuests"
 import ClientAccommodation from "../../../components/ClientAccommodation"
+import DianaStationerySet from "../../../components/DianaStationerySet"
 import QRCode from "qrcode"
 import supabase from "../../../lib/supabase"
 
@@ -15,7 +15,7 @@ const TABS = {
   DASHBOARD: "Dashboard",
   GUESTS: "Hostia",
   ACCOMMODATION: "Ubytovanie",
-  QR_CODE: "QR kód",
+  QR_CODE: "Pozvánka + QR",
 }
 
 function getBaseUrl() {
@@ -42,6 +42,7 @@ export default function ClientZonePage() {
   const [packageType, setPackageType] = useState("signature")
   const [qrDataUrl, setQrDataUrl] = useState("")
   const [qrError, setQrError] = useState("")
+  const [project, setProject] = useState(null)
   const baseUrl = getBaseUrl()
   const weddingWebsiteUrl = slug && baseUrl ? `${baseUrl}/${slug}` : ""
   const showAccommodationTab = packageType === "signature" || packageType === "atelier"
@@ -65,7 +66,7 @@ export default function ClientZonePage() {
       if (slug) {
         const { data: projectData, error } = await supabase
           .from("projects")
-          .select("package_type, owner_user_id")
+          .select("*")
           .eq("slug", slug)
           .single()
 
@@ -75,6 +76,7 @@ export default function ClientZonePage() {
         } else if (projectData?.owner_user_id !== userId) {
           setAccessDenied(true)
         } else {
+          setProject(projectData)
           setPackageType(String(projectData?.package_type || "signature").toLowerCase().trim())
         }
       }
@@ -190,32 +192,12 @@ export default function ClientZonePage() {
 
           {activeTab === TABS.QR_CODE && (
             <section style={qrSectionStyle}>
-              <p style={textStyle}>Slug projektu: {slug || "-"}</p>
-              <p style={textStyle}>Svadobný web: {weddingWebsiteUrl || "-"}</p>
-              <p style={textStyle}>Tu bude QR kód na svadobný web.</p>
-
-              {qrDataUrl ? (
-                <Image
-                  src={qrDataUrl}
-                  alt="QR kód na svadobný web"
-                  width={220}
-                  height={220}
-                  unoptimized
-                  style={qrImageStyle}
-                />
-              ) : null}
-
-              {qrError ? <p style={textStyle}>{qrError}</p> : null}
-
-              {qrDataUrl ? (
-                <a
-                  href={qrDataUrl}
-                  download={`svadobny-web-${slug || "qr"}.png`}
-                  style={downloadButtonStyle}
-                >
-                  Stiahnuť QR kód
-                </a>
-              ) : null}
+              <DianaStationerySet
+                project={project}
+                weddingWebsiteUrl={weddingWebsiteUrl}
+                qrDataUrl={qrDataUrl}
+                qrError={qrError}
+              />
             </section>
           )}
         </section>
@@ -254,7 +236,7 @@ const cardStyle = {
   width: "100%",
   maxWidth: "860px",
   marginTop: "28px",
-  borderRadius: "28px",
+  borderRadius: 0,
   background: "rgba(255, 250, 244, 0.9)",
   border: "1px solid rgba(138, 111, 84, 0.15)",
   boxShadow: "0 20px 60px rgba(106, 82, 58, 0.12)",
@@ -289,7 +271,7 @@ const logoutButtonStyle = {
   borderWidth: "1px",
   borderStyle: "solid",
   borderColor: "rgba(176, 139, 105, 0.28)",
-  borderRadius: "999px",
+  borderRadius: 0,
   background: "#fffaf5",
   color: "#5f4838",
   padding: "9px 14px",
@@ -311,7 +293,7 @@ const tabButtonStyle = {
   borderColor: "rgba(176, 139, 105, 0.28)",
   background: "#fffaf5",
   color: "#5f4838",
-  borderRadius: "999px",
+  borderRadius: 0,
   padding: "10px 16px",
   fontSize: "15px",
   cursor: "pointer",
@@ -326,42 +308,14 @@ const activeTabButtonStyle = {
 
 const contentStyle = {
   marginTop: "18px",
-  borderRadius: "18px",
+  borderRadius: 0,
   background: "rgba(255, 251, 246, 0.9)",
   border: "1px solid rgba(176, 139, 105, 0.16)",
   padding: "24px",
   minHeight: "180px",
 }
 
-const textStyle = {
-  margin: 0,
-  fontSize: "18px",
-  lineHeight: 1.7,
-  color: "#6f5b4b",
-}
-
 const qrSectionStyle = {
   display: "grid",
-  gap: "8px",
-}
-
-const qrImageStyle = {
-  width: "220px",
-  height: "220px",
-  padding: "10px",
-  background: "#fff",
-  border: "1px solid rgba(176, 139, 105, 0.22)",
-  borderRadius: "12px",
-}
-
-const downloadButtonStyle = {
-  display: "inline-block",
-  width: "fit-content",
-  marginTop: "8px",
-  padding: "10px 16px",
-  borderRadius: "999px",
-  background: "#5f4838",
-  color: "#fffaf5",
-  textDecoration: "none",
-  fontSize: "14px",
+  gap: "18px",
 }

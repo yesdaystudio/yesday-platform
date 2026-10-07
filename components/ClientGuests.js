@@ -236,7 +236,7 @@ const emptyStyle = {
 
 const cardStyle = {
   border: '1px solid rgba(176, 139, 105, 0.18)',
-  borderRadius: '14px',
+  borderRadius: 0,
   background: 'rgba(255, 251, 246, 0.9)',
   padding: '14px',
   display: 'grid',
@@ -259,7 +259,7 @@ const nameStyle = {
 
 const badgeStyle = (attending) => ({
   padding: '5px 10px',
-  borderRadius: '999px',
+  borderRadius: 0,
   fontSize: '12px',
   color: attending === 'yes' ? '#2f5c3d' : '#7a3434',
   background: attending === 'yes' ? 'rgba(58, 128, 79, 0.14)' : 'rgba(176, 62, 62, 0.14)',
@@ -274,7 +274,7 @@ const metaGridStyle = {
 
 const metaCardStyle = {
   border: '1px solid rgba(176, 139, 105, 0.14)',
-  borderRadius: '10px',
+  borderRadius: 0,
   background: '#fffaf5',
   padding: '10px',
 }

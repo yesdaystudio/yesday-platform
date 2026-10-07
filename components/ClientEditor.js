@@ -594,7 +594,7 @@ const cardStyle = {
   maxWidth: "860px",
   margin: "0 auto",
   padding: "40px",
-  borderRadius: "28px",
+  borderRadius: 0,
   background: "rgba(255, 250, 244, 0.92)",
 }
 
@@ -638,7 +638,7 @@ const helperTextStyle = {
 const inputStyle = {
   width: "100%",
   padding: "14px",
-  borderRadius: "16px",
+  borderRadius: 0,
   border: "1px solid rgba(138,111,84,0.22)",
   background: "#fffaf5",
   color: "#4f4035",
@@ -674,7 +674,7 @@ const paletteSelectorStyle = {
   marginTop: "14px",
   padding: "18px",
   border: "1px solid rgba(138,111,84,0.18)",
-  borderRadius: "18px",
+  borderRadius: 0,
   background: "#fffaf5",
 }
 
@@ -696,7 +696,7 @@ const selectedColorStyle = {
   alignItems: "center",
   gap: "8px",
   padding: "7px 10px",
-  borderRadius: "999px",
+  borderRadius: 0,
   background: "#f3eadf",
   fontSize: "14px",
 }
@@ -716,7 +716,7 @@ const paletteRemoveButtonStyle = {
   height: "22px",
   padding: 0,
   border: 0,
-  borderRadius: "50%",
+  borderRadius: 0,
   background: "rgba(95,72,56,0.1)",
   color: "#5f4838",
   cursor: "pointer",
@@ -737,7 +737,7 @@ const paletteOptionStyle = {
   minWidth: 0,
   padding: "10px 12px",
   border: "1px solid rgba(138,111,84,0.18)",
-  borderRadius: "12px",
+  borderRadius: 0,
   background: "#fffdf9",
   color: "#4f4035",
   cursor: "pointer",
@@ -766,14 +766,14 @@ const paletteOptionSwatchStyle = {
 
 const scheduleCardStyle = {
   padding: "20px",
-  borderRadius: "18px",
+  borderRadius: 0,
   background: "#fffaf5",
   marginBottom: "20px",
 }
 
 const buttonStyle = {
   padding: "15px 28px",
-  borderRadius: "999px",
+  borderRadius: 0,
   border: "none",
   background: "#5f4838",
   color: "white",

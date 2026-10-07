@@ -14,6 +14,7 @@ export default function ClientAccommodation({ slug: slugProp }) {
   const [loading, setLoading] = useState(true)
   const [accessDenied, setAccessDenied] = useState(false)
   const [savingId, setSavingId] = useState(null)
+  const [savingEmailStatusId, setSavingEmailStatusId] = useState(null)
   const [status, setStatus] = useState('')
 
   const packageType = String(project?.package_type || 'signature').toLowerCase().trim()
@@ -79,6 +80,7 @@ export default function ClientAccommodation({ slug: slugProp }) {
           assignedHotel: row.accommodation_hotel || row.assigned_hotel || row.hotel_name || '',
           roomNumber: row.accommodation_room || row.room_number || row.assigned_room || '',
           internalNote: row.accommodation_internal_note || row.internal_note || row.accommodation_note || '',
+          emailSentAt: row.accommodation_email_sent_at || null,
         }))
       )
 
@@ -120,6 +122,32 @@ export default function ClientAccommodation({ slug: slugProp }) {
     setSavingId(null)
   }
 
+  async function updateEmailStatus(row, sent) {
+    setStatus('')
+    setSavingEmailStatusId(row.id)
+
+    const emailSentAt = sent ? new Date().toISOString() : null
+    const { error } = await supabase
+      .from('rsvp_responses')
+      .update({ accommodation_email_sent_at: emailSentAt })
+      .eq('id', row.id)
+
+    if (error) {
+      console.error('Accommodation email status save error:', error)
+      setStatus('Stav e-mailu sa nepodarilo uložiť.')
+      setSavingEmailStatusId(null)
+      return
+    }
+
+    setRows((current) =>
+      current.map((item) => (
+        item.id === row.id ? { ...item, emailSentAt } : item
+      ))
+    )
+    setStatus(sent ? 'E-mail bol označený ako odoslaný.' : 'E-mail bol označený ako neodoslaný.')
+    setSavingEmailStatusId(null)
+  }
+
   if (loading) {
     return <main style={{ padding: 16 }}>Načítavam ubytovanie...</main>
   }
@@ -142,7 +170,14 @@ export default function ClientAccommodation({ slug: slugProp }) {
         rows.map((row) => (
           <article key={row.id} style={cardStyle}>
             <div style={headStyle}>
-              <h3 style={nameStyle}>{displayValue(row.guest_name)}</h3>
+              <div style={headRowStyle}>
+                <h3 style={nameStyle}>{displayValue(row.guest_name)}</h3>
+                <span style={emailStatusStyle(Boolean(row.emailSentAt))}>
+                  {row.emailSentAt
+                    ? `Hosťovi zaslané · ${formatEmailDate(row.emailSentAt)}`
+                    : 'Hosťovi zatiaľ nezaslané'}
+                </span>
+              </div>
               <span style={countStyle}>
                 Dospelí: {displayValue(row.adults_count)} | Deti: {displayValue(row.children_count)}
               </span>
@@ -176,14 +211,48 @@ export default function ClientAccommodation({ slug: slugProp }) {
               />
             </label>
 
-            <button
-              type='button'
-              onClick={() => saveRow(row)}
-              disabled={savingId === row.id}
-              style={saveButtonStyle}
-            >
-              {savingId === row.id ? 'Ukladám...' : 'Uložiť'}
-            </button>
+            <div style={actionsStyle}>
+              <button
+                type='button'
+                onClick={() => saveRow(row)}
+                disabled={savingId === row.id}
+                style={saveButtonStyle}
+              >
+                {savingId === row.id ? 'Ukladám...' : 'Uložiť'}
+              </button>
+
+              {row.contact_email ? (
+                <>
+                  <a
+                    href={buildAccommodationEmailHref(row, project)}
+                    style={emailButtonStyle}
+                  >
+                    Odoslať e-mail
+                  </a>
+                  <button
+                    type='button'
+                    onClick={() => updateEmailStatus(row, !row.emailSentAt)}
+                    disabled={savingEmailStatusId === row.id}
+                    style={statusButtonStyle}
+                  >
+                    {savingEmailStatusId === row.id
+                      ? 'Ukladám stav...'
+                      : row.emailSentAt
+                        ? 'Označiť ako neodoslané'
+                        : 'Označiť ako odoslané'}
+                  </button>
+                </>
+              ) : (
+                <button
+                  type='button'
+                  disabled
+                  title='Hosť pri RSVP neuviedol e-mailovú adresu.'
+                  style={{ ...emailButtonStyle, ...disabledButtonStyle }}
+                >
+                  E-mail nie je k dispozícii
+                </button>
+              )}
+            </div>
           </article>
         ))
       )}
@@ -195,6 +264,45 @@ function displayValue(value) {
   if (value === null || value === undefined) return '—'
   if (typeof value === 'string' && !value.trim()) return '—'
   return value
+}
+
+function buildAccommodationEmailHref(row, project) {
+  const email = String(row.contact_email || '').trim()
+  const coupleName = String(project?.couple_display_name || '').trim()
+  const guestName = String(row.guest_name || '').trim()
+  const subject = coupleName
+    ? `Informácie k ubytovaniu – ${coupleName}`
+    : 'Informácie k svadobnému ubytovaniu'
+  const greeting = guestName ? `Dobrý deň, ${guestName},` : 'Dobrý deň,'
+  const body = [
+    greeting,
+    '',
+    'posielame vám informácie k ubytovaniu na našu svadbu:',
+    '',
+    `Hotel: ${row.assignedHotel || 'bude doplnený'}`,
+    `Izba: ${row.roomNumber || 'bude doplnená'}`,
+    row.internalNote ? `Poznámka: ${row.internalNote}` : '',
+    '',
+    'S pozdravom',
+    coupleName || 'Nevesta a ženích',
+  ].filter((line, index, lines) => line || lines[index - 1] !== '').join('\n')
+
+  return `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+}
+
+function formatEmailDate(value) {
+  if (!value) return ''
+
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return ''
+
+  return date.toLocaleString('sk-SK', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
 }
 
 const wrapperStyle = {
@@ -214,7 +322,7 @@ const emptyStyle = {
 
 const cardStyle = {
   border: '1px solid rgba(176, 139, 105, 0.18)',
-  borderRadius: '14px',
+  borderRadius: 0,
   background: 'rgba(255, 251, 246, 0.9)',
   padding: '14px',
   display: 'grid',
@@ -224,6 +332,14 @@ const cardStyle = {
 const headStyle = {
   display: 'grid',
   gap: '6px',
+}
+
+const headRowStyle = {
+  display: 'flex',
+  alignItems: 'flex-start',
+  justifyContent: 'space-between',
+  gap: '12px',
+  flexWrap: 'wrap',
 }
 
 const nameStyle = {
@@ -237,6 +353,18 @@ const countStyle = {
   color: '#6f5b4b',
   fontSize: '14px',
 }
+
+const emailStatusStyle = (sent) => ({
+  padding: '5px 8px',
+  border: sent
+    ? '1px solid rgba(58, 128, 79, 0.28)'
+    : '1px solid rgba(176, 139, 105, 0.28)',
+  borderRadius: 0,
+  background: sent ? 'rgba(58, 128, 79, 0.1)' : 'rgba(176, 139, 105, 0.08)',
+  color: sent ? '#2f5c3d' : '#7b624f',
+  fontSize: '12px',
+  whiteSpace: 'nowrap',
+})
 
 const labelStyle = {
   display: 'grid',
@@ -253,7 +381,7 @@ const labelTextStyle = {
 const inputStyle = {
   width: '100%',
   border: '1px solid rgba(176, 139, 105, 0.28)',
-  borderRadius: '10px',
+  borderRadius: 0,
   background: '#fffaf5',
   padding: '10px 12px',
   color: '#4f4035',
@@ -269,9 +397,44 @@ const textareaStyle = {
 const saveButtonStyle = {
   width: 'fit-content',
   padding: '9px 14px',
-  borderRadius: '999px',
+  borderRadius: 0,
   border: 'none',
   background: '#5f4838',
   color: '#fffaf5',
   cursor: 'pointer',
+}
+
+const actionsStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '10px',
+  flexWrap: 'wrap',
+}
+
+const emailButtonStyle = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: 'fit-content',
+  padding: '8px 13px',
+  border: '1px solid #5f4838',
+  borderRadius: 0,
+  background: 'transparent',
+  color: '#5f4838',
+  cursor: 'pointer',
+  fontFamily: 'inherit',
+  fontSize: '13px',
+  lineHeight: 1.4,
+  textDecoration: 'none',
+}
+
+const disabledButtonStyle = {
+  opacity: 0.45,
+  cursor: 'not-allowed',
+}
+
+const statusButtonStyle = {
+  ...emailButtonStyle,
+  borderColor: 'rgba(95, 72, 56, 0.28)',
+  color: '#6f5b4b',
 }

@@ -15,6 +15,7 @@ export default function ClientDashboard({ slug: slugProp }) {
   const [accessDenied, setAccessDenied] = useState(false)
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('all')
+  const [activeSummary, setActiveSummary] = useState(null)
 
   const packageType = String(project?.package_type || 'signature').toLowerCase().trim()
   const showAccommodationAndTransport = packageType === 'signature' || packageType === 'atelier'
@@ -78,6 +79,23 @@ export default function ClientDashboard({ slug: slugProp }) {
       accommodation: attending.filter((r) => r.needs_accommodation).length,
       transportRequests: responses.filter((r) => hasTransportRequest(r)).length,
       allergies: people.filter((p) => hasRealAllergy(p.allergies)).length,
+    }
+  }, [responses])
+
+  const summaryData = useMemo(() => {
+    const attending = responses.filter((response) => response.attending === 'yes')
+    const guests = attending.flatMap((response) => normalizeResponsePeople(response))
+
+    return {
+      adults: guests.filter((guest) => guest.type === 'adult'),
+      children: guests.filter((guest) => guest.type === 'child'),
+      allergies: guests.filter((guest) => hasRealAllergy(guest.allergies)),
+      accommodation: attending
+        .filter((response) => response.needs_accommodation)
+        .map((response) => normalizeResponseGroup(response)),
+      transport: responses
+        .filter((response) => hasTransportRequest(response))
+        .map((response) => normalizeResponseGroup(response, getTransport(response))),
     }
   }, [responses])
 
@@ -204,17 +222,45 @@ export default function ClientDashboard({ slug: slugProp }) {
       <section style={statsGridStyle}>
         <StatCard label="RSVP odpovede" value={stats.totalResponses} />
         <StatCard label="Prichádzajúce odpovede" value={stats.attendingResponses} />
-        <StatCard label="Dospelí spolu" value={stats.adults} />
-        <StatCard label="Deti spolu" value={stats.children} />
+        <StatCard
+          label="Dospelí spolu"
+          value={stats.adults}
+          onClick={() => setActiveSummary('adults')}
+        />
+        <StatCard
+          label="Deti spolu"
+          value={stats.children}
+          onClick={() => setActiveSummary('children')}
+        />
         <StatCard label="Hostia spolu" value={stats.totalGuests} />
-        <StatCard label="Počet alergií" value={stats.allergies} />
+        <StatCard
+          label="Počet alergií"
+          value={stats.allergies}
+          onClick={() => setActiveSummary('allergies')}
+        />
         {showAccommodationAndTransport ? (
-          <StatCard label="Žiadosti o ubytovanie" value={stats.accommodation} />
+          <StatCard
+            label="Žiadosti o ubytovanie"
+            value={stats.accommodation}
+            onClick={() => setActiveSummary('accommodation')}
+          />
         ) : null}
         {showAccommodationAndTransport ? (
-          <StatCard label="Transport requests" value={stats.transportRequests} />
+          <StatCard
+            label="Žiadosti o transport"
+            value={stats.transportRequests}
+            onClick={() => setActiveSummary('transport')}
+          />
         ) : null}
       </section>
+
+      {activeSummary ? (
+        <SummaryModal
+          type={activeSummary}
+          items={summaryData[activeSummary] || []}
+          onClose={() => setActiveSummary(null)}
+        />
+      ) : null}
 
       <section style={toolbarStyle}>
         <input
@@ -311,12 +357,185 @@ export default function ClientDashboard({ slug: slugProp }) {
   )
 }
 
-function StatCard({ label, value }) {
+function normalizeResponsePeople(response) {
+  const adultsCount = Math.max(0, Number(response.adults_count || 0))
+  const childrenCount = Math.max(0, Number(response.children_count || 0))
+  const people = Array.isArray(response.people) ? response.people : []
+  const expectedCount = adultsCount + childrenCount
+  const slots = Math.max(expectedCount, people.length)
+
+  return Array.from({ length: slots }, (_, index) => {
+    const person = people[index] || {}
+    const storedType = String(person.type || '').toLowerCase()
+    const inferredType = index < adultsCount ? 'adult' : 'child'
+
+    return {
+      name: String(person.name || (index === 0 ? response.guest_name : '') || 'Neuvedené meno').trim(),
+      type: storedType === 'adult' || storedType === 'child' ? storedType : inferredType,
+      allergies: person.allergies || '',
+    }
+  })
+}
+
+function normalizeResponseGroup(response, transportDetails = '') {
+  const members = normalizeResponsePeople(response)
+    .map((person) => person.name)
+    .filter(Boolean)
+
+  return {
+    id: response.id,
+    name: String(response.family_name || response.guest_name || 'Neuvedená skupina').trim(),
+    members,
+    adultsCount: Math.max(0, Number(response.adults_count || 0)),
+    childrenCount: Math.max(0, Number(response.children_count || 0)),
+    contact: [response.contact_email, response.contact_phone].filter(Boolean).join(' · '),
+    transportDetails: String(transportDetails || '').trim(),
+  }
+}
+
+function StatCard({ label, value, onClick }) {
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        style={{ ...statCardStyle, ...interactiveStatCardStyle }}
+        aria-label={`${label}: ${value ?? 0}. Zobraziť zoznam.`}
+      >
+        <p style={statLabelStyle}>{label}</p>
+        <p style={statValueStyle}>{value ?? '—'}</p>
+        <span style={statActionStyle}>Zobraziť zoznam</span>
+      </button>
+    )
+  }
+
   return (
     <article style={statCardStyle}>
       <p style={statLabelStyle}>{label}</p>
       <p style={statValueStyle}>{value ?? '—'}</p>
     </article>
+  )
+}
+
+function SummaryModal({ type, items, onClose }) {
+  useEffect(() => {
+    function handleKeyDown(event) {
+      if (event.key === 'Escape') onClose()
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [onClose])
+
+  const isAllergySummary = type === 'allergies'
+  const isGroupSummary = type === 'accommodation' || type === 'transport'
+  const titles = {
+    adults: 'Zoznam dospelých',
+    children: 'Zoznam detí',
+    allergies: 'Sumár alergií',
+    accommodation: 'Žiadosti o ubytovanie podľa skupín',
+    transport: 'Žiadosti o transport',
+  }
+
+  return (
+    <div
+      style={modalBackdropStyle}
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose()
+      }}
+    >
+      <section
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="dashboard-summary-title"
+        style={summaryModalStyle}
+      >
+        <div style={summaryModalHeaderStyle}>
+          <div>
+            <p style={summaryEyebrowStyle}>Dashboard sumár</p>
+            <h2 id="dashboard-summary-title" style={summaryTitleStyle}>{titles[type]}</h2>
+          </div>
+          <button type="button" onClick={onClose} style={modalCloseButtonStyle} aria-label="Zavrieť sumár">
+            ×
+          </button>
+        </div>
+
+        <p style={summaryCountStyle}>
+          {isGroupSummary ? 'Počet skupín' : 'Spolu'}: {items.length}
+        </p>
+
+        {items.length === 0 ? (
+          <p style={summaryEmptyStyle}>
+            {isGroupSummary
+              ? 'V tejto kategórii zatiaľ nie sú žiadne požiadavky.'
+              : 'V tejto kategórii zatiaľ nie sú žiadni hostia.'}
+          </p>
+        ) : isGroupSummary ? (
+          <div style={groupSummaryListStyle}>
+            {items.map((group, index) => (
+              <article key={group.id || `${type}-${index}`} style={groupSummaryCardStyle}>
+                <div style={groupSummaryHeaderStyle}>
+                  <div>
+                    <p style={groupSummaryLabelStyle}>Rodina / skupina</p>
+                    <h3 style={groupSummaryNameStyle}>{group.name}</h3>
+                  </div>
+                  <p style={groupSummaryCountsStyle}>
+                    {group.adultsCount} dospelí · {group.childrenCount} deti
+                  </p>
+                </div>
+
+                <div style={groupSummaryDetailStyle}>
+                  <p style={groupSummaryDetailLabelStyle}>Členovia skupiny</p>
+                  <p style={groupSummaryDetailValueStyle}>
+                    {group.members.length > 0 ? group.members.join(', ') : '—'}
+                  </p>
+                </div>
+
+                {type === 'accommodation' ? (
+                  <div style={groupSummaryDetailStyle}>
+                    <p style={groupSummaryDetailLabelStyle}>Kontakt pre ubytovanie</p>
+                    <p style={groupSummaryDetailValueStyle}>{group.contact || '—'}</p>
+                  </div>
+                ) : null}
+
+                {type === 'transport' ? (
+                  <div style={groupSummaryDetailStyle}>
+                    <p style={groupSummaryDetailLabelStyle}>Požiadavka na transport</p>
+                    <p style={groupSummaryDetailValueStyle}>{group.transportDetails || 'Áno'}</p>
+                  </div>
+                ) : null}
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div style={summaryListStyle}>
+            <div
+              style={{
+                ...summaryListHeaderStyle,
+                ...(!isAllergySummary ? summarySingleColumnStyle : {}),
+              }}
+            >
+              <span>Meno a priezvisko</span>
+              {isAllergySummary ? <span>Typ alergie</span> : null}
+            </div>
+            {items.map((guest, index) => (
+              <div
+                key={`${type}-${guest.name}-${index}`}
+                style={{
+                  ...summaryListRowStyle,
+                  ...(!isAllergySummary ? summarySingleColumnStyle : {}),
+                }}
+              >
+                <span style={summaryNameStyle}>{guest.name}</span>
+                {isAllergySummary ? (
+                  <span style={summaryAllergyStyle}>{guest.allergies}</span>
+                ) : null}
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+    </div>
   )
 }
 
@@ -359,8 +578,17 @@ const statsGridStyle = {
 const statCardStyle = {
   background: 'rgba(255, 251, 246, 0.92)',
   border: '1px solid rgba(176, 139, 105, 0.2)',
-  borderRadius: '14px',
+  borderRadius: 0,
   padding: '12px 14px',
+}
+
+const interactiveStatCardStyle = {
+  appearance: 'none',
+  width: '100%',
+  color: 'inherit',
+  fontFamily: 'inherit',
+  textAlign: 'left',
+  cursor: 'pointer',
 }
 
 const statLabelStyle = {
@@ -377,6 +605,192 @@ const statValueStyle = {
   color: '#4a392d',
 }
 
+const statActionStyle = {
+  display: 'block',
+  marginTop: '8px',
+  fontSize: '11px',
+  letterSpacing: '0.04em',
+  textTransform: 'uppercase',
+  color: '#8d735f',
+  textDecoration: 'underline',
+  textUnderlineOffset: '3px',
+}
+
+const modalBackdropStyle = {
+  position: 'fixed',
+  inset: 0,
+  zIndex: 1000,
+  display: 'grid',
+  placeItems: 'center',
+  padding: '20px',
+  background: 'rgba(42, 32, 25, 0.5)',
+}
+
+const summaryModalStyle = {
+  width: 'min(100%, 680px)',
+  maxHeight: 'min(760px, calc(100vh - 40px))',
+  overflowY: 'auto',
+  padding: '28px',
+  border: '1px solid rgba(115, 88, 66, 0.3)',
+  borderRadius: 0,
+  background: '#fffaf5',
+  boxShadow: '0 28px 80px rgba(42, 32, 25, 0.24)',
+}
+
+const summaryModalHeaderStyle = {
+  display: 'flex',
+  alignItems: 'flex-start',
+  justifyContent: 'space-between',
+  gap: '20px',
+}
+
+const summaryEyebrowStyle = {
+  margin: 0,
+  fontSize: '11px',
+  letterSpacing: '0.18em',
+  textTransform: 'uppercase',
+  color: '#8d735f',
+}
+
+const summaryTitleStyle = {
+  margin: '7px 0 0',
+  fontSize: '30px',
+  fontWeight: 'normal',
+  color: '#3f3128',
+}
+
+const modalCloseButtonStyle = {
+  display: 'grid',
+  placeItems: 'center',
+  flex: '0 0 38px',
+  width: '38px',
+  height: '38px',
+  padding: 0,
+  border: '1px solid rgba(115, 88, 66, 0.28)',
+  borderRadius: 0,
+  background: 'transparent',
+  color: '#4f4035',
+  cursor: 'pointer',
+  fontSize: '25px',
+  fontFamily: 'inherit',
+  lineHeight: 1,
+}
+
+const summaryCountStyle = {
+  margin: '22px 0 12px',
+  color: '#6f5b4b',
+  fontSize: '14px',
+}
+
+const summaryListStyle = {
+  display: 'grid',
+  borderTop: '1px solid rgba(115, 88, 66, 0.24)',
+}
+
+const summaryListHeaderStyle = {
+  display: 'grid',
+  gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
+  gap: '18px',
+  padding: '11px 10px',
+  borderBottom: '1px solid rgba(115, 88, 66, 0.24)',
+  background: '#f4eadf',
+  color: '#7c624f',
+  fontSize: '11px',
+  letterSpacing: '0.07em',
+  textTransform: 'uppercase',
+}
+
+const summaryListRowStyle = {
+  display: 'grid',
+  gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
+  gap: '18px',
+  padding: '13px 10px',
+  borderBottom: '1px solid rgba(115, 88, 66, 0.16)',
+}
+
+const summarySingleColumnStyle = {
+  gridTemplateColumns: '1fr',
+}
+
+const summaryNameStyle = {
+  color: '#3f3128',
+}
+
+const summaryAllergyStyle = {
+  color: '#6f5b4b',
+}
+
+const summaryEmptyStyle = {
+  margin: '20px 0 0',
+  padding: '16px 0',
+  borderTop: '1px solid rgba(115, 88, 66, 0.2)',
+  color: '#6f5b4b',
+}
+
+const groupSummaryListStyle = {
+  display: 'grid',
+  gap: '12px',
+}
+
+const groupSummaryCardStyle = {
+  display: 'grid',
+  gap: '12px',
+  padding: '16px',
+  border: '1px solid rgba(115, 88, 66, 0.22)',
+  borderRadius: 0,
+  background: '#fffdf9',
+}
+
+const groupSummaryHeaderStyle = {
+  display: 'flex',
+  alignItems: 'flex-start',
+  justifyContent: 'space-between',
+  gap: '18px',
+  paddingBottom: '10px',
+  borderBottom: '1px solid rgba(115, 88, 66, 0.16)',
+}
+
+const groupSummaryLabelStyle = {
+  margin: 0,
+  fontSize: '10px',
+  letterSpacing: '0.08em',
+  textTransform: 'uppercase',
+  color: '#8d735f',
+}
+
+const groupSummaryNameStyle = {
+  margin: '4px 0 0',
+  fontSize: '19px',
+  fontWeight: 'normal',
+  color: '#3f3128',
+}
+
+const groupSummaryCountsStyle = {
+  margin: 0,
+  color: '#6f5b4b',
+  fontSize: '13px',
+  whiteSpace: 'nowrap',
+}
+
+const groupSummaryDetailStyle = {
+  display: 'grid',
+  gap: '3px',
+}
+
+const groupSummaryDetailLabelStyle = {
+  margin: 0,
+  fontSize: '10px',
+  letterSpacing: '0.07em',
+  textTransform: 'uppercase',
+  color: '#8d735f',
+}
+
+const groupSummaryDetailValueStyle = {
+  margin: 0,
+  color: '#4f4035',
+  lineHeight: 1.5,
+}
+
 const toolbarStyle = {
   display: 'grid',
   gap: '10px',
@@ -385,7 +799,7 @@ const toolbarStyle = {
 const inputStyle = {
   width: '100%',
   border: '1px solid rgba(176, 139, 105, 0.28)',
-  borderRadius: '12px',
+  borderRadius: 0,
   background: '#fffaf5',
   padding: '10px 12px',
   color: '#4f4035',
@@ -405,7 +819,7 @@ const responseListStyle = {
 const responseCardStyle = {
   background: 'rgba(255, 251, 246, 0.9)',
   border: '1px solid rgba(176, 139, 105, 0.16)',
-  borderRadius: '16px',
+  borderRadius: 0,
   padding: '14px',
   display: 'grid',
   gap: '12px',
@@ -427,7 +841,7 @@ const rowTitleStyle = {
 
 const statusBadgeStyle = (attending) => ({
   padding: '5px 10px',
-  borderRadius: '999px',
+  borderRadius: 0,
   fontSize: '12px',
   color: attending === 'yes' ? '#2f5c3d' : '#7a3434',
   background: attending === 'yes' ? 'rgba(58, 128, 79, 0.14)' : 'rgba(176, 62, 62, 0.14)',
@@ -443,7 +857,7 @@ const metaGridStyle = {
 const metaItemStyle = {
   background: '#fffaf5',
   border: '1px solid rgba(176, 139, 105, 0.14)',
-  borderRadius: '10px',
+  borderRadius: 0,
   padding: '10px',
 }
 
@@ -480,7 +894,7 @@ const peopleGridStyle = {
 const personCardStyle = {
   background: '#fffaf5',
   border: '1px solid rgba(176, 139, 105, 0.14)',
-  borderRadius: '10px',
+  borderRadius: 0,
   padding: '10px',
 }
 
@@ -529,7 +943,7 @@ const detailValueStyle = {
 const emptyStyle = {
   margin: 0,
   padding: '14px',
-  borderRadius: '12px',
+  borderRadius: 0,
   border: '1px solid rgba(176, 139, 105, 0.16)',
   background: 'rgba(255, 251, 246, 0.9)',
   color: '#6f5b4b',
