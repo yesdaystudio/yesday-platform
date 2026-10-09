@@ -50,11 +50,7 @@ export default function ClientDashboard({ slug: slugProp }) {
         return
       }
 
-      const { data: responseData, error: responseError } = await supabase
-        .from('rsvp_responses')
-        .select('*')
-        .eq('project_id', projectData.id)
-        .order('created_at', { ascending: false })
+      const { data: responseData, error: responseError } = await fetchProjectResponses(projectData.id)
 
       if (responseError) console.error(responseError)
 
@@ -65,6 +61,54 @@ export default function ClientDashboard({ slug: slugProp }) {
 
     if (slug) loadDashboard()
   }, [slug, router])
+
+  useEffect(() => {
+    const projectId = project?.id
+    if (!projectId) return undefined
+
+    let active = true
+    let refreshTimer = null
+
+    async function refreshResponses() {
+      const { data, error } = await fetchProjectResponses(projectId)
+
+      if (error) {
+        console.error('Realtime dashboard refresh error:', error)
+        return
+      }
+
+      if (active) setResponses(data || [])
+    }
+
+    function scheduleRefresh() {
+      if (refreshTimer) window.clearTimeout(refreshTimer)
+      refreshTimer = window.setTimeout(refreshResponses, 120)
+    }
+
+    const channel = supabase
+      .channel(`dashboard-rsvp-${projectId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'rsvp_responses',
+          filter: `project_id=eq.${projectId}`,
+        },
+        scheduleRefresh
+      )
+      .subscribe((status) => {
+        if (status === 'CHANNEL_ERROR') {
+          console.error('Realtime dashboard subscription failed.')
+        }
+      })
+
+    return () => {
+      active = false
+      if (refreshTimer) window.clearTimeout(refreshTimer)
+      supabase.removeChannel(channel)
+    }
+  }, [project?.id])
 
   const stats = useMemo(() => {
     const attending = responses.filter((r) => r.attending === 'yes')
@@ -355,6 +399,14 @@ export default function ClientDashboard({ slug: slugProp }) {
       </section>
     </main>
   )
+}
+
+function fetchProjectResponses(projectId) {
+  return supabase
+    .from('rsvp_responses')
+    .select('*')
+    .eq('project_id', projectId)
+    .order('created_at', { ascending: false })
 }
 
 function normalizeResponsePeople(response) {
