@@ -304,8 +304,6 @@ export default function RSVPPage() {
 function Styles() {
   return (
     <style jsx global>{`
-      @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;400;500;600&display=swap');
-
       :root {
         --cream: #f4f1ea;
         --paper: #fffaf4;

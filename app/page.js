@@ -1,16 +1,8 @@
 import Link from 'next/link'
-import { Montserrat, Playfair_Display } from 'next/font/google'
 import PricingSection from './components/PricingSection'
 
-const serif = Playfair_Display({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-})
-
-const sans = Montserrat({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
-})
+const serifClassName = 'font-playfair-display'
+const sansClassName = 'font-montserrat'
 
 const BENEFITS = [
   {
@@ -65,7 +57,7 @@ const TEMPLATES = [
 
 export default function HomePage() {
   return (
-    <main className={sans.className} style={pageStyle}>
+    <main className={sansClassName} style={pageStyle}>
       <Nav />
       <Hero />
       <Benefits />
@@ -103,7 +95,7 @@ function Hero() {
     <section style={heroStyle}>
       <div style={heroInnerStyle}>
         <div style={heroBrandStyle}>
-          <p className={serif.className} style={heroLogoStyle}>
+          <p className={serifClassName} style={heroLogoStyle}>
             YES DAY
           </p>
           <p style={heroSubBrandStyle}>STUDIO</p>
@@ -111,7 +103,7 @@ function Hero() {
 
         <p style={heroEyebrowStyle}>Digitálne svadobné riešenia na mieru v zladenom štýle</p>
 
-        <h1 className={serif.className} style={heroHeadingStyle}>
+        <h1 className={serifClassName} style={heroHeadingStyle}>
           Viac radosti zo svadby,
           <br />
           menej chaosu.
@@ -143,7 +135,7 @@ function Benefits() {
     <section style={sectionStyle}>
       <div style={sectionHeadingBlockStyle}>
         <p style={sectionLabelStyle}>Prečo spojiť pozvánku a svadobný web</p>
-        <h2 className={serif.className} style={sectionHeadingStyle}>
+        <h2 className={serifClassName} style={sectionHeadingStyle}>
           Premyslený systém pre pár aj hostí
         </h2>
         <p style={sectionIntroStyle}>
@@ -155,7 +147,7 @@ function Benefits() {
       <div style={benefitsGridStyle}>
         {BENEFITS.map((benefit) => (
           <article key={benefit.title} style={benefitCardStyle}>
-            <h3 className={serif.className} style={benefitTitleStyle}>
+            <h3 className={serifClassName} style={benefitTitleStyle}>
               {benefit.title}
             </h3>
             <p style={benefitDescriptionStyle}>{benefit.description}</p>
@@ -169,7 +161,7 @@ function Benefits() {
 function Templates() {
   return (
     <section id="portfolio" style={sectionStyle}>
-      <h2 className={serif.className} style={sectionHeadingStyle}>
+      <h2 className={serifClassName} style={sectionHeadingStyle}>
         Templates / Design families
       </h2>
       <p style={sectionIntroStyle}>
@@ -194,12 +186,12 @@ function Templates() {
               }}
             >
               {!template.previewImage ? (
-                <span className={serif.className} style={templatePreviewNameStyle}>
+                <span className={serifClassName} style={templatePreviewNameStyle}>
                   {template.name}
                 </span>
               ) : null}
             </div>
-            <h3 className={serif.className} style={templateNameStyle}>
+            <h3 className={serifClassName} style={templateNameStyle}>
               {template.name}
             </h3>
             <p style={templateToneStyle}>{template.description}</p>
@@ -225,7 +217,7 @@ function Templates() {
 function Contact() {
   return (
     <section id="kontakt" style={sectionStyle}>
-      <h2 className={serif.className} style={sectionHeadingStyle}>
+      <h2 className={serifClassName} style={sectionHeadingStyle}>
         Kontakty
       </h2>
       <p style={sectionIntroStyle}>
@@ -234,7 +226,7 @@ function Contact() {
       <div style={contactGridStyle}>
         <article style={contactCardStyle}>
           <p style={sectionLabelStyle}>E-mail</p>
-          <h3 className={serif.className} style={contactTitleStyle}>
+          <h3 className={serifClassName} style={contactTitleStyle}>
             Napíš nám
           </h3>
           <a href="mailto:info.yesdaystudio@gmail.com" style={contactLinkStyle}>
@@ -243,7 +235,7 @@ function Contact() {
         </article>
         <article style={contactCardStyle}>
           <p style={sectionLabelStyle}>Klientska zóna</p>
-          <h3 className={serif.className} style={contactTitleStyle}>
+          <h3 className={serifClassName} style={contactTitleStyle}>
             Vstup pre klientov
           </h3>
           <Link href="/login" style={contactLinkStyle}>

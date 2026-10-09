@@ -1,32 +1,7 @@
-import { Cormorant_Garamond, Great_Vibes, Inter, Ms_Madi } from 'next/font/google'
 import supabase from '../../lib/supabase'
 import { sortScheduleItemsChronologically } from '../../lib/schedule'
 import { normalizeDresscodePalette } from '../../lib/dresscodePalette'
 import DianaStickyHeader from './DianaStickyHeader'
-
-const dianaContentFont = Cormorant_Garamond({
-  subsets: ['latin', 'latin-ext'],
-  weight: ['400', '500', '600'],
-  display: 'swap',
-})
-
-const dianaLabelFont = Inter({
-  subsets: ['latin', 'latin-ext'],
-  weight: ['400', '500', '600'],
-  display: 'swap',
-})
-
-const dianaHeroCurrentFont = Great_Vibes({
-  subsets: ['latin'],
-  weight: '400',
-  display: 'swap',
-})
-
-const dianaHeroMsMadiFont = Ms_Madi({
-  subsets: ['latin'],
-  weight: '400',
-  display: 'swap',
-})
 
 const dianaHeroFontVariant = 'current'
 
@@ -869,12 +844,12 @@ const colorThemes = {
   },
 }
 
-const dianaSerifFont = dianaContentFont.style.fontFamily
-const dianaSectionLabelFont = dianaLabelFont.style.fontFamily
+const dianaSerifFont = "'Cormorant Garamond', Georgia, 'Times New Roman', serif"
+const dianaSectionLabelFont = "'Inter', Arial, Helvetica, sans-serif"
 const dianaHeroFontVariants = {
-  current: dianaHeroCurrentFont.style.fontFamily,
-  brittany: `'Brittany Signature', ${dianaHeroCurrentFont.style.fontFamily}`,
-  msmadi: dianaHeroMsMadiFont.style.fontFamily,
+  current: "'Great Vibes', cursive",
+  brittany: "'Brittany Signature', 'Great Vibes', cursive",
+  msmadi: "'Ms Madi', cursive",
 }
 
 const dianaHeroNameFontFamily =

@@ -10,6 +10,11 @@
   },
   "dependencies": {
     "@openfonts/cormorant-garamond_all": "^1.44.3",
+    "@openfonts/great-vibes_all": "^1.0.0",
+    "@openfonts/inter_all": "^1.0.3",
+    "@openfonts/montserrat_all": "^1.44.3",
+    "@openfonts/ms-madi_all": "^1.0.0",
+    "@openfonts/playfair-display_all": "^1.44.1",
     "@supabase/supabase-js": "^2.105.4",
     "html-to-image": "^1.11.13",
     "jspdf": "^4.2.1",
