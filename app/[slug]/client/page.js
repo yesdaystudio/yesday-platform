@@ -175,7 +175,7 @@ export default function ClientZonePage() {
 
         <section style={contentStyle}>
           {activeTab === TABS.EDITOR && (
-            <ClientEditor slug={slug} />
+            <ClientEditor slug={slug} onProjectSaved={setProject} />
           )}
 
           {activeTab === TABS.DASHBOARD && (

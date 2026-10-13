@@ -33,7 +33,7 @@ const TEMPLATES = [
     description:
       'Luxury editorial, old money Italy, black tie elegance and timeless villa atmosphere.',
     previewImage: '/templates/diana/diana-anton-hero.png',
-    href: '/diana-anton',
+    href: '/ukazka',
   },
   {
     name: 'Penelope',
@@ -121,8 +121,8 @@ function Hero() {
           <Link href="#portfolio" style={heroPrimaryButtonStyle}>
             Pozrieť šablóny
           </Link>
-          <Link href="#cennik" style={heroSecondaryButtonStyle}>
-            Porovnať balíky
+          <Link href="/ukazka" style={heroSecondaryButtonStyle}>
+            Vyskúšať s vlastnými údajmi
           </Link>
         </div>
       </div>
@@ -199,7 +199,7 @@ function Templates() {
             <div style={templateActionStyle}>
               {template.href ? (
                 <Link href={template.href} style={templateLinkStyle}>
-                  Pozrieť ukážku
+                  Vyskúšať web, pozvánku aj dashboard
                 </Link>
               ) : (
                 <span style={templateComingSoonStyle}>Pripravujeme</span>

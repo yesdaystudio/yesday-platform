@@ -11,28 +11,35 @@ import {
   downloadDianaQrCardPdf,
 } from "../lib/dianaStationeryPdf"
 
-export default function DianaStationerySet({ project, weddingWebsiteUrl, qrDataUrl, qrError }) {
+export default function DianaStationerySet({ project, weddingWebsiteUrl, qrDataUrl, qrError, websiteDisplayUrl }) {
   const [exporting, setExporting] = useState("")
+  const [exportError, setExportError] = useState("")
   const invitationRef = useRef(null)
   const qrCardRef = useRef(null)
   const stationeryData = useMemo(
-    () => getDianaStationeryData(project, weddingWebsiteUrl),
-    [project, weddingWebsiteUrl]
+    () => ({ ...getDianaStationeryData(project, weddingWebsiteUrl), websiteDisplayUrl }),
+    [project, weddingWebsiteUrl, websiteDisplayUrl]
   )
 
   async function handleInvitationExport() {
+    setExportError("")
     setExporting("invitation")
     try {
       await downloadDianaInvitationPdf(invitationRef.current, project)
+    } catch {
+      setExportError("PDF sa nepodarilo pripraviť. Skúste export zopakovať.")
     } finally {
       setExporting("")
     }
   }
 
   async function handleQrExport() {
+    setExportError("")
     setExporting("qr")
     try {
       await downloadDianaQrCardPdf(qrCardRef.current, project)
+    } catch {
+      setExportError("PDF sa nepodarilo pripraviť. Skúste export zopakovať.")
     } finally {
       setExporting("")
     }
@@ -61,6 +68,7 @@ export default function DianaStationerySet({ project, weddingWebsiteUrl, qrDataU
         </div>
       </div>
 
+      {exportError ? <p role="alert" style={qrErrorStyle}>{exportError}</p> : null}
       <div style={downloadActionsStyle}>
         <button
           type="button"

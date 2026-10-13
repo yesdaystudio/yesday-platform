@@ -4,23 +4,25 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import supabase from '../lib/supabase'
 
-export default function ClientAccommodation({ slug: slugProp }) {
+export default function ClientAccommodation({ slug: slugProp, demoProject, demoResponses, onDemoResponseUpdate }) {
   const params = useParams()
   const slug = slugProp || params?.slug
   const router = useRouter()
 
-  const [project, setProject] = useState(null)
-  const [rows, setRows] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [project, setProject] = useState(demoProject || null)
+  const [rows, setRows] = useState(() => (demoResponses || []).filter(row => row.needs_accommodation).map(row => ({ ...row, assignedHotel: row.accommodation_hotel || '', roomNumber: row.accommodation_room || '', internalNote: row.accommodation_internal_note || '', emailSentAt: row.accommodation_email_sent_at || null })))
+  const [loading, setLoading] = useState(!demoProject)
   const [accessDenied, setAccessDenied] = useState(false)
   const [savingId, setSavingId] = useState(null)
   const [savingEmailStatusId, setSavingEmailStatusId] = useState(null)
   const [status, setStatus] = useState('')
+  const [emailPreview, setEmailPreview] = useState('')
 
   const packageType = String(project?.package_type || 'signature').toLowerCase().trim()
   const canManageAccommodation = packageType === 'signature' || packageType === 'atelier'
 
   useEffect(() => {
+    if (demoProject) return
     async function loadAccommodationRows() {
       const { data: sessionData } = await supabase.auth.getSession()
 
@@ -88,7 +90,7 @@ export default function ClientAccommodation({ slug: slugProp }) {
     }
 
     if (slug) loadAccommodationRows()
-  }, [slug, router])
+  }, [slug, router, demoProject])
 
   function updateField(id, field, value) {
     setRows((current) =>
@@ -104,6 +106,13 @@ export default function ClientAccommodation({ slug: slugProp }) {
       accommodation_hotel: row.assignedHotel || null,
       accommodation_room: row.roomNumber || null,
       accommodation_internal_note: row.internalNote || null,
+    }
+
+    if (demoProject) {
+      onDemoResponseUpdate(row.id, payload)
+      setStatus('Ubytovanie bolo uložené v ukážke.')
+      setSavingId(null)
+      return
     }
 
     const { error } = await supabase
@@ -127,6 +136,13 @@ export default function ClientAccommodation({ slug: slugProp }) {
     setSavingEmailStatusId(row.id)
 
     const emailSentAt = sent ? new Date().toISOString() : null
+    if (demoProject) {
+      onDemoResponseUpdate(row.id, { accommodation_email_sent_at: emailSentAt })
+      setRows(current => current.map(item => item.id === row.id ? { ...item, emailSentAt } : item))
+      setStatus(sent ? 'V ukážke označené ako odoslané.' : 'V ukážke označené ako neodoslané.')
+      setSavingEmailStatusId(null)
+      return
+    }
     const { error } = await supabase
       .from('rsvp_responses')
       .update({ accommodation_email_sent_at: emailSentAt })
@@ -162,7 +178,8 @@ export default function ClientAccommodation({ slug: slugProp }) {
 
   return (
     <section style={wrapperStyle}>
-      {status ? <p style={statusStyle}>{status}</p> : null}
+      {status ? <p role="status" style={statusStyle}>{status}</p> : null}
+      {emailPreview ? <section aria-label="Ukážka e-mailu" style={cardStyle}><h3>Ukážka e-mailu hosťovi</h3><p>V ukážke sa e-mail neodosiela.</p><pre style={{ whiteSpace: "pre-wrap", fontFamily: "inherit" }}>{emailPreview}</pre><button type="button" onClick={() => setEmailPreview('')}>Zavrieť náhľad</button></section> : null}
 
       {rows.length === 0 ? (
         <p style={emptyStyle}>Nikto zatiaľ nepožiadal o ubytovanie.</p>
@@ -224,7 +241,12 @@ export default function ClientAccommodation({ slug: slugProp }) {
               {row.contact_email ? (
                 <>
                   <a
-                    href={buildAccommodationEmailHref(row, project)}
+                    href={demoProject ? '#email-preview' : buildAccommodationEmailHref(row, project)}
+                    onClick={demoProject ? (event) => {
+                      event.preventDefault()
+                      const url = new URL(buildAccommodationEmailHref(row, project))
+                      setEmailPreview(`Komu: ${row.contact_email}\nPredmet: ${url.searchParams.get('subject')}\n\n${url.searchParams.get('body')}`)
+                    } : undefined}
                     style={emailButtonStyle}
                   >
                     Odoslať e-mail

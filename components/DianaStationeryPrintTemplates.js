@@ -98,7 +98,7 @@ export const DianaQrCardPrintTemplate = forwardRef(function DianaQrCardPrintTemp
       <div style={qrBottomStyle}>
         <p style={qrTextStyle}>{data.qrText}</p>
         <DianaMonogram data={data} />
-        <p style={qrUrlStyle}>{data.weddingWebsiteUrl || "URL svadobného webu bude doplnená"}</p>
+        <p style={qrUrlStyle}>{data.websiteDisplayUrl || data.weddingWebsiteUrl || "URL svadobného webu bude doplnená"}</p>
       </div>
     </article>
   )

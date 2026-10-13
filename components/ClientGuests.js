@@ -4,20 +4,23 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import supabase from '../lib/supabase'
 
-export default function ClientGuests({ slug: slugProp }) {
+export default function ClientGuests({ slug: slugProp, demoProject, demoResponses }) {
   const params = useParams()
   const slug = slugProp || params?.slug
   const router = useRouter()
 
-  const [project, setProject] = useState(null)
-  const [responses, setResponses] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [loadedProject, setProject] = useState(null)
+  const [loadedResponses, setResponses] = useState([])
+  const project = demoProject || loadedProject
+  const responses = demoProject ? (demoResponses || []) : loadedResponses
+  const [loading, setLoading] = useState(!demoProject)
   const [accessDenied, setAccessDenied] = useState(false)
 
   const packageType = String(project?.package_type || 'signature').toLowerCase().trim()
   const showAccommodationAndTransport = packageType === 'signature' || packageType === 'atelier'
 
   useEffect(() => {
+    if (demoProject) return
     async function loadGuests() {
       const { data: sessionData } = await supabase.auth.getSession()
 
@@ -63,7 +66,7 @@ export default function ClientGuests({ slug: slugProp }) {
     }
 
     if (slug) loadGuests()
-  }, [slug, router])
+  }, [slug, router, demoProject])
 
   if (loading) {
     return <main style={{ padding: 16 }}>Načítavam hostí...</main>

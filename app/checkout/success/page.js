@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function CheckoutSuccessPage() {
   return (
     <div style={pageStyle}>
@@ -9,9 +11,9 @@ export default function CheckoutSuccessPage() {
           Vaša objednávka bola prijatá. Čoskoro sa vám ozveme s ďalšími
           krokmi a prístupom do klientskej zóny.
         </p>
-        <a href="/login" style={buttonStyle}>
+        <Link href="/login" style={buttonStyle}>
           Klientska zóna
-        </a>
+        </Link>
       </div>
     </div>
   )

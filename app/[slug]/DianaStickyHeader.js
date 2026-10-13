@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-export default function DianaStickyHeader({ rsvpHref }) {
+export default function DianaStickyHeader({ rsvpHref, coupleName = 'Diana a Anton' }) {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -23,8 +23,8 @@ export default function DianaStickyHeader({ rsvpHref }) {
   return (
     <header className={`dianaStickyHeader${isVisible ? ' isVisible' : ''}`}>
       <div className="dianaStickyHeader__inner">
-        <a className="dianaStickyHeader__name" href="#top" aria-label="Diana a Anton">
-          Diana a Anton
+        <a className="dianaStickyHeader__name" href="#top" aria-label={coupleName}>
+          {coupleName}
         </a>
         <nav className="dianaStickyHeader__nav" aria-label="Diana wedding navigation">
           <a href="#info">O nás</a>

@@ -4,14 +4,16 @@ import { useEffect, useMemo, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import supabase from '../lib/supabase'
 
-export default function ClientDashboard({ slug: slugProp }) {
+export default function ClientDashboard({ slug: slugProp, demoProject, demoResponses }) {
   const params = useParams()
   const slug = slugProp || params?.slug
   const router = useRouter()
 
-  const [project, setProject] = useState(null)
-  const [responses, setResponses] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [loadedProject, setProject] = useState(null)
+  const [loadedResponses, setResponses] = useState([])
+  const project = demoProject || loadedProject
+  const responses = demoProject && demoResponses ? demoResponses : loadedResponses
+  const [loading, setLoading] = useState(!demoProject)
   const [accessDenied, setAccessDenied] = useState(false)
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('all')
@@ -21,6 +23,7 @@ export default function ClientDashboard({ slug: slugProp }) {
   const showAccommodationAndTransport = packageType === 'signature' || packageType === 'atelier'
 
   useEffect(() => {
+    if (demoProject) return
     async function loadDashboard() {
       const { data: sessionData } = await supabase.auth.getSession()
 
@@ -60,9 +63,10 @@ export default function ClientDashboard({ slug: slugProp }) {
     }
 
     if (slug) loadDashboard()
-  }, [slug, router])
+  }, [slug, router, demoProject])
 
   useEffect(() => {
+    if (demoProject) return
     const projectId = project?.id
     if (!projectId) return undefined
 
@@ -108,7 +112,7 @@ export default function ClientDashboard({ slug: slugProp }) {
       if (refreshTimer) window.clearTimeout(refreshTimer)
       supabase.removeChannel(channel)
     }
-  }, [project?.id])
+  }, [project?.id, demoProject])
 
   const stats = useMemo(() => {
     const attending = responses.filter((r) => r.attending === 'yes')

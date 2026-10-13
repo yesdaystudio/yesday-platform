@@ -10,21 +10,21 @@ import {
   normalizeDresscodePalette,
 } from "../lib/dresscodePalette"
 
-export default function ClientEditor({ slug: slugProp }) {
+export default function ClientEditor({ slug: slugProp, onProjectSaved, demoData, onDemoSave }) {
   const params = useParams()
   const slug = slugProp || params?.slug
   const router = useRouter()
 
-  const [project, setProject] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [project, setProject] = useState(demoData?.project || null)
+  const [loading, setLoading] = useState(!demoData)
   const [accessDenied, setAccessDenied] = useState(false)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState("")
   const [error, setError] = useState("")
-  const [receptionVenueName, setReceptionVenueName] = useState("")
-  const [receptionVenueAddress, setReceptionVenueAddress] = useState("")
+  const [receptionVenueName, setReceptionVenueName] = useState(demoData?.project.reception_venue_name || "")
+  const [receptionVenueAddress, setReceptionVenueAddress] = useState(demoData?.project.reception_venue_address || "")
 
-  const [projectForm, setProjectForm] = useState({
+  const [projectForm, setProjectForm] = useState(demoData ? { ...demoData.project, ceremony_time: String(demoData.project.ceremony_time || "").slice(0, 5), reception_time: String(demoData.project.reception_time || "").slice(0, 5) } : {
     couple_display_name: "",
     wedding_date: "",
     ceremony_time: "",
@@ -43,11 +43,13 @@ export default function ClientEditor({ slug: slugProp }) {
     accommodation_text: "",
     transport_text: "",
     faq_text: "",
+    ...(demoData?.content || {}),
   })
 
-  const [scheduleForm, setScheduleForm] = useState([])
+  const [scheduleForm, setScheduleForm] = useState(demoData?.schedule || [])
 
   useEffect(() => {
+    if (demoData) return
     async function loadData() {
       const { data: sessionData } = await supabase.auth.getSession()
 
@@ -136,7 +138,7 @@ export default function ClientEditor({ slug: slugProp }) {
     }
 
     if (slug) loadData()
-  }, [slug, router])
+  }, [slug, router, demoData])
 
   function handleProjectChange(event) {
     const { name, value } = event.target
@@ -230,6 +232,17 @@ export default function ClientEditor({ slug: slugProp }) {
       reception_venue_address: receptionVenueAddress,
     }
 
+    if (demoData) {
+      const updatedProject = { ...project, ...projectPayload }
+      const schedule = sortScheduleItemsChronologically(scheduleForm)
+      onDemoSave({ project: updatedProject, content: { ...contentForm, dresscode_palette: normalizeDresscodePalette(contentForm.dresscode_palette) }, schedule })
+      setProject(updatedProject)
+      setScheduleForm(schedule)
+      setMessage("Zmeny boli uložené v ukážke. Pozrite si svadobný web alebo tlačoviny.")
+      setSaving(false)
+      return
+    }
+
     console.error("PROJECT DATA CREATED AT", "ClientEditor.handleSubmit -> const projectPayload")
     console.error("PROJECT FORM VALUES", {
       couple_display_name: projectForm.couple_display_name,
@@ -321,6 +334,9 @@ export default function ClientEditor({ slug: slugProp }) {
       }
     }
 
+    const updatedProject = { ...project, ...projectPayload }
+    setProject(updatedProject)
+    onProjectSaved?.(updatedProject)
     setScheduleForm(chronologicalScheduleForm)
     setMessage("Zmeny boli uložené.")
     setSaving(false)
