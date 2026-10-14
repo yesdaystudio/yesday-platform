@@ -466,7 +466,9 @@ function DianaEditorialSplitBlock({
       </div>
       <div className="dianaEditorialSplit__copy" style={{ ...styles.editorialSplitCopy, ...copyStyle }}>
         {eyebrow ? <p style={{ ...styles.editorialEyebrow, ...eyebrowStyle }}>{eyebrow}</p> : null}
-        <h2 style={{ ...styles.editorialTitle, ...titleStyle }}>{title}</h2>
+        <h2 className="dianaEditorialSplit__title" style={{ ...styles.editorialTitle, ...titleStyle }}>
+          {title}
+        </h2>
         {meta ? <p style={styles.editorialSplitMeta}>{meta}</p> : null}
         {children ? <div style={{ ...styles.editorialContent, ...contentStyle }}>{children}</div> : null}
       </div>
