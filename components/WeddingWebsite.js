@@ -94,8 +94,8 @@ export default function WeddingWebsite({ project, websiteContent = {}, scheduleI
               <p style={placeholderStyle}>Harmonogram sa momentálne nepodarilo načítať.</p>
             ) : scheduleItems.length > 0 ? (
               <div style={scheduleListStyle}>
-                {scheduleItems.map((item) => (
-                  <ScheduleItem key={item.id} item={item} />
+                {scheduleItems.map((item, index) => (
+                  <ScheduleItem key={item.id || `schedule-${index}`} item={item} />
                 ))}
               </div>
             ) : (
@@ -263,8 +263,12 @@ function DianaEditorialContent({
           <p style={styles.editorialBody}>Harmonogram sa momentálne nepodarilo načítať.</p>
         ) : scheduleItems.length > 0 ? (
           <div style={styles.editorialScheduleList}>
-            {scheduleItems.map((item) => (
-              <DianaScheduleItem key={item.id} item={item} styles={styles} />
+            {scheduleItems.map((item, index) => (
+              <DianaScheduleItem
+                key={item.id || `diana-schedule-${index}`}
+                item={item}
+                styles={styles}
+              />
             ))}
           </div>
         ) : (
