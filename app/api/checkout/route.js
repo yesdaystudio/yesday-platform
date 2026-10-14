@@ -18,7 +18,7 @@ const PACKAGE_PRICE_DATA = {
   },
   atelier: {
     name: 'YesDay Atelier',
-    unit_amount: 39900,
+    unit_amount: 44900,
   },
 }
 

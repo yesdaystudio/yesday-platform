@@ -27,6 +27,27 @@ const BENEFITS = [
   },
 ]
 
+const SYSTEM_STEPS = [
+  {
+    number: '01',
+    title: 'Všetko sa začína pozvánkou',
+    description:
+      'Hostia dostanú zladenú pozvánku s QR kódom, ktorý ich privedie priamo na váš svadobný web. Nájdú tam miesto, čas, program aj všetky praktické informácie.',
+  },
+  {
+    number: '02',
+    title: 'Hostia vám povedia, čo potrebujú',
+    description:
+      'V RSVP potvrdia svoju účasť, uvedú dospelých a deti, vyberú si menu a doplnia alergie, ubytovanie alebo požiadavku na dopravu.',
+  },
+  {
+    number: '03',
+    title: 'Vy máte všetko pod kontrolou',
+    description:
+      'V dashboarde okamžite vidíte, kto príde, čo bude jesť, kto potrebuje izbu a koho treba odviezť. Po priradení hotela a izby systém automaticky pripraví hosťovi e-mail so všetkými údajmi, ktorý odošlete jedným kliknutím.',
+  },
+]
+
 const TEMPLATES = [
   {
     name: 'Diana',
@@ -60,12 +81,49 @@ export default function HomePage() {
     <main className={sansClassName} style={pageStyle}>
       <Nav />
       <Hero />
+      <HowItWorks />
       <Benefits />
       <Templates />
       <PricingSection />
       <Contact />
       <Footer />
     </main>
+  )
+}
+
+function HowItWorks() {
+  return (
+    <section style={systemSectionStyle}>
+      <div style={systemInnerStyle}>
+        <p style={sectionLabelStyle}>Ako funguje YesDay</p>
+        <h2 className={serifClassName} style={systemHeadingStyle}>
+          Jeden systém pre pokojnejšiu organizáciu vášho svadobného dňa
+        </h2>
+        <p style={systemIntroStyle}>
+          YesDay spája svadobný web, pozvánku, RSVP a organizáciu hostí do jedného
+          krásneho a prehľadného priestoru. Hostia jednoducho nájdu všetko, čo
+          potrebujú, a vy máte vždy aktuálny prehľad bez nekonečných správ,
+          poznámok a tabuliek.
+        </p>
+
+        <div style={systemGridStyle}>
+          {SYSTEM_STEPS.map((step) => (
+            <article key={step.number} style={systemCardStyle}>
+              <p style={systemNumberStyle}>{step.number}</p>
+              <h3 className={serifClassName} style={systemCardTitleStyle}>
+                {step.title}
+              </h3>
+              <p style={systemCardTextStyle}>{step.description}</p>
+            </article>
+          ))}
+        </div>
+
+        <p className={serifClassName} style={systemClosingStyle}>
+          Menej zisťovania, prepisovania a odpovedania na rovnaké otázky.
+          Viac pokoja, istoty a času tešiť sa na váš deň.
+        </p>
+      </div>
+    </section>
   )
 }
 
@@ -104,17 +162,14 @@ function Hero() {
         <p style={heroEyebrowStyle}>Digitálne svadobné riešenia na mieru v zladenom štýle</p>
 
         <h1 className={serifClassName} style={heroHeadingStyle}>
-          Viac radosti zo svadby,
-          <br />
-          menej chaosu.
+          Celá komunikácia s vašimi svadobnými hosťami na jednom mieste.
         </h1>
 
         <div style={heroDividerStyle} />
 
         <p style={heroLeadStyle}>
-          Elegantný digitálny priestor pre váš svadobný web, hostí a organizáciu.
-          Prepojte svadobné pozvánky s výhodami moderného svadobného webu.
-          Vďaka jednému QR kódu budú mať hostia všetko dôležité vždy po ruke.
+          Svadobný web, RSVP, jedlá, alergie, ubytovanie, doprava a prehľad hostí
+          v jednom zladenom systéme.
         </p>
 
         <div style={heroActionsStyle}>
@@ -408,6 +463,78 @@ const sectionStyle = {
   margin: '0 auto',
   textAlign: 'center',
   scrollMarginTop: '110px',
+}
+
+const systemSectionStyle = {
+  padding: '95px 20px',
+  background: COLOR_WHITE,
+}
+
+const systemInnerStyle = {
+  maxWidth: '1140px',
+  margin: '0 auto',
+  textAlign: 'center',
+}
+
+const systemHeadingStyle = {
+  maxWidth: '780px',
+  margin: '0 auto 20px',
+  fontSize: 'clamp(2rem, 4.5vw, 3.2rem)',
+  lineHeight: 1.2,
+  fontWeight: 400,
+}
+
+const systemIntroStyle = {
+  maxWidth: '780px',
+  margin: '0 auto 48px',
+  color: COLOR_GREY,
+  fontSize: '1rem',
+  lineHeight: 1.9,
+}
+
+const systemGridStyle = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+  gap: '22px',
+  textAlign: 'left',
+}
+
+const systemCardStyle = {
+  padding: '34px 30px',
+  border: `1px solid ${COLOR_BORDER}`,
+  background: '#fcfaf5',
+}
+
+const systemNumberStyle = {
+  margin: '0 0 18px',
+  color: COLOR_GOLD,
+  fontSize: '0.7rem',
+  fontWeight: 600,
+  letterSpacing: '0.2em',
+}
+
+const systemCardTitleStyle = {
+  margin: '0 0 14px',
+  color: COLOR_DARK,
+  fontSize: '1.55rem',
+  fontWeight: 400,
+  lineHeight: 1.3,
+}
+
+const systemCardTextStyle = {
+  margin: 0,
+  color: '#5f5a52',
+  fontSize: '0.94rem',
+  lineHeight: 1.85,
+}
+
+const systemClosingStyle = {
+  maxWidth: '830px',
+  margin: '48px auto 0',
+  color: COLOR_DARK,
+  fontSize: 'clamp(1.35rem, 3vw, 2rem)',
+  fontWeight: 400,
+  lineHeight: 1.5,
 }
 
 const sectionHeadingBlockStyle = {

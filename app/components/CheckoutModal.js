@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-export default function CheckoutModal({ packageName, packageType, onClose }) {
+export default function CheckoutModal({ packageName, packageType, packagePrice, onClose }) {
   const [email, setEmail] = useState('')
   const [coupleName, setCoupleName] = useState('')
   const [slug, setSlug] = useState('')
@@ -60,6 +60,7 @@ export default function CheckoutModal({ packageName, packageType, onClose }) {
 
         <p style={modalLabelStyle}>Objednávka</p>
         <h2 style={modalHeadingStyle}>{packageName}</h2>
+        <p style={modalPriceStyle}>{packagePrice}</p>
         <div style={modalDividerStyle} />
 
         <form onSubmit={handleSubmit} noValidate>
@@ -177,6 +178,13 @@ const modalHeadingStyle = {
   fontSize: '2rem',
   fontWeight: 400,
   color: '#1a1a1a',
+}
+
+const modalPriceStyle = {
+  margin: '8px 0 0',
+  color: '#5f5a52',
+  fontSize: '1rem',
+  fontWeight: 600,
 }
 
 const modalDividerStyle = {

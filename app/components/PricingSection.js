@@ -7,29 +7,33 @@ const PACKAGES = [
   {
     name: 'Essential',
     packageType: 'essential',
+    price: '129 €',
     label: 'Elegantný digitálny základ',
     description:
       'Pre páry, ktoré chcú krásny a funkčný svadobný web s praktickým RSVP základom.',
     items: [
+      'Svadobný web s kľúčovými informáciami',
       'RSVP s menami hostí, počtom dospelých a detí',
       'Menu možnosti: mäsové, vegetariánske, vegánske, detské',
       'Alergie a stravovacie obmedzenia',
-      'Svadobný web s kľúčovými informáciami',
-      'Zdieľaný QR kód na web',
+      'Prehľad odpovedí hostí v dashboarde',
+      'Zladená pozvánka a QR kartička na stiahnutie',
+      'QR kód prepojený so svadobným webom',
     ],
     featured: false,
   },
   {
     name: 'Signature',
     packageType: 'signature',
+    price: '249 €',
     label: 'Najobľúbenejšia voľba',
     description:
       'Pre páry, ktoré okrem dizajnu chcú rozšírené RSVP možnosti a viac personalizácie.',
     items: [
       'Všetko z balíka Essential',
-      'Obšírnejší RSVP formulár',
-      'Manažment ubytovania – priradenie ubytovania hosťom (už čoskoro)',
-      'Personalizované QR kódy pre hostí (už čoskoro)',
+      'Rozšírené RSVP s požiadavkami na ubytovanie a dopravu',
+      'Manažment ubytovania – požiadavky, hotely, izby a poznámky',
+      'Prehľad dopravy a komunikácie s hosťami',
       'Bohatšia personalizácia a max 3 fotografie',
       'Galéria po svadbe',
     ],
@@ -38,6 +42,8 @@ const PACKAGES = [
   {
     name: 'Atelier',
     packageType: 'atelier',
+    price: 'od 449 €',
+    customQuote: true,
     label: 'Kompletné riešenie na mieru',
     description:
       'Bespoke varianta pre výnimočné svadby s plnou tvorbou na mieru.',
@@ -114,10 +120,17 @@ const priceLabelStyle = {
 
 const priceNameStyle = {
   marginTop: 0,
-  marginBottom: '14px',
+  marginBottom: '6px',
   fontSize: '1.7rem',
   fontFamily: "'Playfair Display', Georgia, serif",
   fontWeight: 400,
+}
+
+const priceValueStyle = {
+  margin: '0 0 18px',
+  color: COLOR_DARK,
+  fontSize: '1.15rem',
+  fontWeight: 600,
 }
 
 const priceIntroStyle = {
@@ -184,6 +197,7 @@ export default function PricingSection() {
               >
                 <p style={priceLabelStyle}>{pkg.label}</p>
                 <h3 style={priceNameStyle}>{pkg.name}</h3>
+                <p style={priceValueStyle}>{pkg.price}</p>
                 <p style={priceIntroStyle}>{pkg.description}</p>
                 <ul style={priceListStyle}>
                   {pkg.items.map((item) => (
@@ -192,18 +206,28 @@ export default function PricingSection() {
                     </li>
                   ))}
                 </ul>
-                <button
-                  type="button"
-                  style={priceButtonStyle}
-                  onClick={() =>
-                    setActiveModal({
-                      name: pkg.name,
-                      type: pkg.packageType,
-                    })
-                  }
-                >
-                  Objednať
-                </button>
+                {pkg.customQuote ? (
+                  <a
+                    href="mailto:info.yesdaystudio@gmail.com?subject=Nez%C3%A1v%C3%A4zn%C3%BD%20z%C3%A1ujem%20o%20bal%C3%ADk%20Atelier"
+                    style={priceButtonStyle}
+                  >
+                    Nezáväzne sa informovať
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    style={priceButtonStyle}
+                    onClick={() =>
+                      setActiveModal({
+                        name: pkg.name,
+                        type: pkg.packageType,
+                        price: pkg.price,
+                      })
+                    }
+                  >
+                    Objednať
+                  </button>
+                )}
               </article>
             ))}
           </div>
@@ -214,6 +238,7 @@ export default function PricingSection() {
         <CheckoutModal
           packageName={activeModal.name}
           packageType={activeModal.type}
+          packagePrice={activeModal.price}
           onClose={() => setActiveModal(null)}
         />
       )}
