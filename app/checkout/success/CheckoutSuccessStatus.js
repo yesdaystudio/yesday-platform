@@ -54,11 +54,19 @@ export default function CheckoutSuccessStatus({ sessionId }) {
   if (state.status === 'ready') {
     return <>
       {state.livemode === false ? <p style={testModeStyle}>Išlo o testovaciu platbu. Z účtu sa nič nestiahlo.</p> : null}
-      <p style={bodyStyle}>
-        Klientska zóna je pripravená. Na e-mail <strong>{state.customer_email}</strong> sme poslali odkaz na nastavenie hesla.
-      </p>
+      {state.access_url ? (
+        <p style={bodyStyle}>Testovacia klientska zóna je pripravená. Pokračujte cez bezpečný odkaz a nastavte si heslo.</p>
+      ) : (
+        <p style={bodyStyle}>
+          Klientska zóna je pripravená. Na e-mail <strong>{state.customer_email}</strong> sme poslali odkaz na nastavenie hesla.
+        </p>
+      )}
       <div style={actionsStyle}>
-        <Link href={`/${state.project_slug}/client`} style={buttonStyle}>Otvoriť klientsku zónu</Link>
+        {state.access_url ? (
+          <a href={state.access_url} style={buttonStyle}>Nastaviť heslo</a>
+        ) : (
+          <Link href={`/${state.project_slug}/client`} style={buttonStyle}>Otvoriť klientsku zónu</Link>
+        )}
         <Link href="/login" style={secondaryButtonStyle}>Prihlásenie</Link>
       </div>
     </>
