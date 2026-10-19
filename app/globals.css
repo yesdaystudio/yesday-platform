@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./signature-weddings.css";
 
 :root {
   --background: #ffffff;

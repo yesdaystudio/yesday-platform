@@ -1,0 +1,130 @@
+.signatureWedding {
+  --signature-ink: #26362b;
+  --signature-muted: #647166;
+  --signature-paper: #f4f1e8;
+  --signature-accent: #738269;
+  --signature-line: rgba(49, 69, 54, 0.2);
+  min-height: 100vh;
+  overflow: hidden;
+  color: var(--signature-ink);
+  background: var(--signature-paper);
+  font-family: var(--signature-serif, 'Cormorant Garamond', Georgia, serif);
+}
+
+.signatureWedding--penelope {
+  --signature-ink: #5a3f45;
+  --signature-muted: #8b6f74;
+  --signature-paper: #fbf4f2;
+  --signature-accent: #b7868f;
+  --signature-line: rgba(130, 86, 96, 0.2);
+}
+
+.signatureWedding__nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 66px;
+  padding: 0 clamp(22px, 5vw, 72px);
+  color: var(--signature-paper);
+  background: color-mix(in srgb, var(--signature-ink) 91%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+.signatureWedding__nav a { color: inherit; text-decoration: none; }
+.signatureWedding__brand { font-size: clamp(20px, 2.2vw, 28px); letter-spacing: .04em; }
+.signatureWedding__nav nav { display: flex; gap: clamp(18px, 3vw, 38px); font-family: Inter, Arial, sans-serif; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; }
+
+.signatureWedding__hero {
+  position: relative;
+  display: grid;
+  min-height: min(780px, calc(100vh - 66px));
+  place-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  background-image: var(--signature-hero);
+  background-position: center;
+  background-size: cover;
+}
+
+.signatureWedding__heroShade { position: absolute; z-index: -1; inset: 0; background: linear-gradient(90deg, rgba(20,31,23,.48), rgba(20,31,23,.09) 48%, rgba(20,31,23,.34)); }
+.signatureWedding--penelope .signatureWedding__heroShade { background: linear-gradient(90deg, rgba(255,250,246,.24), rgba(255,250,246,.02) 50%, rgba(255,250,246,.16)); }
+.signatureWedding__heroCopy { display: grid; justify-items: center; width: min(92%, 900px); padding: 70px 20px; color: #fffdf7; text-align: center; text-shadow: 0 2px 28px rgba(19,27,20,.42); }
+.signatureWedding--penelope .signatureWedding__heroCopy { color: #5a3f45; text-shadow: 0 1px 20px rgba(255,252,248,.9); }
+.signatureWedding__heroCopy > p,
+.signatureWedding__eyebrow { margin: 0 0 22px; font-family: Inter, Arial, sans-serif; font-size: 11px; font-weight: 500; letter-spacing: .28em; text-transform: uppercase; }
+.signatureWedding__heroCopy h1 { display: grid; margin: 0; font-size: clamp(68px, 12vw, 150px); font-weight: 400; letter-spacing: -.045em; line-height: .68; }
+.signatureWedding__heroCopy h1 i { margin: .12em 0 .08em; font-family: 'Great Vibes', cursive; font-size: .55em; font-weight: 400; line-height: .8; }
+.signatureWedding--penelope .signatureWedding__heroCopy h1 { line-height: .76; }
+.signatureWedding--penelope .signatureWedding__heroCopy h1 i { color: #a96f7b; }
+.signatureWedding__heroCopy strong { margin-top: 38px; font-family: Inter, Arial, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: .24em; text-transform: uppercase; }
+
+.signatureWedding__section { width: min(calc(100% - 48px), 1120px); margin: 0 auto; padding: clamp(76px, 10vw, 132px) 0; }
+.signatureWedding__eyebrow { color: var(--signature-accent); }
+.signatureWedding__welcome { display: grid; justify-items: center; text-align: center; }
+.signatureWedding__welcome h2 { max-width: 900px; margin: 0; font-size: clamp(40px, 6vw, 72px); font-weight: 400; line-height: 1.08; }
+.signatureWedding__ornament { margin-top: 42px; color: var(--signature-accent); font-size: 18px; }
+
+.signatureWedding__places { display: grid; grid-template-columns: 1fr 1fr; width: 100%; padding: 0; border-top: 1px solid var(--signature-line); border-bottom: 1px solid var(--signature-line); }
+.signatureWedding__places article { display: grid; min-height: 420px; padding: clamp(56px, 8vw, 100px); place-content: center; text-align: center; }
+.signatureWedding__places article + article { border-left: 1px solid var(--signature-line); }
+.signatureWedding__places strong { font-size: clamp(50px, 7vw, 86px); font-weight: 400; line-height: 1; }
+.signatureWedding__places h2,
+.signatureWedding__details h2 { margin: 26px 0 8px; font-size: clamp(28px, 3.5vw, 42px); font-weight: 400; }
+.signatureWedding__places article > p:last-child,
+.signatureWedding__details article > p,
+.signatureWedding__story div > p:last-child,
+.signatureWedding__faq > p:not(.signatureWedding__eyebrow),
+.signatureWedding__rsvp > p:not(.signatureWedding__eyebrow) { margin: 0; color: var(--signature-muted); font-size: clamp(18px, 2vw, 22px); line-height: 1.7; }
+
+.signatureWedding__story { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(320px, .9fr); gap: clamp(44px, 8vw, 110px); align-items: center; }
+.signatureWedding__storyImage { min-height: 620px; background-image: var(--signature-hero); background-position: left center; background-size: auto 125%; }
+.signatureWedding--penelope .signatureWedding__storyImage { background-position: center; background-size: cover; }
+.signatureWedding__story h2,
+.signatureWedding__schedule > h2,
+.signatureWedding__menu h2,
+.signatureWedding__faq h2,
+.signatureWedding__rsvp h2 { margin: 0 0 30px; font-size: clamp(48px, 7vw, 84px); font-weight: 400; line-height: 1; }
+
+.signatureWedding__schedule { text-align: center; }
+.signatureWedding__timeline { width: min(100%, 760px); margin: 62px auto 0; }
+.signatureWedding__timeline article { display: grid; grid-template-columns: 110px 1fr; gap: 34px; padding: 26px 0; border-top: 1px solid var(--signature-line); text-align: left; }
+.signatureWedding__timeline time { color: var(--signature-accent); font-family: Inter, Arial, sans-serif; font-size: 12px; letter-spacing: .16em; }
+.signatureWedding__timeline h3 { margin: -7px 0 4px; font-size: 30px; font-weight: 400; }
+.signatureWedding__timeline p { margin: 0; color: var(--signature-muted); font-size: 18px; }
+
+.signatureWedding__menu { display: grid; grid-template-columns: .85fr 1.15fr; gap: clamp(48px, 9vw, 120px); width: 100%; padding-right: max(24px, calc((100vw - 1120px) / 2)); padding-left: max(24px, calc((100vw - 1120px) / 2)); color: var(--signature-paper); background: var(--signature-ink); }
+.signatureWedding__menu .signatureWedding__eyebrow { color: color-mix(in srgb, var(--signature-accent) 55%, white); }
+.signatureWedding__menuCopy p { margin: 0; padding: 17px 0; border-bottom: 1px solid color-mix(in srgb, var(--signature-paper) 18%, transparent); font-size: clamp(18px, 2vw, 23px); line-height: 1.5; }
+.signatureWedding__menuCopy p:nth-child(odd) { padding-top: 28px; color: color-mix(in srgb, var(--signature-accent) 45%, white); font-family: Inter, Arial, sans-serif; font-size: 10px; letter-spacing: .22em; text-transform: uppercase; }
+
+.signatureWedding__details { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(50px, 9vw, 120px); }
+.signatureWedding__details article { min-width: 0; }
+.signatureWedding__details article + article { padding-left: clamp(30px, 5vw, 70px); border-left: 1px solid var(--signature-line); }
+.signatureWedding__palette { display: flex; gap: 12px; margin-top: 28px; }
+.signatureWedding__palette span { width: 42px; height: 42px; border: 1px solid rgba(0,0,0,.08); border-radius: 50%; }
+.signatureWedding__faq,
+.signatureWedding__rsvp { text-align: center; }
+.signatureWedding__faq > p:not(.signatureWedding__eyebrow) { max-width: 720px; margin: 14px auto 0; }
+.signatureWedding__rsvp { width: 100%; padding-right: 24px; padding-left: 24px; background: color-mix(in srgb, var(--signature-accent) 15%, var(--signature-paper)); }
+.signatureWedding__rsvp p { max-width: 650px; margin-right: auto !important; margin-left: auto !important; }
+.signatureWedding__rsvp a { display: inline-flex; min-height: 48px; margin-top: 34px; padding: 0 30px; align-items: center; justify-content: center; color: var(--signature-paper); background: var(--signature-ink); font-family: Inter, Arial, sans-serif; font-size: 10px; letter-spacing: .2em; text-decoration: none; text-transform: uppercase; }
+
+@media (max-width: 760px) {
+  .signatureWedding__nav nav a:not(:last-child) { display: none; }
+  .signatureWedding__hero { min-height: 670px; background-position: center; }
+  .signatureWedding__heroCopy h1 { font-size: clamp(58px, 20vw, 92px); }
+  .signatureWedding__section { width: min(calc(100% - 36px), 1120px); padding: 72px 0; }
+  .signatureWedding__places,
+  .signatureWedding__story,
+  .signatureWedding__menu,
+  .signatureWedding__details { grid-template-columns: 1fr; }
+  .signatureWedding__places article { min-height: 330px; padding: 60px 24px; }
+  .signatureWedding__places article + article { border-top: 1px solid var(--signature-line); border-left: 0; }
+  .signatureWedding__storyImage { min-height: 460px; }
+  .signatureWedding__menu { width: 100%; padding: 72px 24px; }
+  .signatureWedding__details article + article { padding-top: 48px; padding-left: 0; border-top: 1px solid var(--signature-line); border-left: 0; }
+  .signatureWedding__timeline article { grid-template-columns: 76px 1fr; gap: 20px; }
+}

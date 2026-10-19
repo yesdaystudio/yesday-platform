@@ -1,5 +1,6 @@
 import { normalizeDresscodePalette } from '../lib/dresscodePalette'
 import DianaStickyHeader from '../app/[slug]/DianaStickyHeader'
+import AlternativeWeddingWebsite from './AlternativeWeddingWebsite'
 
 const dianaHeroFontVariant = 'current'
 
@@ -24,6 +25,19 @@ export default function WeddingWebsite({ project, websiteContent = {}, scheduleI
   const isDianaHero = designFamily === 'diana'
   const ceremonyTime = formatScheduleTime(project.ceremony_time || scheduleItems[0]?.item_time || scheduleItems[0]?.time)
   const celebrationTime = formatScheduleTime(project.reception_time)
+
+  if (designFamily === 'botanique' || designFamily === 'penelope') {
+    return (
+      <AlternativeWeddingWebsite
+        variant={designFamily}
+        project={project}
+        websiteContent={websiteContent}
+        scheduleItems={scheduleItems}
+        scheduleError={scheduleError}
+        rsvpHref={rsvpHref}
+      />
+    )
+  }
 
   return (
     <main style={{ ...pageStyle, ...themeStyles.page, ...colorTheme.page }}>

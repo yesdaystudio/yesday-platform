@@ -7,6 +7,7 @@ import ClientDashboard from "../../../components/ClientDashboard"
 import ClientGuests from "../../../components/ClientGuests"
 import ClientAccommodation from "../../../components/ClientAccommodation"
 import DianaStationerySet from "../../../components/DianaStationerySet"
+import AlternativeStationerySet from "../../../components/AlternativeStationerySet"
 import QRCode from "qrcode"
 import supabase from "../../../lib/supabase"
 
@@ -192,12 +193,22 @@ export default function ClientZonePage() {
 
           {activeTab === TABS.QR_CODE && (
             <section style={qrSectionStyle}>
-              <DianaStationerySet
-                project={project}
-                weddingWebsiteUrl={weddingWebsiteUrl}
-                qrDataUrl={qrDataUrl}
-                qrError={qrError}
-              />
+              {project?.design_family === "botanique" || project?.design_family === "penelope" ? (
+                <AlternativeStationerySet
+                  variant={project.design_family}
+                  project={project}
+                  weddingWebsiteUrl={weddingWebsiteUrl}
+                  qrDataUrl={qrDataUrl}
+                  qrError={qrError}
+                />
+              ) : (
+                <DianaStationerySet
+                  project={project}
+                  weddingWebsiteUrl={weddingWebsiteUrl}
+                  qrDataUrl={qrDataUrl}
+                  qrError={qrError}
+                />
+              )}
             </section>
           )}
         </section>

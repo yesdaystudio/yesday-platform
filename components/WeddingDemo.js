@@ -4,12 +4,14 @@ import { useEffect, useState, useSyncExternalStore } from 'react'
 import Link from 'next/link'
 import QRCode from 'qrcode'
 import DianaStationerySet from './DianaStationerySet'
+import AlternativeStationerySet from './AlternativeStationerySet'
 import ClientDashboard from './ClientDashboard'
 import ClientEditor from './ClientEditor'
 import ClientGuests from './ClientGuests'
 import ClientAccommodation from './ClientAccommodation'
 import DemoRsvp from './DemoRsvp'
 import { DEMO_FIELDS, DEMO_DEFAULTS, DEMO_RESPONSES, normalizeDemo, createDemoState, readDemoState } from '../lib/demoWedding'
+import { DESIGN_CUSTOMIZATION_OPTIONS } from '../lib/designCustomization'
 import styles from './WeddingDemo.module.css'
 
 const subscribeOrigin = () => () => {}
@@ -17,6 +19,7 @@ const readOrigin = () => window.location.origin
 const serverOrigin = () => ''
 
 const TABS = [['web', 'Svadobný web'], ['editor', 'Editor'], ['dashboard', 'Dashboard'], ['guests', 'Hostia'], ['accommodation', 'Ubytovanie'], ['stationery', 'Pozvánka + QR'], ['rsvp', 'Vyskúšať RSVP']]
+const DESIGNS = [['diana', 'Diana'], ['botanique', 'Botanique'], ['penelope', 'Penelope']]
 
 export default function WeddingDemo({ initialValues }) {
   const [values, setValues] = useState(() => normalizeDemo(initialValues))
@@ -29,6 +32,8 @@ export default function WeddingDemo({ initialValues }) {
   const [responses, setResponses] = useState(DEMO_RESPONSES)
   const [notice, setNotice] = useState('')
   const project = demoData.project
+  const designName = DESIGNS.find(([key]) => key === project.design_family)?.[1] || 'Diana'
+  const designOptions = DESIGN_CUSTOMIZATION_OPTIONS[project.design_family]
   const [websiteUrl, setWebsiteUrl] = useState('')
 
   useEffect(() => {
@@ -51,7 +56,18 @@ export default function WeddingDemo({ initialValues }) {
   }, [origin, demoData])
 
   function reset() {
-    setValues({ ...DEMO_DEFAULTS }); setDemoData(createDemoState(DEMO_DEFAULTS)); setResponses(DEMO_RESPONSES); setNotice('Ukážka bola obnovená.'); setTab('web')
+    const defaults = { ...DEMO_DEFAULTS, design: project.design_family, font: project.design_font_variant, ink: project.design_text_color }; setValues(defaults); setDemoData(createDemoState(defaults)); setResponses(DEMO_RESPONSES); setNotice('Ukážka bola obnovená.'); setTab('web')
+  }
+  function changeDesign(design) {
+    setValues(current => ({ ...current, design, font: 'serif', ink: 'primary' }))
+    setDemoData(current => ({ ...current, project: { ...current.project, design_family: design, design_font_variant: 'serif', design_text_color: 'primary' } }))
+    setNotice(`Dizajn bol zmenený na ${DESIGNS.find(([key]) => key === design)?.[1]}.`)
+    setTab('web')
+  }
+  function changeCustomization(field, value) {
+    setDemoData(current => ({ ...current, project: { ...current.project, [field]: value } }))
+    setValues(current => ({ ...current, [field === 'design_font_variant' ? 'font' : 'ink']: value }))
+    setNotice('Písmo a farba sa premietli do webu, pozvánky aj QR kartičky.')
   }
   function changeQuickField(key, value) {
     const next = { ...values, [key]: value }
@@ -78,7 +94,7 @@ export default function WeddingDemo({ initialValues }) {
   return <main className={styles.page}>
     <header className={styles.header}><Link href="/">YES DAY <span>STUDIO</span></Link><Link href="/#portfolio">Späť na šablóny</Link></header>
     <section className={styles.intro}>
-      <p className={styles.eyebrow}>Diana · interaktívna ukážka</p>
+      <p className={styles.eyebrow}>{designName} · interaktívna ukážka</p>
       <h1>Váš deň. Váš príbeh. Jeden krásny celok.</h1>
       <p>Skúste si zadať svoje mená a detaily svadby. Web, pozvánka aj QR kartička sa prispôsobia vám.</p>
       <p className={styles.note}>Bez registrácie. Údaje sa neukladajú do klientskych projektov. Obnovením stránky sa vaše úpravy vymažú. QR kód otvorí ukážkový web s vyplnenými údajmi.</p>
@@ -86,13 +102,28 @@ export default function WeddingDemo({ initialValues }) {
     <div className={styles.layout}>
       <aside className={styles.editor}>
         <h2>Predstavte si svoju svadbu</h2>
+        <div className={styles.designPicker}>
+          <span>Vyberte si dizajn</span>
+          <div>{DESIGNS.map(([key, label]) => <button type="button" key={key} aria-pressed={project.design_family === key} className={project.design_family === key ? styles.designActive : ''} onClick={() => changeDesign(key)}>{label}</button>)}</div>
+        </div>
+        {designOptions ? <div className={styles.customizationPicker}>
+          <label>Písmo
+            <select value={project.design_font_variant || 'serif'} onChange={event => changeCustomization('design_font_variant', event.target.value)}>
+              {designOptions.fonts.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
+            </select>
+          </label>
+          <span>Farba písma</span>
+          <div className={styles.inkChoices}>
+            {designOptions.colors.map(option => <button type="button" key={option.value} aria-label={option.label} title={option.label} aria-pressed={(project.design_text_color || 'primary') === option.value} className={(project.design_text_color || 'primary') === option.value ? styles.inkActive : ''} style={{ '--ink-choice': option.hex }} onClick={() => changeCustomization('design_text_color', option.value)}><span style={{ background: option.hex }} />{option.label}</button>)}
+          </div>
+        </div> : null}
         {DEMO_FIELDS.map(([key, label, type]) => <label key={key}>{label}<input type={type} value={values[key]} maxLength={key === 'welcome' ? 240 : 80} onChange={event => changeQuickField(key, event.target.value)} /></label>)}
         <button type="button" className={styles.secondary} onClick={reset}>Obnoviť vzorové údaje</button>
       </aside>
       <section className={styles.preview} aria-label="Ukážka vašej svadby">
         <div className={styles.tabs} aria-label="Vyberte náhľad">{TABS.map(([key, label]) => <button type="button" key={key} aria-pressed={tab === key} className={tab === key ? styles.active : ''} onClick={() => setTab(key)}>{label}</button>)}</div>
-        {tab === 'web' && <><p className={styles.hint}>Skutočný dizajn Diana s vašimi údajmi. Posuňte sa v náhľade a prezrite si celý web.</p><iframe title="Živá ukážka svadobného webu Diana" className={styles.frame} src={`/ukazka/web?${previewQuery}`} /></>}
-        {tab === 'stationery' && <div className={styles.stationery}><DianaStationerySet project={project} weddingWebsiteUrl={websiteUrl} websiteDisplayUrl={origin ? `${origin}/ukazka/web` : "Ukážka svadobného webu"} qrDataUrl={qrDataUrl} qrError={qrError} /></div>}
+        {tab === 'web' && <><p className={styles.hint}>Skutočný dizajn {designName} s vašimi údajmi. Posuňte sa v náhľade a prezrite si celý web.</p><iframe title={`Živá ukážka svadobného webu ${designName}`} className={styles.frame} src={`/ukazka/web?${previewQuery}`} /></>}
+        {tab === 'stationery' && <div className={styles.stationery}>{project.design_family === 'diana' ? <DianaStationerySet project={project} weddingWebsiteUrl={websiteUrl} websiteDisplayUrl={origin ? `${origin}/ukazka/web` : "Ukážka svadobného webu"} qrDataUrl={qrDataUrl} qrError={qrError} /> : <AlternativeStationerySet variant={project.design_family} project={project} weddingWebsiteUrl={websiteUrl} websiteDisplayUrl={origin ? `${origin}/ukazka/web` : "Ukážka svadobného webu"} qrDataUrl={qrDataUrl} qrError={qrError} />}</div>}
         {tab === 'editor' && <div className={styles.dashboard}><ClientEditor demoData={demoData} onDemoSave={saveDemo} /></div>}
         {tab === 'dashboard' && <div className={styles.dashboard}>
           <p className={styles.hint}>Rovnaký dashboard ako v klientskej zóne: dospelí, deti, alergie, požiadavky na ubytovanie a dopravu. Kliknutím na jednotlivé prehľady zobrazíte mená a detaily.</p>
@@ -104,6 +135,6 @@ export default function WeddingDemo({ initialValues }) {
         <p role="status" className={styles.hint}>{notice}</p>
       </section>
     </div>
-    <section className={styles.cta}><h2>Páči sa vám vaša svadba v štýle Diana?</h2><Link href="/#cennik">Pozrieť balíky</Link></section>
+    <section className={styles.cta}><h2>Páči sa vám vaša svadba v štýle {designName}?</h2><Link href="/#cennik">Pozrieť balíky</Link></section>
   </main>
 }

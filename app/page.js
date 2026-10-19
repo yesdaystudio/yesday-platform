@@ -60,17 +60,15 @@ const TEMPLATES = [
     name: 'Penelope',
     description:
       'Romantic floral design family inspired by softness, femininity and fairytale wedding atmosphere.',
-    preview:
-      'radial-gradient(circle at 18% 15%, rgba(255,255,255,0.9), transparent 28%), linear-gradient(145deg, #f8eee9 0%, #e8d4d1 100%)',
-    comingSoon: true,
+    previewImage: '/templates/penelope/hero-v2.jpg',
+    href: '/ukazka?design=penelope',
   },
   {
     name: 'Botanique',
     description:
       'Natural garden design family with relaxed authentic styling, greenery, brick, ivy and wild garden atmosphere.',
-    preview:
-      'radial-gradient(circle at 82% 18%, rgba(255,255,255,0.38), transparent 30%), linear-gradient(145deg, #dfe4d7 0%, #aeb9a4 100%)',
-    comingSoon: true,
+    previewImage: '/templates/botanique/hero.jpg',
+    href: '/ukazka?design=botanique',
   },
 ]
 
