@@ -1,5 +1,10 @@
 # Pred spustením e-shopu
 
+## Ranná priorita – 20. 10. 2026
+
+- Aplikovať migráciu `supabase/migrations/20261019000000_align_real_experience_with_demo.sql` v produkčnom Supabase.
+- Následne overiť výber písma a farby v reálnom editore pre Botanique aj Penelope a uloženie požiadavky na dopravu v RSVP.
+
 ## Uvítací a registračný e-mail
 
 - Zapojiť vlastnú transakčnú e-mailovú službu a odosielaciu doménu YesDay.
