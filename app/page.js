@@ -61,6 +61,8 @@ const TEMPLATES = [
     description:
       'Romantic floral design family inspired by softness, femininity and fairytale wedding atmosphere.',
     previewImage: '/templates/penelope/hero-v2.jpg',
+    previewCouple: ['Sofia', 'Samuel'],
+    previewCoupleStyle: 'penelope',
     href: '/ukazka?design=penelope',
   },
   {
@@ -68,6 +70,8 @@ const TEMPLATES = [
     description:
       'Natural garden design family with relaxed authentic styling, greenery, brick, ivy and wild garden atmosphere.',
     previewImage: '/templates/botanique/hero.jpg',
+    previewCouple: ['Laura', 'Matej'],
+    previewCoupleStyle: 'botanique',
     href: '/ukazka?design=botanique',
   },
 ]
@@ -242,6 +246,19 @@ function Templates() {
                 <span className={serifClassName} style={templatePreviewNameStyle}>
                   {template.name}
                 </span>
+              ) : null}
+              {template.previewCouple ? (
+                <div
+                  aria-label={`${template.previewCouple[0]} a ${template.previewCouple[1]}`}
+                  style={{
+                    ...templateCoupleStyle,
+                    ...(template.previewCoupleStyle === 'penelope' ? penelopePreviewCoupleStyle : botaniquePreviewCoupleStyle),
+                  }}
+                >
+                  <span>{template.previewCouple[0]}</span>
+                  <i style={templateCoupleAmpersandStyle}>&amp;</i>
+                  <span>{template.previewCouple[1]}</span>
+                </div>
               ) : null}
             </div>
             <h3 className={serifClassName} style={templateNameStyle}>
@@ -604,6 +621,7 @@ const templateCardStyle = {
 }
 
 const templatePreviewStyle = {
+  position: 'relative',
   width: '100%',
   aspectRatio: '4 / 3',
   border: `1px solid ${COLOR_BORDER}`,
@@ -611,6 +629,39 @@ const templatePreviewStyle = {
   display: 'grid',
   placeItems: 'center',
   overflow: 'hidden',
+}
+
+const templateCoupleStyle = {
+  position: 'absolute',
+  inset: 0,
+  zIndex: 1,
+  display: 'grid',
+  alignContent: 'center',
+  justifyItems: 'center',
+  fontFamily: '"Playfair Display", Georgia, serif',
+  fontSize: 'clamp(1.6rem, 3vw, 2.65rem)',
+  fontWeight: 400,
+  letterSpacing: '-0.035em',
+  lineHeight: 0.8,
+  textAlign: 'center',
+}
+
+const penelopePreviewCoupleStyle = {
+  color: '#64434b',
+}
+
+const templateCoupleAmpersandStyle = {
+  margin: '0.22em 0 0.14em',
+  fontFamily: '"Great Vibes", cursive',
+  fontSize: '0.68em',
+  fontWeight: 400,
+  lineHeight: 0.85,
+}
+
+const botaniquePreviewCoupleStyle = {
+  color: '#fffdf7',
+  background: 'rgba(24, 35, 27, 0.2)',
+  textShadow: '0 2px 18px rgba(18, 27, 20, 0.72)',
 }
 
 const templatePreviewNameStyle = {
