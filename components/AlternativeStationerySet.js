@@ -22,11 +22,16 @@ export default function AlternativeStationerySet({ variant, project, weddingWebs
 
   async function download(kind) {
     setExportError("")
+    if (kind === "qr" && !qrDataUrl) {
+      setExportError("QR kód sa ešte pripravuje. Skúste to o chvíľu znova.")
+      return
+    }
     setExporting(kind)
     try {
       await downloadStationeryPdf(kind === "invitation" ? invitationRef.current : qrRef.current, {
         filename: `${variant}-${kind === "invitation" ? "pozvanka" : "qr-karticka"}-${project?.slug || "svadba"}.pdf`,
         title: `${kind === "invitation" ? "Svadobná pozvánka" : "QR kartička"} ${config.name}`,
+        requireImage: kind === "qr",
       })
     } catch {
       setExportError("PDF sa nepodarilo pripraviť. Skúste export zopakovať.")
@@ -49,7 +54,7 @@ export default function AlternativeStationerySet({ variant, project, weddingWebs
       {qrError || exportError ? <p role="alert" style={errorStyle}>{qrError || exportError}</p> : null}
       <div style={actionsStyle}>
         <button type="button" disabled={Boolean(exporting)} onClick={() => download("invitation")}>{exporting === "invitation" ? "Pripravujem PDF..." : "Stiahnuť pozvánku"}</button>
-        <button type="button" disabled={Boolean(exporting) || !weddingWebsiteUrl} onClick={() => download("qr")}>{exporting === "qr" ? "Pripravujem PDF..." : "Stiahnuť QR kartičku"}</button>
+        <button type="button" disabled={Boolean(exporting) || !weddingWebsiteUrl || !qrDataUrl} onClick={() => download("qr")}>{exporting === "qr" ? "Pripravujem PDF..." : !qrDataUrl && weddingWebsiteUrl ? "Pripravujem QR kód..." : "Stiahnuť QR kartičku"}</button>
       </div>
     </section>
   )
@@ -78,7 +83,7 @@ const QrCard = forwardRef(function QrCard({ data, config, variant, qrDataUrl }, 
       <Image src={config.ornament} alt="" width={90} height={90} unoptimized style={{ ...qrOrnamentStyle, ...(variant === "penelope" ? qrPenelopeOrnamentStyle : qrBotaniqueOrnamentStyle) }} />
       <p style={{ ...smallStyle, color: config.accent }}>Všetko o našej svadbe</p>
       <div style={{ ...qrNamePlateStyle, color: config.paper, background: config.ink }}><h3 style={qrNamesStyle}>{data.firstPartner} <i>&amp;</i> {data.secondPartner}</h3></div>
-      {qrDataUrl ? <Image src={qrDataUrl} alt="QR kód svadobného webu" width={126} height={126} unoptimized style={qrImageStyle} /> : <div style={qrPlaceholderStyle}>QR</div>}
+      {qrDataUrl ? <Image src={qrDataUrl} alt="QR kód svadobného webu" width={126} height={126} unoptimized data-pdf-required-image="true" style={qrImageStyle} /> : <div style={qrPlaceholderStyle}>QR</div>}
       <p style={qrTextStyle}>Naskenujte QR kód<br />a potvrďte svoju účasť.</p>
       <p style={{ ...urlStyle, color: config.accent }}>{data.websiteDisplayUrl}</p>
     </article>

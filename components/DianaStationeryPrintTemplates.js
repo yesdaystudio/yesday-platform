@@ -78,6 +78,7 @@ export const DianaQrCardPrintTemplate = forwardRef(function DianaQrCardPrintTemp
             width={170}
             height={170}
             unoptimized
+            data-pdf-required-image="true"
             style={qrImageStyle}
           />
         ) : (

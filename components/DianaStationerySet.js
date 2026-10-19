@@ -35,6 +35,10 @@ export default function DianaStationerySet({ project, weddingWebsiteUrl, qrDataU
 
   async function handleQrExport() {
     setExportError("")
+    if (!qrDataUrl) {
+      setExportError("QR kód sa ešte pripravuje. Skúste to o chvíľu znova.")
+      return
+    }
     setExporting("qr")
     try {
       await downloadDianaQrCardPdf(qrCardRef.current, project)
@@ -85,13 +89,13 @@ export default function DianaStationerySet({ project, weddingWebsiteUrl, qrDataU
         <button
           type="button"
           onClick={handleQrExport}
-          disabled={exporting === "qr" || !weddingWebsiteUrl}
+          disabled={exporting === "qr" || !weddingWebsiteUrl || !qrDataUrl}
           style={{
             ...downloadButtonStyle,
-            ...(exporting === "qr" || !weddingWebsiteUrl ? disabledDownloadButtonStyle : {}),
+            ...(exporting === "qr" || !weddingWebsiteUrl || !qrDataUrl ? disabledDownloadButtonStyle : {}),
           }}
         >
-          {exporting === "qr" ? "Pripravujem PDF..." : "Stiahnuť QR kartičku"}
+          {exporting === "qr" ? "Pripravujem PDF..." : !qrDataUrl && weddingWebsiteUrl ? "Pripravujem QR kód..." : "Stiahnuť QR kartičku"}
         </button>
       </div>
     </section>
