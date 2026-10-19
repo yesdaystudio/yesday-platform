@@ -21,6 +21,8 @@ export default function RSVPPage() {
   ])
 
   const [needsAccommodation, setNeedsAccommodation] = useState(false)
+  const [transportRequest, setTransportRequest] = useState('')
+  const [decliningGuestName, setDecliningGuestName] = useState('')
   const [contactEmail, setContactEmail] = useState('')
   const [contactPhone, setContactPhone] = useState('')
   const [message, setMessage] = useState('')
@@ -102,21 +104,40 @@ export default function RSVPPage() {
       return
     }
 
-    const firstGuestName =
-      people.find((person) => person.name.trim())?.name.trim() || 'Hosť'
+    const firstGuestName = attending === 'yes'
+      ? people.find((person) => person.name.trim())?.name.trim() || 'Hosť'
+      : decliningGuestName.trim() || 'Hosť'
 
-    const { error } = await supabase.from('rsvp_responses').insert({
+    const normalizedPeople = attending === 'yes'
+      ? people.map((person, index) => index === 0 && transportRequest.trim()
+        ? { ...person, transport_request: transportRequest.trim() }
+        : person)
+      : []
+
+    const needsContact = showAccommodation && (needsAccommodation || Boolean(transportRequest.trim()))
+
+    const responsePayload = {
       project_id: project.id,
       guest_name: firstGuestName,
       attending,
       adults_count: attending === 'yes' ? adults : 0,
       children_count: attending === 'yes' ? children : 0,
-      people: attending === 'yes' ? people : [],
+      people: normalizedPeople,
       needs_accommodation: showAccommodation ? needsAccommodation : false,
-      contact_email: showAccommodation && needsAccommodation ? contactEmail : null,
-      contact_phone: showAccommodation && needsAccommodation ? contactPhone : null,
+      transport: showAccommodation && attending === 'yes' ? transportRequest.trim() || null : null,
+      contact_email: needsContact ? contactEmail : null,
+      contact_phone: needsContact ? contactPhone : null,
       message
-    })
+    }
+
+    let { error } = await supabase.from('rsvp_responses').insert(responsePayload)
+
+    if (isMissingTransportColumnError(error)) {
+      const legacyPayload = { ...responsePayload }
+      delete legacyPayload.transport
+      const fallbackResult = await supabase.from('rsvp_responses').insert(legacyPayload)
+      error = fallbackResult.error
+    }
 
     if (error) {
       console.error('RSVP submit error:', error)
@@ -166,6 +187,18 @@ export default function RSVPPage() {
             <option value="yes">Áno, prídeme</option>
             <option value="no">Nie, nemôžeme prísť</option>
           </select>
+
+          {attending === 'no' ? (
+            <>
+              <label>Vaše meno</label>
+              <input
+                type="text"
+                value={decliningGuestName}
+                onChange={(e) => setDecliningGuestName(e.target.value)}
+                required
+              />
+            </>
+          ) : null}
 
           {attending === 'yes' && (
             <>
@@ -249,29 +282,26 @@ export default function RSVPPage() {
                   </div>
 
                   {needsAccommodation && (
-                    <div className="contact-box">
-                      <div className="small-note">
-                        Kontakt zobrazujeme iba vtedy, keď hosť potrebuje
-                        ubytovanie. Neskôr sem doplníme aj rozdelenie izieb v
-                        dashboarde.
-                      </div>
-
-                      <label>Kontaktný email</label>
-                      <input
-                        type="email"
-                        value={contactEmail}
-                        onChange={(e) => setContactEmail(e.target.value)}
-                        required={needsAccommodation}
-                      />
-
-                      <label>Telefón</label>
-                      <input
-                        value={contactPhone}
-                        onChange={(e) => setContactPhone(e.target.value)}
-                        required={needsAccommodation}
-                      />
-                    </div>
+                    <div className="small-note">Požiadavku uvidia snúbenci v správe ubytovania a po pridelení izby vám môžu poslať informácie o hoteli.</div>
                   )}
+
+                  <label>Požiadavka na dopravu</label>
+                  <input
+                    value={transportRequest}
+                    maxLength="240"
+                    onChange={(e) => setTransportRequest(e.target.value)}
+                    placeholder="Napr. odvoz pre 3 osoby o 01:00"
+                  />
+
+                  {(needsAccommodation || transportRequest.trim()) ? (
+                    <div className="contact-box">
+                      <div className="small-note">Kontakt slúži iba na dohodnutie ubytovania alebo dopravy.</div>
+                      <label>Kontaktný email</label>
+                      <input type="email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} required />
+                      <label>Telefón</label>
+                      <input value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} />
+                    </div>
+                  ) : null}
                 </section>
               )}
             </>
@@ -299,6 +329,12 @@ export default function RSVPPage() {
       <Styles />
     </main>
   )
+}
+
+function isMissingTransportColumnError(error) {
+  if (!error) return false
+  const details = [error.message, error.details, error.hint].filter(Boolean).join(' ').toLowerCase()
+  return error.code === '42703' || error.code === 'PGRST204' || details.includes('transport')
 }
 
 function Styles() {

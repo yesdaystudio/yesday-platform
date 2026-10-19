@@ -9,6 +9,7 @@ import {
   MAX_DRESSCODE_PALETTE_COLORS,
   normalizeDresscodePalette,
 } from "../lib/dresscodePalette"
+import { DESIGN_CUSTOMIZATION_OPTIONS } from "../lib/designCustomization"
 
 export default function ClientEditor({ slug: slugProp, onProjectSaved, demoData, onDemoSave }) {
   const params = useParams()
@@ -23,6 +24,8 @@ export default function ClientEditor({ slug: slugProp, onProjectSaved, demoData,
   const [error, setError] = useState("")
   const [receptionVenueName, setReceptionVenueName] = useState(demoData?.project.reception_venue_name || "")
   const [receptionVenueAddress, setReceptionVenueAddress] = useState(demoData?.project.reception_venue_address || "")
+  const [designFontVariant, setDesignFontVariant] = useState(demoData?.project.design_font_variant || "serif")
+  const [designTextColor, setDesignTextColor] = useState(demoData?.project.design_text_color || "primary")
 
   const [projectForm, setProjectForm] = useState(demoData ? { ...demoData.project, ceremony_time: String(demoData.project.ceremony_time || "").slice(0, 5), reception_time: String(demoData.project.reception_time || "").slice(0, 5) } : {
     couple_display_name: "",
@@ -99,6 +102,8 @@ export default function ClientEditor({ slug: slugProp, onProjectSaved, demoData,
 
       setReceptionVenueName(projectData.reception_venue_name || "")
       setReceptionVenueAddress(projectData.reception_venue_address || "")
+      setDesignFontVariant(projectData.design_font_variant || "serif")
+      setDesignTextColor(projectData.design_text_color || "primary")
 
       const { data: contentData } = await supabase
         .from("website_content")
@@ -232,6 +237,12 @@ export default function ClientEditor({ slug: slugProp, onProjectSaved, demoData,
       reception_venue_address: receptionVenueAddress,
     }
 
+    const supportsDesignCustomization = Object.hasOwn(project || {}, "design_font_variant") && Object.hasOwn(project || {}, "design_text_color")
+    if (supportsDesignCustomization) {
+      projectPayload.design_font_variant = designFontVariant
+      projectPayload.design_text_color = designTextColor
+    }
+
     if (demoData) {
       const updatedProject = { ...project, ...projectPayload }
       const schedule = sortScheduleItemsChronologically(scheduleForm)
@@ -359,6 +370,37 @@ export default function ClientEditor({ slug: slugProp, onProjectSaved, demoData,
       <form onSubmit={handleSubmit} style={cardStyle}>
         <p style={eyebrowStyle}>Klientska zóna</p>
         <h1 style={titleStyle}>Upraviť svadobný web</h1>
+
+        {!demoData && DESIGN_CUSTOMIZATION_OPTIONS[project?.design_family] && Object.hasOwn(project || {}, "design_font_variant") ? (
+          <>
+            <h2 style={subtitleStyle}>Vzhľad šablóny</h2>
+            <label style={labelStyle}>
+              <span style={labelTextStyle}>Písmo</span>
+              <select value={designFontVariant} onChange={(event) => setDesignFontVariant(event.target.value)} style={inputStyle}>
+                {DESIGN_CUSTOMIZATION_OPTIONS[project.design_family].fonts.map((option) => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </select>
+            </label>
+            <fieldset style={paletteFieldsetStyle}>
+              <legend style={labelTextStyle}>Farba písma</legend>
+              <div style={paletteOptionsStyle}>
+                {DESIGN_CUSTOMIZATION_OPTIONS[project.design_family].colors.map((option) => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    aria-pressed={designTextColor === option.value}
+                    onClick={() => setDesignTextColor(option.value)}
+                    style={{ ...paletteOptionStyle, ...(designTextColor === option.value ? paletteOptionSelectedStyle : {}) }}
+                  >
+                    <span aria-hidden="true" style={{ ...paletteOptionSwatchStyle, backgroundColor: option.hex }} />
+                    <span>{option.label}</span>
+                  </button>
+                ))}
+              </div>
+            </fieldset>
+          </>
+        ) : null}
 
         <h2 style={subtitleStyle}>Základné údaje</h2>
 

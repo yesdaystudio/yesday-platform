@@ -208,7 +208,11 @@ export default function ClientDashboard({ slug: slugProp, demoProject, demoRespo
   }
 
   function getTransport(row) {
-    return row.transport || row.transport_note || row.transport_details || ''
+    const peopleTransport = Array.isArray(row.people)
+      ? row.people.find((person) => String(person?.transport_request || '').trim())?.transport_request
+      : ''
+
+    return row.transport || row.transport_note || row.transport_details || peopleTransport || ''
   }
 
   function hasTransportRequest(row) {
@@ -232,6 +236,10 @@ export default function ClientDashboard({ slug: slugProp, demoProject, demoRespo
 
     const transportDetails = row.transport_details
     if (typeof transportDetails === 'string' && transportDetails.trim()) {
+      return true
+    }
+
+    if (Array.isArray(row.people) && row.people.some((person) => String(person?.transport_request || '').trim())) {
       return true
     }
 
