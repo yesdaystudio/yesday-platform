@@ -76,7 +76,9 @@ export async function POST(request) {
   const metadata = {
     package_type,
     couple_display_name: couple_display_name.trim(),
-    design_family: (design_family && typeof design_family === 'string') ? design_family.trim() : 'classic',
+    design_family: ['diana', 'botanique', 'penelope'].includes(String(design_family || '').trim().toLowerCase())
+      ? String(design_family).trim().toLowerCase()
+      : 'diana',
   }
   if (slug && typeof slug === 'string') {
     metadata.slug = slug.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-')

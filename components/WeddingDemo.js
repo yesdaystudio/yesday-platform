@@ -126,7 +126,7 @@ export default function WeddingDemo({ initialValues }) {
             <p>Chcete vlastný YesDay?</p>
             <strong>Vyberte si svadobný balík a vytvorte si svoj priestor pre hostí.</strong>
           </div>
-          <Link href="/#cennik" target="_blank" rel="noopener noreferrer">Vybrať svadobný balík</Link>
+          <Link href={`/?design=${project.design_family}#cennik`} target="_blank" rel="noopener noreferrer">Vybrať svadobný balík</Link>
         </div>
         {tab === 'web' && <>
           <div className={styles.webPreviewHeader}>

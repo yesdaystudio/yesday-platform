@@ -1,19 +1,16 @@
-import Link from 'next/link'
+import CheckoutSuccessStatus from './CheckoutSuccessStatus'
 
-export default function CheckoutSuccessPage() {
+export default async function CheckoutSuccessPage({ searchParams }) {
+  const params = await searchParams
+  const sessionId = typeof params?.session_id === 'string' ? params.session_id : ''
+
   return (
     <div style={pageStyle}>
       <div style={cardStyle}>
-        <p style={labelStyle}>Platba prebehla úspešne</p>
+        <p style={labelStyle}>Objednávka YesDay</p>
         <h1 style={headingStyle}>Ďakujeme!</h1>
         <div style={dividerStyle} />
-        <p style={bodyStyle}>
-          Vaša objednávka bola prijatá. Čoskoro sa vám ozveme s ďalšími
-          krokmi a prístupom do klientskej zóny.
-        </p>
-        <Link href="/login" style={buttonStyle}>
-          Klientska zóna
-        </Link>
+        <CheckoutSuccessStatus sessionId={sessionId} />
       </div>
     </div>
   )
@@ -60,23 +57,4 @@ const dividerStyle = {
   height: '1px',
   background: '#d4af37',
   margin: '24px auto',
-}
-
-const bodyStyle = {
-  margin: '0 0 36px',
-  color: '#5f5a52',
-  lineHeight: 1.85,
-  fontSize: '1rem',
-}
-
-const buttonStyle = {
-  display: 'inline-block',
-  padding: '14px 36px',
-  background: '#1a1a1a',
-  color: '#ffffff',
-  textDecoration: 'none',
-  textTransform: 'uppercase',
-  letterSpacing: '2px',
-  fontSize: '0.72rem',
-  fontWeight: 600,
 }

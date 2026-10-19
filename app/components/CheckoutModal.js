@@ -24,6 +24,7 @@ export default function CheckoutModal({ packageName, packageType, packagePrice, 
 
     setLoading(true)
     try {
+      const selectedDesign = new URLSearchParams(window.location.search).get('design')
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -32,7 +33,7 @@ export default function CheckoutModal({ packageName, packageType, packagePrice, 
           couple_display_name: coupleName.trim(),
           slug: slug.trim() || undefined,
           customer_email: email.trim(),
-          design_family: 'classic',
+          design_family: ['diana', 'botanique', 'penelope'].includes(selectedDesign) ? selectedDesign : 'diana',
         }),
       })
 
