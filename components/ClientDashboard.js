@@ -508,7 +508,7 @@ function SummaryModal({ type, items, onClose }) {
       >
         <div style={summaryModalHeaderStyle}>
           <div>
-            <p style={summaryEyebrowStyle}>Dashboard sumár</p>
+            <p style={summaryEyebrowStyle}>Prehľad hostí</p>
             <h2 id="dashboard-summary-title" style={summaryTitleStyle}>{titles[type]}</h2>
           </div>
           <button type="button" onClick={onClose} style={modalCloseButtonStyle} aria-label="Zavrieť sumár">

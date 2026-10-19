@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import ClientEditor from "../../../components/ClientEditor"
 import ClientDashboard from "../../../components/ClientDashboard"
-import ClientGuests from "../../../components/ClientGuests"
 import ClientAccommodation from "../../../components/ClientAccommodation"
 import DianaStationerySet from "../../../components/DianaStationerySet"
 import AlternativeStationerySet from "../../../components/AlternativeStationerySet"
@@ -13,8 +12,7 @@ import supabase from "../../../lib/supabase"
 
 const TABS = {
   EDITOR: "Editor",
-  DASHBOARD: "Dashboard",
-  GUESTS: "Hostia",
+  DASHBOARD: "Hostia",
   ACCOMMODATION: "Ubytovanie",
   QR_CODE: "Pozvánka + QR",
 }
@@ -167,11 +165,6 @@ export default function ClientZonePage() {
             isActive={activeTab === TABS.QR_CODE}
             onClick={() => setActiveTab(TABS.QR_CODE)}
           />
-          <TabButton
-            label={TABS.GUESTS}
-            isActive={activeTab === TABS.GUESTS}
-            onClick={() => setActiveTab(TABS.GUESTS)}
-          />
           {showAccommodationTab ? (
             <TabButton
               label={TABS.ACCOMMODATION}
@@ -188,10 +181,6 @@ export default function ClientZonePage() {
 
           {activeTab === TABS.DASHBOARD && (
             <ClientDashboard slug={slug} />
-          )}
-
-          {activeTab === TABS.GUESTS && (
-            <ClientGuests slug={slug} />
           )}
 
           {activeTab === TABS.ACCOMMODATION && showAccommodationTab ? (

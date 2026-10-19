@@ -7,7 +7,6 @@ import DianaStationerySet from './DianaStationerySet'
 import AlternativeStationerySet from './AlternativeStationerySet'
 import ClientDashboard from './ClientDashboard'
 import ClientEditor from './ClientEditor'
-import ClientGuests from './ClientGuests'
 import ClientAccommodation from './ClientAccommodation'
 import DemoRsvp from './DemoRsvp'
 import { DEMO_FIELDS, DEMO_DEFAULTS, DEMO_RESPONSES, normalizeDemo, createDemoState, readDemoState } from '../lib/demoWedding'
@@ -18,7 +17,7 @@ const subscribeOrigin = () => () => {}
 const readOrigin = () => window.location.origin
 const serverOrigin = () => ''
 
-const TABS = [['web', 'Svadobný web'], ['editor', 'Editor'], ['dashboard', 'Dashboard'], ['guests', 'Hostia'], ['accommodation', 'Ubytovanie'], ['stationery', 'Pozvánka + QR'], ['rsvp', 'Vyskúšať RSVP']]
+const TABS = [['web', 'Svadobný web'], ['editor', 'Editor'], ['dashboard', 'Hostia'], ['accommodation', 'Ubytovanie'], ['stationery', 'Pozvánka + QR'], ['rsvp', 'Vyskúšať RSVP']]
 const DESIGNS = [['diana', 'Diana'], ['botanique', 'Botanique'], ['penelope', 'Penelope']]
 
 export default function WeddingDemo({ initialValues }) {
@@ -84,7 +83,7 @@ export default function WeddingDemo({ initialValues }) {
   }
   function submitRsvp(response) {
     setResponses(current => [response, ...current])
-    setNotice('Odpoveď bola pridaná. Rozkliknite dospelých, deti, alergie, ubytovanie alebo dopravu v dashboarde.')
+    setNotice('Odpoveď bola pridaná. V záložke Hostia si môžete rozkliknúť dospelých, deti, alergie, ubytovanie alebo dopravu.')
     setTab('dashboard')
   }
   function updateDemoResponse(id, patch) {
@@ -132,10 +131,9 @@ export default function WeddingDemo({ initialValues }) {
         {tab === 'stationery' && <div className={styles.stationery}>{project.design_family === 'diana' ? <DianaStationerySet project={project} weddingWebsiteUrl={websiteUrl} websiteDisplayUrl={origin ? `${origin}/ukazka/web` : "Ukážka svadobného webu"} qrDataUrl={qrDataUrl} qrError={qrError} /> : <AlternativeStationerySet variant={project.design_family} project={project} weddingWebsiteUrl={websiteUrl} websiteDisplayUrl={origin ? `${origin}/ukazka/web` : "Ukážka svadobného webu"} qrDataUrl={qrDataUrl} qrError={qrError} />}</div>}
         {tab === 'editor' && <div className={styles.dashboard}><ClientEditor demoData={demoData} onDemoSave={saveDemo} /></div>}
         {tab === 'dashboard' && <div className={styles.dashboard}>
-          <p className={styles.hint}>Rovnaký dashboard ako v klientskej zóne: dospelí, deti, alergie, požiadavky na ubytovanie a dopravu. Kliknutím na jednotlivé prehľady zobrazíte mená a detaily.</p>
+          <p className={styles.hint}>Prehľad hostí z klientskej zóny: dospelí, deti, alergie, požiadavky na ubytovanie a dopravu. Kliknutím na jednotlivé prehľady zobrazíte mená a detaily.</p>
           <ClientDashboard demoProject={project} demoResponses={responses} />
         </div>}
-        {tab === 'guests' && <div className={styles.dashboard}><ClientGuests demoProject={project} demoResponses={responses} /></div>}
         {tab === 'accommodation' && <div className={styles.dashboard}><p className={styles.hint}>Vyskúšajte priradiť hotel, izbu, doplniť poznámku a pripraviť e-mail hosťovi. Zmeny sa uchovajú pri prepínaní záložiek.</p><ClientAccommodation demoProject={project} demoResponses={responses} onDemoResponseUpdate={updateDemoResponse} /></div>}
         {tab === 'rsvp' && <div className={styles.rsvp}><DemoRsvp onSubmit={submitRsvp} /></div>}
         <p role="status" className={styles.hint}>{notice}</p>

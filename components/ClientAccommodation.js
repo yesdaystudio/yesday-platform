@@ -20,6 +20,9 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
 
   const packageType = String(project?.package_type || 'signature').toLowerCase().trim()
   const canManageAccommodation = packageType === 'signature' || packageType === 'atelier'
+  const requestedRooms = rows.reduce((sum, row) => sum + getRequestedRoomCount(row), 0)
+  const assignedRooms = rows.reduce((sum, row) => sum + (String(row.roomNumber || '').trim() ? getRequestedRoomCount(row) : 0), 0)
+  const accommodationGuests = rows.reduce((sum, row) => sum + Math.max(0, Number(row.adults_count || 0)) + Math.max(0, Number(row.children_count || 0)), 0)
 
   useEffect(() => {
     if (demoProject) return
@@ -178,6 +181,21 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
 
   return (
     <section style={wrapperStyle}>
+      <section aria-label="Súhrn potrebných izieb" style={summaryStyle}>
+        <div style={summaryLeadStyle}>
+          <p style={summaryLabelStyle}>Potrebné izby</p>
+          <strong style={summaryValueStyle}>{requestedRooms}</strong>
+          <p style={summaryHelpStyle}>Jedna izba na každú RSVP skupinu, ktorá požiadala o ubytovanie.</p>
+        </div>
+        <div style={summaryMetricStyle}>
+          <p style={summaryLabelStyle}>Hostia na ubytovanie</p>
+          <strong style={summarySmallValueStyle}>{accommodationGuests}</strong>
+        </div>
+        <div style={summaryMetricStyle}>
+          <p style={summaryLabelStyle}>Izby už priradené</p>
+          <strong style={summarySmallValueStyle}>{assignedRooms} / {requestedRooms}</strong>
+        </div>
+      </section>
       {status ? <p role="status" style={statusStyle}>{status}</p> : null}
       {emailPreview ? <section aria-label="Ukážka e-mailu" style={cardStyle}><h3>Ukážka e-mailu hosťovi</h3><p>V ukážke sa e-mail neodosiela.</p><pre style={{ whiteSpace: "pre-wrap", fontFamily: "inherit" }}>{emailPreview}</pre><button type="button" onClick={() => setEmailPreview('')}>Zavrieť náhľad</button></section> : null}
 
@@ -288,6 +306,11 @@ function displayValue(value) {
   return value
 }
 
+function getRequestedRoomCount(row) {
+  const explicitCount = Number(row.accommodation_rooms_count || row.requested_rooms || row.rooms_count)
+  return Number.isFinite(explicitCount) && explicitCount > 0 ? Math.floor(explicitCount) : 1
+}
+
 function buildAccommodationEmailHref(row, project) {
   const email = String(row.contact_email || '').trim()
   const coupleName = String(project?.couple_display_name || '').trim()
@@ -330,6 +353,56 @@ function formatEmailDate(value) {
 const wrapperStyle = {
   display: 'grid',
   gap: '12px',
+}
+
+const summaryStyle = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+  gap: '10px',
+}
+
+const summaryLeadStyle = {
+  border: '1px solid #5f4838',
+  background: '#5f4838',
+  color: '#fffaf5',
+  padding: '18px',
+}
+
+const summaryMetricStyle = {
+  border: '1px solid rgba(176, 139, 105, 0.2)',
+  background: '#fffaf5',
+  color: '#4f4035',
+  padding: '18px',
+}
+
+const summaryLabelStyle = {
+  margin: 0,
+  fontSize: '11px',
+  letterSpacing: '0.09em',
+  textTransform: 'uppercase',
+}
+
+const summaryValueStyle = {
+  display: 'block',
+  marginTop: '8px',
+  fontSize: '42px',
+  fontWeight: 400,
+  lineHeight: 1,
+}
+
+const summarySmallValueStyle = {
+  display: 'block',
+  marginTop: '14px',
+  fontSize: '28px',
+  fontWeight: 400,
+  lineHeight: 1,
+}
+
+const summaryHelpStyle = {
+  margin: '10px 0 0',
+  fontSize: '12px',
+  lineHeight: 1.5,
+  opacity: 0.78,
 }
 
 const statusStyle = {
