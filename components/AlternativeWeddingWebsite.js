@@ -5,13 +5,11 @@ const THEMES = {
     label: 'Botanique',
     hero: '/templates/botanique/hero.jpg',
     story: '/templates/botanique/story-v2.jpg',
-    intro: 'Prirodzená oslava lásky',
   },
   penelope: {
     label: 'Penelope',
     hero: '/templates/penelope/hero-v2.jpg',
     story: '/templates/penelope/story-v2.jpg',
-    intro: 'Jeden deň, ktorý zostane navždy',
   },
 }
 
@@ -50,7 +48,6 @@ export default function AlternativeWeddingWebsite({
       <section id="top" className="signatureWedding__hero" style={{ '--signature-hero': `url("${theme.hero}")` }}>
         <div className="signatureWedding__heroShade" />
         <div className="signatureWedding__heroCopy">
-          <p>{theme.intro}</p>
           <h1>
             <span>{firstPartner}</span>
             {secondPartner ? <><i>&amp;</i><span>{secondPartner}</span></> : null}
