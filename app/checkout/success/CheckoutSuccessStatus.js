@@ -9,8 +9,9 @@ export default function CheckoutSuccessStatus({ sessionId }) {
   useEffect(() => {
     if (!sessionId) return
     let active = true
+    let retryTimer
 
-    async function completeCheckout() {
+    async function completeCheckout(attempt = 0) {
       try {
         const response = await fetch('/api/checkout/complete', {
           method: 'POST',
@@ -24,6 +25,9 @@ export default function CheckoutSuccessStatus({ sessionId }) {
           setState({ status: 'ready', ...data })
         } else if (response.status === 202) {
           setState({ status: 'pending' })
+          if (attempt < 9) {
+            retryTimer = window.setTimeout(() => completeCheckout(attempt + 1), 1500)
+          }
         } else {
           setState({ status: 'error' })
         }
@@ -33,7 +37,10 @@ export default function CheckoutSuccessStatus({ sessionId }) {
     }
 
     completeCheckout()
-    return () => { active = false }
+    return () => {
+      active = false
+      window.clearTimeout(retryTimer)
+    }
   }, [sessionId])
 
   if (state.status === 'loading') {

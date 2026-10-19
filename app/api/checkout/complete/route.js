@@ -15,6 +15,11 @@ export async function POST(request) {
     return Response.json(result, { status: result.ready ? 200 : 202 })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Checkout completion failed'
+
+    if (message === 'Onboarding job is already being processed') {
+      return Response.json({ ready: false, processing: true }, { status: 202 })
+    }
+
     console.error('[checkout-complete] Failed', { error: message })
     return Response.json({ error: 'Objednávku sa nepodarilo automaticky dokončiť.' }, { status: 500 })
   }
