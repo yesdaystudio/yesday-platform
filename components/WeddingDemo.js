@@ -122,7 +122,13 @@ export default function WeddingDemo({ initialValues }) {
       </aside>
       <section className={styles.preview} aria-label="Ukážka vašej svadby">
         <div className={styles.tabs} aria-label="Vyberte náhľad">{TABS.map(([key, label]) => <button type="button" key={key} aria-pressed={tab === key} className={tab === key ? styles.active : ''} onClick={() => setTab(key)}>{label}</button>)}</div>
-        {tab === 'web' && <><p className={styles.hint}>Skutočný dizajn {designName} s vašimi údajmi. Posuňte sa v náhľade a prezrite si celý web.</p><iframe title={`Živá ukážka svadobného webu ${designName}`} className={styles.frame} src={`/ukazka/web?${previewQuery}`} /></>}
+        {tab === 'web' && <>
+          <div className={styles.webPreviewHeader}>
+            <p className={styles.hint}>Skutočný dizajn {designName} s vašimi údajmi. Posuňte sa v náhľade a prezrite si celý web.</p>
+            {websiteUrl ? <a className={styles.guestViewLink} href={websiteUrl} target="_blank" rel="noopener noreferrer">Otvoriť web pre hostí</a> : null}
+          </div>
+          <iframe title={`Živá ukážka svadobného webu ${designName}`} className={styles.frame} src={`/ukazka/web?${previewQuery}`} />
+        </>}
         {tab === 'stationery' && <div className={styles.stationery}>{project.design_family === 'diana' ? <DianaStationerySet project={project} weddingWebsiteUrl={websiteUrl} websiteDisplayUrl={origin ? `${origin}/ukazka/web` : "Ukážka svadobného webu"} qrDataUrl={qrDataUrl} qrError={qrError} /> : <AlternativeStationerySet variant={project.design_family} project={project} weddingWebsiteUrl={websiteUrl} websiteDisplayUrl={origin ? `${origin}/ukazka/web` : "Ukážka svadobného webu"} qrDataUrl={qrDataUrl} qrError={qrError} />}</div>}
         {tab === 'editor' && <div className={styles.dashboard}><ClientEditor demoData={demoData} onDemoSave={saveDemo} /></div>}
         {tab === 'dashboard' && <div className={styles.dashboard}>

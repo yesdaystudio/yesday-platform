@@ -139,9 +139,16 @@ export default function ClientZonePage() {
             <h1 style={titleStyle}>Správa svadobného webu</h1>
           </div>
 
-          <button type="button" onClick={handleLogout} style={logoutButtonStyle}>
-            Odhlásiť sa
-          </button>
+          <div style={headerActionsStyle}>
+            {weddingWebsiteUrl ? (
+              <a href={weddingWebsiteUrl} target="_blank" rel="noopener noreferrer" style={guestWebsiteLinkStyle}>
+                Zobraziť web pre hostí
+              </a>
+            ) : null}
+            <button type="button" onClick={handleLogout} style={logoutButtonStyle}>
+              Odhlásiť sa
+            </button>
+          </div>
         </div>
 
         <div style={tabsRowStyle}>
@@ -275,6 +282,23 @@ const headerRowStyle = {
   alignItems: "flex-start",
   gap: "12px",
   flexWrap: "wrap",
+}
+
+const headerActionsStyle = {
+  display: "flex",
+  alignItems: "center",
+  gap: "10px",
+  flexWrap: "wrap",
+}
+
+const guestWebsiteLinkStyle = {
+  border: "1px solid #5f4838",
+  background: "#5f4838",
+  color: "#fffaf5",
+  padding: "10px 15px",
+  fontSize: "14px",
+  fontFamily: "inherit",
+  textDecoration: "none",
 }
 
 const logoutButtonStyle = {
