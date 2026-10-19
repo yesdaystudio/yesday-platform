@@ -121,6 +121,13 @@ export default function WeddingDemo({ initialValues }) {
       </aside>
       <section className={styles.preview} aria-label="Ukážka vašej svadby">
         <div className={styles.tabs} aria-label="Vyberte náhľad">{TABS.map(([key, label]) => <button type="button" key={key} aria-pressed={tab === key} className={tab === key ? styles.active : ''} onClick={() => setTab(key)}>{label}</button>)}</div>
+        <div className={styles.packagePrompt}>
+          <div>
+            <p>Chcete vlastný YesDay?</p>
+            <strong>Vyberte si svadobný balík a vytvorte si svoj priestor pre hostí.</strong>
+          </div>
+          <Link href="/#cennik" target="_blank" rel="noopener noreferrer">Vybrať svadobný balík</Link>
+        </div>
         {tab === 'web' && <>
           <div className={styles.webPreviewHeader}>
             <p className={styles.hint}>Skutočný dizajn {designName} s vašimi údajmi. Posuňte sa v náhľade a prezrite si celý web.</p>
