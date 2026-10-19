@@ -13,7 +13,7 @@ const CONFIG = {
 
 export default function AlternativeStationerySet({ variant, project, weddingWebsiteUrl, qrDataUrl, qrError, websiteDisplayUrl }) {
   const customization = getDesignCustomization(variant, project)
-  const config = { ...(CONFIG[variant] || CONFIG.botanique), ink: customization.color.hex, fontFamily: customization.font.family }
+  const config = { ...(CONFIG[variant] || CONFIG.botanique), ink: customization.color.hex, fontFamily: customization.font.family, fontVariant: customization.font.value }
   const invitationRef = useRef(null)
   const qrRef = useRef(null)
   const [exporting, setExporting] = useState("")
@@ -63,7 +63,7 @@ const Invitation = forwardRef(function Invitation({ data, config, variant }, ref
       <div style={invitationContentStyle}>
         <p style={{ ...smallStyle, color: config.accent }}>S radosťou vás pozývame</p>
         <div style={{ ...namePlateStyle, color: config.paper, background: config.ink }}>
-          <h3 style={namesStyle}>{data.firstPartner}<i>&amp;</i>{data.secondPartner}</h3>
+          <h3 style={{ ...namesStyle, ...(config.fontVariant === "editorial" ? editorialNamesStyle : {}) }}>{data.firstPartner}<i>&amp;</i>{data.secondPartner}</h3>
         </div>
         <p style={dateStyle}>{data.displayDate}</p>
         <p style={detailStyle}>{data.timeLine}<br />{data.ceremonyVenue}<br />{data.ceremonyCity}</p>
@@ -100,6 +100,7 @@ const invitationContentStyle = { position: "absolute", inset: "30px", display: "
 const smallStyle = { margin: 0, fontFamily: "Inter,Arial,sans-serif", fontSize: "8px", fontWeight: 600, letterSpacing: ".22em", textTransform: "uppercase" }
 const namePlateStyle = { display: "grid", width: "calc(100% + 66px)", minHeight: "172px", margin: "28px 0 30px", padding: "22px", placeItems: "center" }
 const namesStyle = { display: "grid", margin: 0, fontSize: "50px", fontWeight: 400, lineHeight: .72 }
+const editorialNamesStyle = { lineHeight: .88, rowGap: "4px" }
 const dateStyle = { margin: 0, fontSize: "21px", textTransform: "capitalize" }
 const detailStyle = { margin: "16px 0 0", fontSize: "14px", lineHeight: 1.55 }
 const qrCardStyle = { ...cardStyle, width: "300px", height: "420px", display: "grid", alignContent: "center", justifyItems: "center", padding: "28px", textAlign: "center" }

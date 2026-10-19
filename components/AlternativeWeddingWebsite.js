@@ -35,7 +35,7 @@ export default function AlternativeWeddingWebsite({
 
   return (
     <main
-      className={`signatureWedding signatureWedding--${variant}`}
+      className={`signatureWedding signatureWedding--${variant} signatureWedding--font-${customization.font.value}`}
       style={{ '--signature-serif': customization.font.family, '--signature-ink': customization.color.hex }}
     >
       <header className="signatureWedding__nav">
