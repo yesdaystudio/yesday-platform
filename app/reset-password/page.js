@@ -17,6 +17,30 @@ export default function ResetPasswordPage() {
     let active = true
 
     async function checkSession() {
+      const params = new URLSearchParams(window.location.search)
+      const tokenHash = params.get("token_hash")
+      const verificationType = params.get("type")
+
+      if (tokenHash && ["invite", "recovery"].includes(verificationType)) {
+        const { error: verificationError } = await supabase.auth.verifyOtp({
+          token_hash: tokenHash,
+          type: verificationType,
+        })
+
+        if (!active) return
+
+        if (verificationError) {
+          setHasRecoverySession(false)
+          setCheckingSession(false)
+          return
+        }
+
+        window.history.replaceState({}, "", "/reset-password")
+        setHasRecoverySession(true)
+        setCheckingSession(false)
+        return
+      }
+
       const { data } = await supabase.auth.getSession()
 
       if (active) {
