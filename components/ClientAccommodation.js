@@ -17,6 +17,7 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
   const [savingId, setSavingId] = useState(null)
   const [savingAccommodationId, setSavingAccommodationId] = useState(null)
   const [savingEmailStatusId, setSavingEmailStatusId] = useState(null)
+  const [sendingEmail, setSendingEmail] = useState(false)
   const [status, setStatus] = useState('')
   const [emailDraft, setEmailDraft] = useState(null)
 
@@ -269,6 +270,47 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
     setSavingEmailStatusId(null)
   }
 
+  async function sendAccommodationEmail(draft) {
+    setStatus('')
+    setSendingEmail(true)
+
+    const { data: sessionData } = await supabase.auth.getSession()
+    const accessToken = sessionData.session?.access_token
+    if (!accessToken) {
+      setStatus('Prihlásenie vypršalo. Prihláste sa, prosím, znova.')
+      setSendingEmail(false)
+      return
+    }
+
+    try {
+      const response = await fetch('/api/accommodation-email', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          response_id: draft.responseId,
+          subject: draft.subject,
+          body: draft.body,
+        }),
+      })
+      const result = await response.json().catch(() => ({}))
+
+      if (!response.ok) throw new Error(result.error || 'E-mail sa nepodarilo odoslať.')
+
+      setRows((current) => current.map((row) => (
+        row.id === draft.responseId ? { ...row, emailSentAt: result.sent_at } : row
+      )))
+      setStatus('E-mail s informáciami o ubytovaní bol odoslaný.')
+      setEmailDraft(null)
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : 'E-mail sa nepodarilo odoslať.')
+    } finally {
+      setSendingEmail(false)
+    }
+  }
+
   if (loading) {
     return <main style={{ padding: 16 }}>Načítavam ubytovanie...</main>
   }
@@ -386,8 +428,10 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
         <EmailComposer
           draft={emailDraft}
           isDemo={Boolean(demoProject)}
+          sending={sendingEmail}
           onChange={setEmailDraft}
           onClose={() => setEmailDraft(null)}
+          onSend={sendAccommodationEmail}
         />
       ) : null}
 
@@ -469,18 +513,16 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
                   >
                     Pripraviť e-mail
                   </button>
-                  <button
-                    type='button'
-                    onClick={() => updateEmailStatus(row, !row.emailSentAt)}
-                    disabled={savingEmailStatusId === row.id}
-                    style={statusButtonStyle}
-                  >
-                    {savingEmailStatusId === row.id
-                      ? 'Ukladám stav...'
-                      : row.emailSentAt
-                        ? 'Označiť ako neodoslané'
-                        : 'Označiť ako odoslané'}
-                  </button>
+                  {row.emailSentAt ? (
+                    <button
+                      type='button'
+                      onClick={() => updateEmailStatus(row, false)}
+                      disabled={savingEmailStatusId === row.id}
+                      style={statusButtonStyle}
+                    >
+                      {savingEmailStatusId === row.id ? 'Ukladám stav...' : 'Označiť ako neodoslané'}
+                    </button>
+                  ) : null}
                 </>
               ) : (
                 <button
@@ -581,14 +623,14 @@ function buildAccommodationEmailDraft(row, project, accommodation) {
     coupleName || 'Nevesta a ženích',
   ].filter((line, index, lines) => line || lines[index - 1] !== '').join('\n')
 
-  return { email, subject, body }
+  return { responseId: row.id, email, subject, body }
 }
 
 function buildAccommodationEmailHref(draft) {
   return `mailto:${encodeURIComponent(draft.email)}?subject=${encodeURIComponent(draft.subject)}&body=${encodeURIComponent(draft.body)}`
 }
 
-function EmailComposer({ draft, isDemo, onChange, onClose }) {
+function EmailComposer({ draft, isDemo, sending, onChange, onClose, onSend }) {
   return (
     <section aria-label="Náhľad e-mailu hosťovi" style={emailComposerStyle}>
       <div style={headRowStyle}>
@@ -627,9 +669,14 @@ function EmailComposer({ draft, isDemo, onChange, onClose }) {
         {isDemo ? (
           <span style={demoNoticeStyle}>V ukážke sa e-mail neodosiela.</span>
         ) : (
-          <a href={buildAccommodationEmailHref(draft)} style={saveButtonLinkStyle}>
-            Otvoriť v e-mailovej aplikácii
-          </a>
+          <>
+            <button type="button" onClick={() => onSend(draft)} disabled={sending} style={saveButtonStyle}>
+              {sending ? 'Odosielam...' : 'Odoslať hosťovi cez YesDay'}
+            </button>
+            <a href={buildAccommodationEmailHref(draft)} style={emailButtonStyle}>
+              Otvoriť v mojej e-mailovej aplikácii
+            </a>
+          </>
         )}
         <span style={composerHelpStyle}>Pred odoslaním môžete predmet aj text upraviť.</span>
       </div>
@@ -909,14 +956,6 @@ const saveButtonStyle = {
   background: '#5f4838',
   color: '#fffaf5',
   cursor: 'pointer',
-}
-
-const saveButtonLinkStyle = {
-  ...saveButtonStyle,
-  display: 'inline-flex',
-  alignItems: 'center',
-  textDecoration: 'none',
-  fontSize: '13px',
 }
 
 const actionsStyle = {

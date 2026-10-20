@@ -9,12 +9,13 @@
 
 ## Uvítací a registračný e-mail
 
-- Zapojiť vlastnú transakčnú e-mailovú službu a odosielaciu doménu YesDay.
-- Nastaviť SPF, DKIM a DMARC pre spoľahlivé doručovanie.
-- Pripraviť značkový uvítací e-mail s oslovením páru, názvom balíka a bezpečným registračným odkazom.
-- Novému účtu poslať nastavenie hesla; existujúcemu účtu poslať obnovenie prístupu.
-- Otestovať nový aj existujúci e-mail, expiráciu odkazu, opakované odoslanie a Spam/Reklamy.
-- V Supabase nastaviť produkčný Site URL a povolené presmerovania na `https://www.yesdaystudio.com/reset-password`.
+- [x] Pripraviť značkový uvítací e-mail s oslovením páru, názvom balíka a bezpečným registračným odkazom.
+- [x] Novému účtu pripraviť nastavenie hesla a existujúcemu účtu obnovenie prístupu.
+- [x] Pripraviť priame odoslanie ubytovacieho e-mailu cez YesDay s automatickým záznamom dátumu odoslania.
+- [ ] Založiť Resend, pridať API kľúč do Vercelu a nastaviť overeného odosielateľa YesDay.
+- [ ] Nastaviť SPF, DKIM a DMARC pre spoľahlivé doručovanie.
+- [ ] Otestovať nový aj existujúci e-mail, expiráciu odkazu, opakované odoslanie a Spam/Reklamy.
+- [ ] V Supabase skontrolovať produkčný Site URL a povolené presmerovanie na `https://www.yesdaystudio.com/reset-password`.
 
 ## Faktúra a Stripe
 
