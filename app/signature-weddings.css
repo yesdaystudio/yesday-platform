@@ -112,7 +112,9 @@
 .signatureWedding__faq > p:not(.signatureWedding__eyebrow) { max-width: 720px; margin: 14px auto 0; }
 .signatureWedding__rsvp { width: 100%; padding-right: 24px; padding-left: 24px; background: color-mix(in srgb, var(--signature-accent) 15%, var(--signature-paper)); }
 .signatureWedding__rsvp p { max-width: 650px; margin-right: auto !important; margin-left: auto !important; }
-.signatureWedding__rsvp a { display: inline-flex; min-height: 48px; margin-top: 34px; padding: 0 30px; align-items: center; justify-content: center; color: var(--signature-paper); background: var(--signature-ink); font-family: Inter, Arial, sans-serif; font-size: 10px; letter-spacing: .2em; text-decoration: none; text-transform: uppercase; }
+.signatureWedding__rsvpActions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 34px; }
+.signatureWedding__rsvp a { display: inline-flex; min-height: 48px; padding: 0 30px; align-items: center; justify-content: center; border: 1px solid var(--signature-ink); color: var(--signature-paper); background: var(--signature-ink); font-family: Inter, Arial, sans-serif; font-size: 10px; letter-spacing: .2em; text-decoration: none; text-transform: uppercase; }
+.signatureWedding__rsvp .signatureWedding__calendarAction { color: var(--signature-ink); background: transparent; }
 
 @media (max-width: 760px) {
   .signatureWedding__nav nav a:not(:last-child) { display: none; }

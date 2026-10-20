@@ -1,4 +1,5 @@
 import { getDesignCustomization } from '../lib/designCustomization'
+import { buildGoogleCalendarUrl } from '../lib/googleCalendar'
 
 const THEMES = {
   botanique: {
@@ -27,6 +28,7 @@ export default function AlternativeWeddingWebsite({
   const date = formatWeddingDate(project.wedding_date)
   const ceremonyTime = formatTime(project.ceremony_time || scheduleItems[0]?.item_time)
   const receptionTime = formatTime(project.reception_time)
+  const googleCalendarUrl = buildGoogleCalendarUrl(project)
   const palette = websiteContent.dresscode_palette_enabled === true
     ? websiteContent.dresscode_palette || []
     : []
@@ -146,7 +148,10 @@ export default function AlternativeWeddingWebsite({
         <p className="signatureWedding__eyebrow">Budete pri tom?</p>
         <h2>Tešíme sa na vás</h2>
         <p>Prosíme, potvrďte nám svoju účasť a doplňte všetko, čo pre vás môžeme pripraviť.</p>
-        <a href={rsvpHref}>Potvrdiť účasť</a>
+        <div className="signatureWedding__rsvpActions">
+          <a href={rsvpHref}>Potvrdiť účasť</a>
+          <a href={googleCalendarUrl} target="_blank" rel="noopener noreferrer" className="signatureWedding__calendarAction">Uložiť do kalendára</a>
+        </div>
       </section>
     </main>
   )
