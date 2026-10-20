@@ -290,7 +290,7 @@ export default function RSVPPage() {
                       checked={needsAccommodation}
                       onChange={(e) => setNeedsAccommodation(e.target.checked)}
                     />
-                    <span>Máme záujem o pomoc s ubytovaním</span>
+                    <span>Máme záujem o ubytovanie</span>
                   </div>
 
                   {needsAccommodation && (
