@@ -2,8 +2,10 @@
 
 ## Ranná priorita – 20. 10. 2026
 
-- Aplikovať migráciu `supabase/migrations/20261019000000_align_real_experience_with_demo.sql` v produkčnom Supabase.
-- Následne overiť výber písma a farby v reálnom editore pre Botanique aj Penelope a uloženie požiadavky na dopravu v RSVP.
+- [x] Aplikovať migráciu `supabase/migrations/20261019000000_align_real_experience_with_demo.sql` v produkčnom Supabase.
+- [x] Overiť produkčné stĺpce pre výber písma, farby a požiadavku na dopravu v RSVP.
+- [ ] Vyskúšať uloženie písma a farby cez prihlásený reálny editor Botanique aj Penelope.
+- [ ] Odoslať jednu skúšobnú RSVP odpoveď s dopravou a skontrolovať ju v záložke Hostia.
 
 ## Uvítací a registračný e-mail
 
