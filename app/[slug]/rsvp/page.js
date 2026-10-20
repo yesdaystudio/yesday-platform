@@ -181,31 +181,35 @@ export default function RSVPPage() {
           )}
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <label>Zúčastníte sa?</label>
-          <select value={attending} onChange={(e) => setAttending(e.target.value)}>
-            <option value="yes">Áno, prídeme</option>
-            <option value="no">Nie, nemôžeme prísť</option>
-          </select>
+        <form onSubmit={handleSubmit} className="rsvp-form">
+          <div className="attendance-field">
+            <label htmlFor="attendance">Zúčastníte sa?</label>
+            <select id="attendance" value={attending} onChange={(e) => setAttending(e.target.value)}>
+              <option value="yes">Áno, prídeme</option>
+              <option value="no">Nie, nemôžeme prísť</option>
+            </select>
+          </div>
 
           {attending === 'no' ? (
-            <>
-              <label>Vaše meno</label>
+            <div className="decline-box compact-field">
+              <label htmlFor="declining-name">Vaše meno</label>
               <input
+                id="declining-name"
                 type="text"
                 value={decliningGuestName}
                 onChange={(e) => setDecliningGuestName(e.target.value)}
                 required
               />
-            </>
+            </div>
           ) : null}
 
           {attending === 'yes' && (
             <>
-              <div className="grid">
+              <div className="count-grid">
                 <div>
-                  <label>Počet dospelých</label>
+                  <label htmlFor="adults-count">Počet dospelých</label>
                   <input
+                    id="adults-count"
                     type="number"
                     min="0"
                     max="20"
@@ -215,8 +219,9 @@ export default function RSVPPage() {
                 </div>
 
                 <div>
-                  <label>Počet detí</label>
+                  <label htmlFor="children-count">Počet detí</label>
                   <input
+                    id="children-count"
                     type="number"
                     min="0"
                     max="20"
@@ -227,7 +232,10 @@ export default function RSVPPage() {
               </div>
 
               <section className="guest-section">
-                <label>Hostia, menu a alergie</label>
+                <div className="section-heading">
+                  <span>Hostia, menu a alergie</span>
+                  <small>{people.length} {people.length === 1 ? 'hosť' : people.length < 5 ? 'hostia' : 'hostí'}</small>
+                </div>
 
                 <div className="guest-list">
                   {people.map((person, index) => (
@@ -238,33 +246,37 @@ export default function RSVPPage() {
                           : `Dieťa ${index + 1}`}
                       </div>
 
-                      <input
-                        type="text"
-                        placeholder={
-                          person.type === 'adult'
-                            ? `Meno dospelej osoby ${index + 1}`
-                            : `Meno dieťaťa ${index + 1}`
-                        }
-                        value={person.name}
-                        onChange={(e) => updatePerson(index, 'name', e.target.value)}
-                      />
-
-                      <select
-                        value={person.menu}
-                        onChange={(e) => updatePerson(index, 'menu', e.target.value)}
-                      >
-                        <option value="meat">Mäsové menu</option>
-                        <option value="vegetarian">Vegetariánske menu</option>
-                        <option value="vegan">Vegánske menu</option>
-                        <option value="child">Detské menu</option>
-                        <option value="other">Iné / ešte nevieme</option>
-                      </select>
-
-                      <textarea
-                        placeholder="Alergie alebo stravovacie obmedzenia pre tohto hosťa"
-                        value={person.allergies}
-                        onChange={(e) => updatePerson(index, 'allergies', e.target.value)}
-                      />
+                      <div className="guest-fields">
+                        <label>
+                          <span>Meno</span>
+                          <input
+                            type="text"
+                            placeholder={person.type === 'adult' ? 'Meno dospelej osoby' : 'Meno dieťaťa'}
+                            value={person.name}
+                            onChange={(e) => updatePerson(index, 'name', e.target.value)}
+                            required
+                          />
+                        </label>
+                        <label>
+                          <span>Menu</span>
+                          <select value={person.menu} onChange={(e) => updatePerson(index, 'menu', e.target.value)}>
+                            <option value="meat">Mäsové</option>
+                            <option value="vegetarian">Vegetariánske</option>
+                            <option value="vegan">Vegánske</option>
+                            <option value="child">Detské</option>
+                            <option value="other">Iné / ešte nevieme</option>
+                          </select>
+                        </label>
+                        <label>
+                          <span>Alergie</span>
+                          <input
+                            type="text"
+                            placeholder="Napr. orechy, lepok"
+                            value={person.allergies}
+                            onChange={(e) => updatePerson(index, 'allergies', e.target.value)}
+                          />
+                        </label>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -285,21 +297,30 @@ export default function RSVPPage() {
                     <div className="small-note">Požiadavku uvidia snúbenci v správe ubytovania a po pridelení izby vám môžu poslať informácie o hoteli.</div>
                   )}
 
-                  <label>Požiadavka na dopravu</label>
-                  <input
-                    value={transportRequest}
-                    maxLength="240"
-                    onChange={(e) => setTransportRequest(e.target.value)}
-                    placeholder="Napr. odvoz pre 3 osoby o 01:00"
-                  />
+                  <div className="transport-field">
+                    <label htmlFor="transport-request">Požiadavka na dopravu</label>
+                    <input
+                      id="transport-request"
+                      value={transportRequest}
+                      maxLength="240"
+                      onChange={(e) => setTransportRequest(e.target.value)}
+                      placeholder="Napr. odvoz pre 3 osoby o 01:00"
+                    />
+                  </div>
 
                   {(needsAccommodation || transportRequest.trim()) ? (
                     <div className="contact-box">
                       <div className="small-note">Kontakt slúži iba na dohodnutie ubytovania alebo dopravy.</div>
-                      <label>Kontaktný email</label>
-                      <input type="email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} required />
-                      <label>Telefón</label>
-                      <input value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} />
+                      <div className="contact-grid">
+                        <label>
+                          <span>Kontaktný e-mail</span>
+                          <input type="email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} required />
+                        </label>
+                        <label>
+                          <span>Telefón</span>
+                          <input type="tel" value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} />
+                        </label>
+                      </div>
                     </div>
                   ) : null}
                 </section>
@@ -307,12 +328,15 @@ export default function RSVPPage() {
             </>
           )}
 
-          <label>Poznámka pre nevestu a ženícha</label>
-          <textarea
-            placeholder="Sem môžete dopísať čokoľvek dôležité."
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          />
+          <div className="message-field">
+            <label htmlFor="guest-message">Poznámka pre nevestu a ženícha</label>
+            <textarea
+              id="guest-message"
+              placeholder="Sem môžete dopísať čokoľvek dôležité."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
+          </div>
 
           <button type="submit" disabled={isSubmitting}>
             {isSubmitting ? 'Odosielam...' : 'Odoslať potvrdenie'}
@@ -367,7 +391,7 @@ function Styles() {
       }
 
       .wrapper {
-        max-width: 760px;
+        max-width: 880px;
         margin: 0 auto;
         background: rgba(255, 255, 255, 0.82);
         border: 1px solid var(--border);
@@ -403,8 +427,11 @@ function Styles() {
         max-width: 560px;
       }
 
-      form {
+      .rsvp-form {
+        width: min(100%, 720px);
         margin-top: 28px;
+        margin-right: auto;
+        margin-left: auto;
       }
 
       label {
@@ -433,14 +460,53 @@ function Styles() {
         resize: vertical;
       }
 
-      .grid {
+      .attendance-field,
+      .compact-field {
+        width: min(100%, 340px);
+      }
+
+      .decline-box {
+        margin-top: 24px;
+        padding: 18px;
+        border: 1px solid var(--border);
+        background: rgba(255, 250, 244, 0.6);
+      }
+
+      .decline-box label {
+        margin-top: 0;
+      }
+
+      .count-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
+        grid-template-columns: repeat(2, minmax(130px, 170px));
+        gap: 14px;
+        width: fit-content;
+        margin-top: 8px;
       }
 
       .guest-section {
-        margin-top: 6px;
+        margin-top: 34px;
+      }
+
+      .section-heading {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 16px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 1.4px;
+        text-transform: uppercase;
+      }
+
+      .section-heading small {
+        color: var(--muted);
+        font-size: 0.72rem;
+        font-weight: 500;
+        letter-spacing: 0;
+        text-transform: none;
       }
 
       .guest-list {
@@ -450,14 +516,13 @@ function Styles() {
       }
 
       .guest-card {
-        display: grid;
-        gap: 10px;
-        padding: 14px;
+        padding: 18px;
         border: 1px solid var(--border);
         background: rgba(255, 250, 244, 0.68);
       }
 
       .guest-card-title {
+        margin-bottom: 12px;
         font-size: 0.74rem;
         text-transform: uppercase;
         letter-spacing: 1.3px;
@@ -465,13 +530,29 @@ function Styles() {
         font-weight: 600;
       }
 
-      .guest-card textarea {
-        min-height: 70px;
+      .guest-fields {
+        display: grid;
+        grid-template-columns: minmax(180px, 1.2fr) minmax(150px, .85fr) minmax(180px, 1fr);
+        gap: 12px;
+      }
+
+      .guest-fields label,
+      .contact-grid label {
+        margin: 0;
+      }
+
+      .guest-fields label > span,
+      .contact-grid label > span {
+        display: block;
+        margin-bottom: 7px;
+        color: var(--muted);
+        font-size: 0.68rem;
+        letter-spacing: 1px;
       }
 
       .advanced-box {
-        margin-top: 22px;
-        padding: 16px;
+        margin-top: 30px;
+        padding: 22px;
         border: 1px solid rgba(212, 175, 55, 0.28);
         background: #fffdf8;
       }
@@ -485,10 +566,29 @@ function Styles() {
 
       .checkbox-row input {
         width: auto;
+        min-width: 18px;
+        min-height: 18px;
       }
 
       .contact-box {
-        margin-top: 16px;
+        margin-top: 20px;
+        padding-top: 18px;
+        border-top: 1px solid var(--border);
+      }
+
+      .contact-grid {
+        display: grid;
+        grid-template-columns: 1.25fr .75fr;
+        gap: 12px;
+      }
+
+      .transport-field {
+        width: min(100%, 520px);
+        margin-top: 20px;
+      }
+
+      .message-field {
+        margin-top: 30px;
       }
 
       .small-note {
@@ -509,7 +609,10 @@ function Styles() {
       }
 
       button {
-        width: 100%;
+        display: block;
+        width: min(100%, 320px);
+        margin-right: auto;
+        margin-left: auto;
         border: none;
         background: var(--dark);
         color: var(--white);
@@ -546,12 +649,20 @@ function Styles() {
       }
 
       @media (max-width: 640px) {
-        .grid {
+        .count-grid,
+        .guest-fields,
+        .contact-grid {
           grid-template-columns: 1fr;
+          width: 100%;
         }
 
         .wrapper {
           padding: 34px 20px;
+        }
+
+        .advanced-box,
+        .guest-card {
+          padding: 16px;
         }
       }
     `}</style>
