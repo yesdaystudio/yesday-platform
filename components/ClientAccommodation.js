@@ -11,9 +11,11 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
 
   const [project, setProject] = useState(demoProject || null)
   const [rows, setRows] = useState(() => (demoResponses || []).filter(row => row.needs_accommodation).map(mapAccommodationRow))
+  const [accommodations, setAccommodations] = useState(() => buildDemoAccommodationOptions(demoResponses || []))
   const [loading, setLoading] = useState(!demoProject)
   const [accessDenied, setAccessDenied] = useState(false)
   const [savingId, setSavingId] = useState(null)
+  const [savingAccommodationId, setSavingAccommodationId] = useState(null)
   const [savingEmailStatusId, setSavingEmailStatusId] = useState(null)
   const [status, setStatus] = useState('')
   const [emailDraft, setEmailDraft] = useState(null)
@@ -21,7 +23,9 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
   const packageType = String(project?.package_type || 'signature').toLowerCase().trim()
   const canManageAccommodation = packageType === 'signature' || packageType === 'atelier'
   const requestedRooms = rows.reduce((sum, row) => sum + getRequestedRoomCount(row), 0)
-  const assignedRooms = rows.reduce((sum, row) => sum + (String(row.roomNumber || '').trim() ? getRequestedRoomCount(row) : 0), 0)
+  const assignedRooms = rows.reduce((sum, row) => sum + (
+    row.assignedAccommodationId && String(row.roomNumber || '').trim() ? getRequestedRoomCount(row) : 0
+  ), 0)
   const accommodationGuests = rows.reduce((sum, row) => sum + Math.max(0, Number(row.adults_count || 0)) + Math.max(0, Number(row.children_count || 0)), 0)
 
   useEffect(() => {
@@ -66,22 +70,31 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
         return
       }
 
-      const { data: responseData, error: responseError } = await supabase
-        .from('rsvp_responses')
-        .select('*')
-        .eq('project_id', projectData.id)
-        .eq('needs_accommodation', true)
-        .order('created_at', { ascending: false })
+      const [responseResult, accommodationResult] = await Promise.all([
+        supabase
+          .from('rsvp_responses')
+          .select('*')
+          .eq('project_id', projectData.id)
+          .eq('needs_accommodation', true)
+          .order('created_at', { ascending: false }),
+        supabase
+          .from('accommodation_options')
+          .select('*')
+          .eq('project_id', projectData.id)
+          .order('created_at', { ascending: true }),
+      ])
 
-      if (responseError) {
-        console.error(responseError)
+      const { data: responseData, error: responseError } = responseResult
+      const { data: accommodationData, error: accommodationError } = accommodationResult
+
+      if (responseError || accommodationError) {
+        console.error(responseError || accommodationError)
         setLoading(false)
         return
       }
 
-      setRows(
-        (responseData || []).map(mapAccommodationRow)
-      )
+      setAccommodations((accommodationData || []).map(mapAccommodationOption))
+      setRows((responseData || []).map(mapAccommodationRow))
 
       setLoading(false)
     }
@@ -95,17 +108,108 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
     )
   }
 
+  function updateAccommodationField(id, field, value) {
+    setAccommodations((current) =>
+      current.map((option) => (option.id === id ? { ...option, [field]: value } : option))
+    )
+  }
+
+  function addAccommodation() {
+    setAccommodations((current) => [
+      ...current,
+      {
+        id: crypto.randomUUID(),
+        project_id: project?.id || null,
+        name: '',
+        address: '',
+        checkIn: '',
+        checkOut: '',
+        guestNote: '',
+        isNew: true,
+      },
+    ])
+  }
+
+  async function saveAccommodation(option) {
+    if (!String(option.name || '').trim()) {
+      setStatus('Doplňte názov ubytovania.')
+      return
+    }
+
+    setStatus('')
+    setSavingAccommodationId(option.id)
+
+    if (demoProject) {
+      setAccommodations((current) => current.map((item) => (
+        item.id === option.id ? { ...item, isNew: false } : item
+      )))
+      setStatus('Ubytovanie bolo uložené v ukážke.')
+      setSavingAccommodationId(null)
+      return
+    }
+
+    const payload = {
+      id: option.id,
+      project_id: project.id,
+      name: option.name.trim(),
+      address: option.address.trim() || null,
+      check_in: option.checkIn.trim() || null,
+      check_out: option.checkOut.trim() || null,
+      guest_note: option.guestNote.trim() || null,
+    }
+    const { data, error } = await supabase
+      .from('accommodation_options')
+      .upsert(payload)
+      .select('*')
+      .single()
+
+    if (error) {
+      console.error('Accommodation option save error:', error)
+      setStatus(`Ubytovanie sa nepodarilo uložiť: ${error.message}`)
+      setSavingAccommodationId(null)
+      return
+    }
+
+    setAccommodations((current) => current.map((item) => (
+      item.id === option.id ? mapAccommodationOption(data) : item
+    )))
+    setStatus('Ubytovanie bolo uložené.')
+    setSavingAccommodationId(null)
+  }
+
+  async function removeAccommodation(option) {
+    setStatus('')
+    if (!demoProject && !option.isNew) {
+      const { error } = await supabase
+        .from('accommodation_options')
+        .delete()
+        .eq('id', option.id)
+
+      if (error) {
+        console.error('Accommodation option delete error:', error)
+        setStatus(`Ubytovanie sa nepodarilo odstrániť: ${error.message}`)
+        return
+      }
+    }
+
+    setAccommodations((current) => current.filter((item) => item.id !== option.id))
+    setRows((current) => current.map((row) => (
+      row.assignedAccommodationId === option.id
+        ? { ...row, assignedAccommodationId: '' }
+        : row
+    )))
+    setStatus('Ubytovanie bolo odstránené.')
+  }
+
   async function saveRow(row) {
     setStatus('')
     setSavingId(row.id)
 
+    const selectedAccommodation = accommodations.find((option) => option.id === row.assignedAccommodationId)
     const payload = {
-      accommodation_hotel: row.assignedHotel || null,
+      accommodation_option_id: row.assignedAccommodationId || null,
+      accommodation_hotel: selectedAccommodation?.name || null,
       accommodation_room: row.roomNumber || null,
-      accommodation_hotel_address: row.hotelAddress || null,
-      accommodation_check_in: row.checkIn || null,
-      accommodation_check_out: row.checkOut || null,
-      accommodation_guest_note: row.guestNote || null,
       accommodation_internal_note: row.internalNote || null,
     }
 
@@ -195,6 +299,89 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
         </div>
       </section>
       {status ? <p role="status" style={statusStyle}>{status}</p> : null}
+
+      <section aria-label="Zoznam ubytovaní" style={catalogStyle}>
+        <div style={catalogHeaderStyle}>
+          <div>
+            <p style={composerEyebrowStyle}>Ubytovania</p>
+            <h2 style={catalogTitleStyle}>Hotely a informácie pre hostí</h2>
+            <p style={catalogHelpStyle}>Každé ubytovanie vyplníte iba raz. Pri hosťovi potom vyberiete hotel a doplníte číslo izby.</p>
+          </div>
+          <button type="button" onClick={addAccommodation} style={emailButtonStyle}>+ Pridať ubytovanie</button>
+        </div>
+
+        {accommodations.length === 0 ? (
+          <div style={catalogEmptyStyle}>
+            <p style={emptyStyle}>Zatiaľ nemáte pridané žiadne ubytovanie.</p>
+            <button type="button" onClick={addAccommodation} style={saveButtonStyle}>Pridať prvé ubytovanie</button>
+          </div>
+        ) : (
+          accommodations.map((option) => (
+            <article key={option.id} style={accommodationOptionStyle}>
+              <div style={fieldsGridStyle}>
+                <label style={labelStyle}>
+                  <span style={labelTextStyle}>Názov ubytovania</span>
+                  <input
+                    value={option.name}
+                    onChange={(event) => updateAccommodationField(option.id, 'name', event.target.value)}
+                    placeholder="Napr. Hotel Park"
+                    style={inputStyle}
+                  />
+                </label>
+                <label style={labelStyle}>
+                  <span style={labelTextStyle}>Adresa</span>
+                  <input
+                    value={option.address}
+                    onChange={(event) => updateAccommodationField(option.id, 'address', event.target.value)}
+                    placeholder="Ulica, mesto"
+                    style={inputStyle}
+                  />
+                </label>
+                <label style={labelStyle}>
+                  <span style={labelTextStyle}>Check-in</span>
+                  <input
+                    value={option.checkIn}
+                    onChange={(event) => updateAccommodationField(option.id, 'checkIn', event.target.value)}
+                    placeholder="Napr. 18. 9. 2027 od 14:00"
+                    style={inputStyle}
+                  />
+                </label>
+                <label style={labelStyle}>
+                  <span style={labelTextStyle}>Check-out</span>
+                  <input
+                    value={option.checkOut}
+                    onChange={(event) => updateAccommodationField(option.id, 'checkOut', event.target.value)}
+                    placeholder="Napr. 19. 9. 2027 do 10:00"
+                    style={inputStyle}
+                  />
+                </label>
+              </div>
+              <label style={labelStyle}>
+                <span style={labelTextStyle}>Informácie pre hostí</span>
+                <textarea
+                  value={option.guestNote}
+                  onChange={(event) => updateAccommodationField(option.id, 'guestNote', event.target.value)}
+                  placeholder="Napr. raňajky sú v cene, parkovanie je za hotelom alebo ako prebehne prevzatie kľúčov."
+                  rows={3}
+                  style={textareaStyle}
+                />
+              </label>
+              <div style={actionsStyle}>
+                <button
+                  type="button"
+                  onClick={() => saveAccommodation(option)}
+                  disabled={savingAccommodationId === option.id}
+                  style={saveButtonStyle}
+                >
+                  {savingAccommodationId === option.id ? 'Ukladám...' : 'Uložiť ubytovanie'}
+                </button>
+                <button type="button" onClick={() => removeAccommodation(option)} style={removeButtonStyle}>Odstrániť</button>
+              </div>
+            </article>
+          ))
+        )}
+      </section>
+
       {emailDraft ? (
         <EmailComposer
           draft={emailDraft}
@@ -223,15 +410,19 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
               </span>
             </div>
 
-            <div style={fieldsGridStyle}>
+            <div style={guestAssignmentGridStyle}>
               <label style={labelStyle}>
-                <span style={labelTextStyle}>Názov ubytovania</span>
-                <input
-                  value={row.assignedHotel}
-                  onChange={(event) => updateField(row.id, 'assignedHotel', event.target.value)}
-                  placeholder="Napr. Hotel Park"
+                <span style={labelTextStyle}>Priradené ubytovanie</span>
+                <select
+                  value={row.assignedAccommodationId}
+                  onChange={(event) => updateField(row.id, 'assignedAccommodationId', event.target.value)}
                   style={inputStyle}
-                />
+                >
+                  <option value="">Vyberte ubytovanie</option>
+                  {accommodations.filter((option) => !option.isNew && option.name.trim()).map((option) => (
+                    <option key={option.id} value={option.id}>{option.name}</option>
+                  ))}
+                </select>
               </label>
 
               <label style={labelStyle}>
@@ -243,48 +434,7 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
                   style={inputStyle}
                 />
               </label>
-
-              <label style={{ ...labelStyle, ...wideFieldStyle }}>
-                <span style={labelTextStyle}>Adresa ubytovania</span>
-                <input
-                  value={row.hotelAddress}
-                  onChange={(event) => updateField(row.id, 'hotelAddress', event.target.value)}
-                  placeholder="Ulica, mesto"
-                  style={inputStyle}
-                />
-              </label>
-
-              <label style={labelStyle}>
-                <span style={labelTextStyle}>Check-in</span>
-                <input
-                  value={row.checkIn}
-                  onChange={(event) => updateField(row.id, 'checkIn', event.target.value)}
-                  placeholder="Napr. 18. 9. 2027 od 14:00"
-                  style={inputStyle}
-                />
-              </label>
-
-              <label style={labelStyle}>
-                <span style={labelTextStyle}>Check-out</span>
-                <input
-                  value={row.checkOut}
-                  onChange={(event) => updateField(row.id, 'checkOut', event.target.value)}
-                  placeholder="Napr. 19. 9. 2027 do 10:00"
-                  style={inputStyle}
-                />
-              </label>
             </div>
-
-            <label style={labelStyle}>
-              <span style={labelTextStyle}>Informácia pre hosťa</span>
-              <textarea
-                value={row.guestNote}
-                onChange={(event) => updateField(row.id, 'guestNote', event.target.value)}
-                placeholder="Napr. raňajky, parkovanie alebo postup pri príchode. Táto poznámka sa vloží do e-mailu."
-                rows={3}
-                style={textareaStyle}
-              />
-            </label>
 
             <label style={labelStyle}>
               <span style={labelTextStyle}>Interná poznámka</span>
@@ -310,7 +460,11 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
                 <>
                   <button
                     type="button"
-                    onClick={() => setEmailDraft(buildAccommodationEmailDraft(row, project))}
+                    onClick={() => setEmailDraft(buildAccommodationEmailDraft(
+                      row,
+                      project,
+                      accommodations.find((option) => option.id === row.assignedAccommodationId)
+                    ))}
                     style={emailButtonStyle}
                   >
                     Pripraviť e-mail
@@ -360,18 +514,47 @@ function getRequestedRoomCount(row) {
 function mapAccommodationRow(row) {
   return {
     ...row,
-    assignedHotel: row.accommodation_hotel || row.assigned_hotel || row.hotel_name || '',
+    assignedAccommodationId: row.accommodation_option_id || '',
     roomNumber: row.accommodation_room || row.room_number || row.assigned_room || '',
-    hotelAddress: row.accommodation_hotel_address || '',
-    checkIn: row.accommodation_check_in || '',
-    checkOut: row.accommodation_check_out || '',
-    guestNote: row.accommodation_guest_note || '',
     internalNote: row.accommodation_internal_note || row.internal_note || row.accommodation_note || '',
     emailSentAt: row.accommodation_email_sent_at || null,
   }
 }
 
-function buildAccommodationEmailDraft(row, project) {
+function mapAccommodationOption(option) {
+  return {
+    ...option,
+    address: option.address || '',
+    checkIn: option.check_in || option.checkIn || '',
+    checkOut: option.check_out || option.checkOut || '',
+    guestNote: option.guest_note || option.guestNote || '',
+    isNew: false,
+  }
+}
+
+function buildDemoAccommodationOptions(rows) {
+  const options = []
+  const optionByName = new Map()
+
+  rows.filter((row) => row.needs_accommodation).forEach((row) => {
+    const name = String(row.accommodation_hotel || '').trim()
+    if (!name || optionByName.has(name)) return
+    const option = mapAccommodationOption({
+      id: `demo-accommodation-${options.length + 1}`,
+      name,
+      address: row.accommodation_hotel_address || '',
+      check_in: row.accommodation_check_in || '',
+      check_out: row.accommodation_check_out || '',
+      guest_note: row.accommodation_guest_note || '',
+    })
+    options.push(option)
+    optionByName.set(name, option)
+  })
+
+  return options
+}
+
+function buildAccommodationEmailDraft(row, project, accommodation) {
   const email = String(row.contact_email || '').trim()
   const coupleName = String(project?.couple_display_name || '').trim()
   const guestName = String(row.guest_name || '').trim()
@@ -384,13 +567,13 @@ function buildAccommodationEmailDraft(row, project) {
     '',
     'tešíme sa, že budete súčasťou nášho svadobného dňa. Posielame vám všetky informácie k ubytovaniu:',
     '',
-    `Ubytovanie: ${row.assignedHotel || 'bude doplnené'}`,
-    row.hotelAddress ? `Adresa: ${row.hotelAddress}` : '',
+    `Ubytovanie: ${accommodation?.name || 'bude doplnené'}`,
+    accommodation?.address ? `Adresa: ${accommodation.address}` : '',
     `Izba: ${row.roomNumber || 'bude doplnená'}`,
-    row.checkIn ? `Check-in: ${row.checkIn}` : '',
-    row.checkOut ? `Check-out: ${row.checkOut}` : '',
+    accommodation?.checkIn ? `Check-in: ${accommodation.checkIn}` : '',
+    accommodation?.checkOut ? `Check-out: ${accommodation.checkOut}` : '',
     '',
-    row.guestNote || '',
+    accommodation?.guestNote || '',
     '',
     'Ak by ste mali akékoľvek otázky, pokojne sa nám ozvite.',
     '',
@@ -591,8 +774,57 @@ const fieldsGridStyle = {
   gap: '10px',
 }
 
-const wideFieldStyle = {
-  gridColumn: '1 / -1',
+const guestAssignmentGridStyle = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+  gap: '10px',
+}
+
+const catalogStyle = {
+  border: '1px solid rgba(95, 72, 56, 0.22)',
+  background: '#f8f2ea',
+  padding: '20px',
+  display: 'grid',
+  gap: '14px',
+}
+
+const catalogHeaderStyle = {
+  display: 'flex',
+  alignItems: 'flex-start',
+  justifyContent: 'space-between',
+  gap: '18px',
+  flexWrap: 'wrap',
+}
+
+const catalogTitleStyle = {
+  margin: 0,
+  color: '#3f3128',
+  fontSize: '24px',
+  fontWeight: 400,
+}
+
+const catalogHelpStyle = {
+  margin: '7px 0 0',
+  color: '#6f5b4b',
+  fontSize: '13px',
+  lineHeight: 1.55,
+}
+
+const catalogEmptyStyle = {
+  border: '1px dashed rgba(95, 72, 56, 0.28)',
+  background: 'rgba(255, 251, 246, 0.65)',
+  padding: '18px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: '12px',
+  flexWrap: 'wrap',
+}
+
+const accommodationOptionStyle = {
+  ...cardStyle,
+  background: '#fffaf5',
+  padding: '16px',
 }
 
 const labelTextStyle = {
@@ -714,6 +946,12 @@ const emailButtonStyle = {
 const disabledButtonStyle = {
   opacity: 0.45,
   cursor: 'not-allowed',
+}
+
+const removeButtonStyle = {
+  ...emailButtonStyle,
+  borderColor: 'transparent',
+  color: '#8a6b5f',
 }
 
 const statusButtonStyle = {
