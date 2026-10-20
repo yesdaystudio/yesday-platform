@@ -10,13 +10,13 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
   const router = useRouter()
 
   const [project, setProject] = useState(demoProject || null)
-  const [rows, setRows] = useState(() => (demoResponses || []).filter(row => row.needs_accommodation).map(row => ({ ...row, assignedHotel: row.accommodation_hotel || '', roomNumber: row.accommodation_room || '', internalNote: row.accommodation_internal_note || '', emailSentAt: row.accommodation_email_sent_at || null })))
+  const [rows, setRows] = useState(() => (demoResponses || []).filter(row => row.needs_accommodation).map(mapAccommodationRow))
   const [loading, setLoading] = useState(!demoProject)
   const [accessDenied, setAccessDenied] = useState(false)
   const [savingId, setSavingId] = useState(null)
   const [savingEmailStatusId, setSavingEmailStatusId] = useState(null)
   const [status, setStatus] = useState('')
-  const [emailPreview, setEmailPreview] = useState('')
+  const [emailDraft, setEmailDraft] = useState(null)
 
   const packageType = String(project?.package_type || 'signature').toLowerCase().trim()
   const canManageAccommodation = packageType === 'signature' || packageType === 'atelier'
@@ -80,13 +80,7 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
       }
 
       setRows(
-        (responseData || []).map((row) => ({
-          ...row,
-          assignedHotel: row.accommodation_hotel || row.assigned_hotel || row.hotel_name || '',
-          roomNumber: row.accommodation_room || row.room_number || row.assigned_room || '',
-          internalNote: row.accommodation_internal_note || row.internal_note || row.accommodation_note || '',
-          emailSentAt: row.accommodation_email_sent_at || null,
-        }))
+        (responseData || []).map(mapAccommodationRow)
       )
 
       setLoading(false)
@@ -108,6 +102,10 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
     const payload = {
       accommodation_hotel: row.assignedHotel || null,
       accommodation_room: row.roomNumber || null,
+      accommodation_hotel_address: row.hotelAddress || null,
+      accommodation_check_in: row.checkIn || null,
+      accommodation_check_out: row.checkOut || null,
+      accommodation_guest_note: row.guestNote || null,
       accommodation_internal_note: row.internalNote || null,
     }
 
@@ -197,7 +195,14 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
         </div>
       </section>
       {status ? <p role="status" style={statusStyle}>{status}</p> : null}
-      {emailPreview ? <section aria-label="Ukážka e-mailu" style={cardStyle}><h3>Ukážka e-mailu hosťovi</h3><p>V ukážke sa e-mail neodosiela.</p><pre style={{ whiteSpace: "pre-wrap", fontFamily: "inherit" }}>{emailPreview}</pre><button type="button" onClick={() => setEmailPreview('')}>Zavrieť náhľad</button></section> : null}
+      {emailDraft ? (
+        <EmailComposer
+          draft={emailDraft}
+          isDemo={Boolean(demoProject)}
+          onChange={setEmailDraft}
+          onClose={() => setEmailDraft(null)}
+        />
+      ) : null}
 
       {rows.length === 0 ? (
         <p style={emptyStyle}>Nikto zatiaľ nepožiadal o ubytovanie.</p>
@@ -218,26 +223,71 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
               </span>
             </div>
 
+            <div style={fieldsGridStyle}>
+              <label style={labelStyle}>
+                <span style={labelTextStyle}>Názov ubytovania</span>
+                <input
+                  value={row.assignedHotel}
+                  onChange={(event) => updateField(row.id, 'assignedHotel', event.target.value)}
+                  placeholder="Napr. Hotel Park"
+                  style={inputStyle}
+                />
+              </label>
+
+              <label style={labelStyle}>
+                <span style={labelTextStyle}>Číslo izby</span>
+                <input
+                  value={row.roomNumber}
+                  onChange={(event) => updateField(row.id, 'roomNumber', event.target.value)}
+                  placeholder="Napr. 204"
+                  style={inputStyle}
+                />
+              </label>
+
+              <label style={{ ...labelStyle, ...wideFieldStyle }}>
+                <span style={labelTextStyle}>Adresa ubytovania</span>
+                <input
+                  value={row.hotelAddress}
+                  onChange={(event) => updateField(row.id, 'hotelAddress', event.target.value)}
+                  placeholder="Ulica, mesto"
+                  style={inputStyle}
+                />
+              </label>
+
+              <label style={labelStyle}>
+                <span style={labelTextStyle}>Check-in</span>
+                <input
+                  value={row.checkIn}
+                  onChange={(event) => updateField(row.id, 'checkIn', event.target.value)}
+                  placeholder="Napr. 18. 9. 2027 od 14:00"
+                  style={inputStyle}
+                />
+              </label>
+
+              <label style={labelStyle}>
+                <span style={labelTextStyle}>Check-out</span>
+                <input
+                  value={row.checkOut}
+                  onChange={(event) => updateField(row.id, 'checkOut', event.target.value)}
+                  placeholder="Napr. 19. 9. 2027 do 10:00"
+                  style={inputStyle}
+                />
+              </label>
+            </div>
+
             <label style={labelStyle}>
-              <span style={labelTextStyle}>Assigned hotel</span>
-              <input
-                value={row.assignedHotel}
-                onChange={(event) => updateField(row.id, 'assignedHotel', event.target.value)}
-                style={inputStyle}
+              <span style={labelTextStyle}>Informácia pre hosťa</span>
+              <textarea
+                value={row.guestNote}
+                onChange={(event) => updateField(row.id, 'guestNote', event.target.value)}
+                placeholder="Napr. raňajky, parkovanie alebo postup pri príchode. Táto poznámka sa vloží do e-mailu."
+                rows={3}
+                style={textareaStyle}
               />
             </label>
 
             <label style={labelStyle}>
-              <span style={labelTextStyle}>Room number</span>
-              <input
-                value={row.roomNumber}
-                onChange={(event) => updateField(row.id, 'roomNumber', event.target.value)}
-                style={inputStyle}
-              />
-            </label>
-
-            <label style={labelStyle}>
-              <span style={labelTextStyle}>Internal note</span>
+              <span style={labelTextStyle}>Interná poznámka</span>
               <textarea
                 value={row.internalNote}
                 onChange={(event) => updateField(row.id, 'internalNote', event.target.value)}
@@ -258,17 +308,13 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
 
               {row.contact_email ? (
                 <>
-                  <a
-                    href={demoProject ? '#email-preview' : buildAccommodationEmailHref(row, project)}
-                    onClick={demoProject ? (event) => {
-                      event.preventDefault()
-                      const url = new URL(buildAccommodationEmailHref(row, project))
-                      setEmailPreview(`Komu: ${row.contact_email}\nPredmet: ${url.searchParams.get('subject')}\n\n${url.searchParams.get('body')}`)
-                    } : undefined}
+                  <button
+                    type="button"
+                    onClick={() => setEmailDraft(buildAccommodationEmailDraft(row, project))}
                     style={emailButtonStyle}
                   >
-                    Odoslať e-mail
-                  </a>
+                    Pripraviť e-mail
+                  </button>
                   <button
                     type='button'
                     onClick={() => updateEmailStatus(row, !row.emailSentAt)}
@@ -311,7 +357,21 @@ function getRequestedRoomCount(row) {
   return Number.isFinite(explicitCount) && explicitCount > 0 ? Math.floor(explicitCount) : 1
 }
 
-function buildAccommodationEmailHref(row, project) {
+function mapAccommodationRow(row) {
+  return {
+    ...row,
+    assignedHotel: row.accommodation_hotel || row.assigned_hotel || row.hotel_name || '',
+    roomNumber: row.accommodation_room || row.room_number || row.assigned_room || '',
+    hotelAddress: row.accommodation_hotel_address || '',
+    checkIn: row.accommodation_check_in || '',
+    checkOut: row.accommodation_check_out || '',
+    guestNote: row.accommodation_guest_note || '',
+    internalNote: row.accommodation_internal_note || row.internal_note || row.accommodation_note || '',
+    emailSentAt: row.accommodation_email_sent_at || null,
+  }
+}
+
+function buildAccommodationEmailDraft(row, project) {
   const email = String(row.contact_email || '').trim()
   const coupleName = String(project?.couple_display_name || '').trim()
   const guestName = String(row.guest_name || '').trim()
@@ -322,17 +382,76 @@ function buildAccommodationEmailHref(row, project) {
   const body = [
     greeting,
     '',
-    'posielame vám informácie k ubytovaniu na našu svadbu:',
+    'tešíme sa, že budete súčasťou nášho svadobného dňa. Posielame vám všetky informácie k ubytovaniu:',
     '',
-    `Hotel: ${row.assignedHotel || 'bude doplnený'}`,
+    `Ubytovanie: ${row.assignedHotel || 'bude doplnené'}`,
+    row.hotelAddress ? `Adresa: ${row.hotelAddress}` : '',
     `Izba: ${row.roomNumber || 'bude doplnená'}`,
-    row.internalNote ? `Poznámka: ${row.internalNote}` : '',
+    row.checkIn ? `Check-in: ${row.checkIn}` : '',
+    row.checkOut ? `Check-out: ${row.checkOut}` : '',
     '',
-    'S pozdravom',
+    row.guestNote || '',
+    '',
+    'Ak by ste mali akékoľvek otázky, pokojne sa nám ozvite.',
+    '',
+    'Tešíme sa na vás!',
     coupleName || 'Nevesta a ženích',
   ].filter((line, index, lines) => line || lines[index - 1] !== '').join('\n')
 
-  return `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+  return { email, subject, body }
+}
+
+function buildAccommodationEmailHref(draft) {
+  return `mailto:${encodeURIComponent(draft.email)}?subject=${encodeURIComponent(draft.subject)}&body=${encodeURIComponent(draft.body)}`
+}
+
+function EmailComposer({ draft, isDemo, onChange, onClose }) {
+  return (
+    <section aria-label="Náhľad e-mailu hosťovi" style={emailComposerStyle}>
+      <div style={headRowStyle}>
+        <div>
+          <p style={composerEyebrowStyle}>Pripravený e-mail</p>
+          <h3 style={composerTitleStyle}>Informácie o ubytovaní pre hosťa</h3>
+        </div>
+        <button type="button" onClick={onClose} style={closeButtonStyle}>Zavrieť</button>
+      </div>
+
+      <label style={labelStyle}>
+        <span style={labelTextStyle}>Komu</span>
+        <input value={draft.email} readOnly style={{ ...inputStyle, ...readOnlyInputStyle }} />
+      </label>
+
+      <label style={labelStyle}>
+        <span style={labelTextStyle}>Predmet</span>
+        <input
+          value={draft.subject}
+          onChange={(event) => onChange({ ...draft, subject: event.target.value })}
+          style={inputStyle}
+        />
+      </label>
+
+      <label style={labelStyle}>
+        <span style={labelTextStyle}>Text e-mailu</span>
+        <textarea
+          value={draft.body}
+          onChange={(event) => onChange({ ...draft, body: event.target.value })}
+          rows={16}
+          style={emailBodyStyle}
+        />
+      </label>
+
+      <div style={actionsStyle}>
+        {isDemo ? (
+          <span style={demoNoticeStyle}>V ukážke sa e-mail neodosiela.</span>
+        ) : (
+          <a href={buildAccommodationEmailHref(draft)} style={saveButtonLinkStyle}>
+            Otvoriť v e-mailovej aplikácii
+          </a>
+        )}
+        <span style={composerHelpStyle}>Pred odoslaním môžete predmet aj text upraviť.</span>
+      </div>
+    </section>
+  )
 }
 
 function formatEmailDate(value) {
@@ -466,6 +585,16 @@ const labelStyle = {
   gap: '6px',
 }
 
+const fieldsGridStyle = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+  gap: '10px',
+}
+
+const wideFieldStyle = {
+  gridColumn: '1 / -1',
+}
+
 const labelTextStyle = {
   fontSize: '12px',
   letterSpacing: '0.04em',
@@ -489,6 +618,57 @@ const textareaStyle = {
   resize: 'vertical',
 }
 
+const emailComposerStyle = {
+  ...cardStyle,
+  border: '1px solid rgba(95, 72, 56, 0.38)',
+  background: '#fffaf5',
+  padding: '20px',
+  gap: '16px',
+}
+
+const composerEyebrowStyle = {
+  margin: '0 0 5px',
+  color: '#8a6f54',
+  fontSize: '11px',
+  letterSpacing: '0.1em',
+  textTransform: 'uppercase',
+}
+
+const composerTitleStyle = {
+  ...nameStyle,
+  fontSize: '23px',
+}
+
+const closeButtonStyle = {
+  border: 0,
+  background: 'transparent',
+  color: '#6f5b4b',
+  padding: '4px',
+  cursor: 'pointer',
+  fontFamily: 'inherit',
+}
+
+const readOnlyInputStyle = {
+  background: 'rgba(176, 139, 105, 0.07)',
+  color: '#6f5b4b',
+}
+
+const emailBodyStyle = {
+  ...textareaStyle,
+  minHeight: '310px',
+  lineHeight: 1.65,
+}
+
+const demoNoticeStyle = {
+  color: '#6f5b4b',
+  fontSize: '13px',
+}
+
+const composerHelpStyle = {
+  color: '#8a7768',
+  fontSize: '12px',
+}
+
 const saveButtonStyle = {
   width: 'fit-content',
   padding: '9px 14px',
@@ -497,6 +677,14 @@ const saveButtonStyle = {
   background: '#5f4838',
   color: '#fffaf5',
   cursor: 'pointer',
+}
+
+const saveButtonLinkStyle = {
+  ...saveButtonStyle,
+  display: 'inline-flex',
+  alignItems: 'center',
+  textDecoration: 'none',
+  fontSize: '13px',
 }
 
 const actionsStyle = {
