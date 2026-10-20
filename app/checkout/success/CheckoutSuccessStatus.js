@@ -54,20 +54,22 @@ export default function CheckoutSuccessStatus({ sessionId }) {
   if (state.status === 'ready') {
     return <>
       {state.livemode === false ? <p style={testModeStyle}>Išlo o testovaciu platbu. Z účtu sa nič nestiahlo.</p> : null}
-      {state.access_url ? (
-        <p style={bodyStyle}>Testovacia klientska zóna je pripravená. Pokračujte cez bezpečný odkaz a nastavte si heslo.</p>
-      ) : (
-        <p style={bodyStyle}>
-          Klientska zóna je pripravená. Na e-mail <strong>{state.customer_email}</strong> sme poslali odkaz na nastavenie hesla.
-        </p>
-      )}
+      <p style={bodyStyle}>
+        Klientska zóna je pripravená.{' '}
+        {state.email_sent ? (
+          <>Registračný e-mail s odkazom na nastavenie hesla sme poslali na <strong>{state.customer_email}</strong>.</>
+        ) : (
+          <>Pri testovacej platbe môžete pokračovať cez bezpečný odkaz nižšie. Po aktivácii e-mailovej služby príde rovnaký odkaz aj na <strong>{state.customer_email}</strong>.</>
+        )}
+        {state.access_url && state.email_sent ? ' Pri testovacej platbe môžete pokračovať aj priamo cez tlačidlo nižšie.' : null}
+      </p>
       <div style={actionsStyle}>
         {state.access_url ? (
           <a href={state.access_url} style={buttonStyle}>Nastaviť heslo</a>
         ) : (
-          <Link href={`/${state.project_slug}/client`} style={buttonStyle}>Otvoriť klientsku zónu</Link>
+          <Link href="/login" style={buttonStyle}>Prejsť na prihlásenie</Link>
         )}
-        <Link href="/login" style={secondaryButtonStyle}>Prihlásenie</Link>
+        {state.access_url ? <Link href="/login" style={secondaryButtonStyle}>Prihlásenie</Link> : null}
       </div>
     </>
   }

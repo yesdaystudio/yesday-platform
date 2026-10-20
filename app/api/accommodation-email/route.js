@@ -39,7 +39,7 @@ export async function POST(request) {
 
   const { data: project, error: projectError } = await supabaseAdmin
     .from('projects')
-    .select('owner_user_id, client_email')
+    .select('owner_user_id, client_email, couple_display_name')
     .eq('id', rsvp.project_id)
     .single()
 
@@ -53,6 +53,9 @@ export async function POST(request) {
     const delivery = await sendTransactionalEmail({
       to: rsvp.contact_email,
       replyTo: project.client_email || user.email,
+      fromName: project.couple_display_name
+        ? `${project.couple_display_name} cez YesDay`
+        : 'Nevesta a ženích cez YesDay',
       ...email,
     })
     const sentAt = new Date().toISOString()
