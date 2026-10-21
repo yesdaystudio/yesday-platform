@@ -143,7 +143,7 @@ function Nav() {
           Kontakty
         </Link>
         <Link href="/login" style={navLinkStyle}>
-          Klientska zóna
+          Prihlásenie pre klientov
         </Link>
       </nav>
     </header>
@@ -308,8 +308,9 @@ function Contact() {
           <h3 className={serifClassName} style={contactTitleStyle}>
             Vstup pre klientov
           </h3>
+          <p style={clientAccessNoteStyle}>Prístup získate po zakúpení svadobného balíka.</p>
           <Link href="/login" style={contactLinkStyle}>
-            Otvoriť /login
+            Prihlásiť sa
           </Link>
         </article>
       </div>
@@ -812,6 +813,13 @@ const contactTitleStyle = {
   marginTop: 0,
   marginBottom: '14px',
   fontSize: '1.7rem',
+}
+
+const clientAccessNoteStyle = {
+  margin: '-4px 0 14px',
+  color: COLOR_GREY,
+  fontSize: '0.9rem',
+  lineHeight: 1.55,
 }
 
 const contactLinkStyle = {

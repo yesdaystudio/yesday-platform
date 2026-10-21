@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import supabase from "../../lib/supabase"
 
 export default function LoginPage() {
@@ -90,6 +91,10 @@ export default function LoginPage() {
       <form onSubmit={handleLogin} style={cardStyle}>
         <p style={eyebrowStyle}>YesDay</p>
         <h1 style={titleStyle}>Klientske prihlásenie</h1>
+        <p style={accessInfoStyle}>
+          Klientske konto vznikne po zakúpení balíka. Registračný odkaz a nastavenie hesla vám následne pošleme e-mailom.{' '}
+          <Link href="/#cennik" style={accessLinkStyle}>Pozrieť balíky</Link>
+        </p>
 
         <label style={labelStyle}>
           <span style={labelTextStyle}>Email</span>
@@ -161,10 +166,23 @@ const eyebrowStyle = {
 }
 
 const titleStyle = {
-  margin: "14px 0 28px",
+  margin: "14px 0 14px",
   fontSize: "40px",
   fontWeight: "normal",
   color: "#4f4035",
+}
+
+const accessInfoStyle = {
+  margin: "0 0 28px",
+  color: "#75675e",
+  fontSize: "14px",
+  lineHeight: 1.65,
+}
+
+const accessLinkStyle = {
+  color: "#5f4838",
+  fontWeight: 600,
+  textUnderlineOffset: "3px",
 }
 
 const labelStyle = {

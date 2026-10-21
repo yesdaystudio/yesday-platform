@@ -62,6 +62,7 @@ const COLOR_DARK = '#1a1a1a'
 const COLOR_WHITE = '#ffffff'
 const COLOR_GREY = '#666'
 const COLOR_BORDER = '#e9e9e9'
+const SALES_OPEN = process.env.NEXT_PUBLIC_SALES_OPEN === 'true' || process.env.NODE_ENV !== 'production'
 
 const pricingSectionStyle = {
   background: COLOR_WHITE,
@@ -84,6 +85,17 @@ const sectionIntroStyle = {
   margin: '0 auto 45px',
   color: COLOR_GREY,
   fontSize: '0.98rem',
+}
+
+const prelaunchNoticeStyle = {
+  maxWidth: '720px',
+  margin: '-20px auto 38px',
+  padding: '14px 18px',
+  border: '1px solid #eadfce',
+  background: '#fffaf3',
+  color: '#68594d',
+  fontSize: '0.9rem',
+  lineHeight: 1.6,
 }
 
 const pricingGridStyle = {
@@ -185,6 +197,11 @@ export default function PricingSection() {
             Vyberte si úroveň digitálneho svadobného riešenia podľa toho, či
             chcete elegantný základ alebo plne personalizovaný systém.
           </p>
+          {!SALES_OPEN ? (
+            <p style={prelaunchNoticeStyle}>
+              Online objednávky práve pripravujeme. O balík môžete prejaviť nezáväzný záujem a ozveme sa vám pred spustením.
+            </p>
+          ) : null}
 
           <div style={pricingGridStyle}>
             {PACKAGES.map((pkg) => (
@@ -206,12 +223,12 @@ export default function PricingSection() {
                     </li>
                   ))}
                 </ul>
-                {pkg.customQuote ? (
+                {pkg.customQuote || !SALES_OPEN ? (
                   <a
-                    href="mailto:info.yesdaystudio@gmail.com?subject=Nez%C3%A1v%C3%A4zn%C3%BD%20z%C3%A1ujem%20o%20bal%C3%ADk%20Atelier"
+                    href={`mailto:info.yesdaystudio@gmail.com?subject=Nez%C3%A1v%C3%A4zn%C3%BD%20z%C3%A1ujem%20o%20bal%C3%ADk%20${encodeURIComponent(pkg.name)}`}
                     style={priceButtonStyle}
                   >
-                    Nezáväzne sa informovať
+                    Mám záujem
                   </a>
                 ) : (
                   <button

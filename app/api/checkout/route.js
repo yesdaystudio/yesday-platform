@@ -25,6 +25,14 @@ const PACKAGE_PRICE_DATA = {
 export async function POST(request) {
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+  const salesOpen = process.env.SALES_OPEN === 'true' || process.env.NODE_ENV !== 'production'
+
+  if (!salesOpen) {
+    return NextResponse.json(
+      { error: 'Objednávky zatiaľ pripravujeme. Napíšte nám a ozveme sa vám medzi prvými.' },
+      { status: 503 }
+    )
+  }
 
   if (!stripeSecretKey) {
     return NextResponse.json(
@@ -37,6 +45,15 @@ export async function POST(request) {
     return NextResponse.json(
       { error: 'NEXT_PUBLIC_SITE_URL is not configured' },
       { status: 500 }
+    )
+  }
+
+  const isPublicProductionSite = /https:\/\/(?:www\.)?yesdaystudio\.com(?:\/|$)/i.test(siteUrl)
+  if (isPublicProductionSite && stripeSecretKey.startsWith('sk_test_')) {
+    console.error('[checkout] Blocked test Stripe key on the public production site')
+    return NextResponse.json(
+      { error: 'Objednávky zatiaľ pripravujeme. Napíšte nám a ozveme sa vám medzi prvými.' },
+      { status: 503 }
     )
   }
 
