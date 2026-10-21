@@ -52,15 +52,20 @@
 .signatureWedding__heroShade { position: absolute; z-index: -1; inset: 0; background: linear-gradient(90deg, rgba(20,31,23,.48), rgba(20,31,23,.09) 48%, rgba(20,31,23,.34)); }
 .signatureWedding--penelope .signatureWedding__heroShade { background: linear-gradient(90deg, rgba(255,250,246,.24), rgba(255,250,246,.02) 50%, rgba(255,250,246,.16)); }
 .signatureWedding__heroCopy { display: grid; justify-items: center; width: min(92%, 900px); padding: 70px 20px; color: #fffdf7; text-align: center; text-shadow: 0 2px 28px rgba(19,27,20,.42); }
-.signatureWedding--penelope .signatureWedding__heroCopy { color: #5a3f45; text-shadow: 0 1px 20px rgba(255,252,248,.9); }
+.signatureWedding--penelope .signatureWedding__heroCopy { color: var(--signature-ink); text-shadow: 0 1px 20px rgba(255,252,248,.9); }
 .signatureWedding__heroCopy > p,
 .signatureWedding__eyebrow { margin: 0 0 22px; font-family: Inter, Arial, sans-serif; font-size: 11px; font-weight: 500; letter-spacing: .28em; text-transform: uppercase; }
 .signatureWedding__heroCopy h1 { display: grid; margin: 0; font-size: clamp(68px, 12vw, 150px); font-weight: 400; letter-spacing: -.045em; line-height: .68; }
 .signatureWedding__heroCopy h1 i { margin: .12em 0 .08em; font-family: 'Great Vibes', cursive; font-size: .55em; font-weight: 400; line-height: .8; }
 .signatureWedding--penelope .signatureWedding__heroCopy h1 { line-height: .76; }
-.signatureWedding--penelope .signatureWedding__heroCopy h1 i { color: #a96f7b; }
+.signatureWedding--penelope .signatureWedding__heroCopy h1 i { color: color-mix(in srgb, var(--signature-ink) 68%, #d9a7b0); }
 .signatureWedding--font-editorial .signatureWedding__heroCopy h1 { line-height: .86; }
 .signatureWedding--font-editorial .signatureWedding__heroCopy h1 i { margin: .24em 0 .18em; font-size: .46em; line-height: 1; }
+.signatureWedding--font-editorial .signatureWedding__brand { letter-spacing: .01em; }
+.signatureWedding--font-editorial h1,
+.signatureWedding--font-editorial h2,
+.signatureWedding--font-editorial h3,
+.signatureWedding--font-editorial strong { font-family: 'Playfair Display', Georgia, serif; }
 .signatureWedding__heroCopy strong { margin-top: 38px; font-family: Inter, Arial, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: .24em; text-transform: uppercase; }
 
 .signatureWedding__section { width: min(calc(100% - 48px), 1120px); margin: 0 auto; padding: clamp(76px, 10vw, 132px) 0; }

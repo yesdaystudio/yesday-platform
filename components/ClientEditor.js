@@ -11,7 +11,7 @@ import {
 } from "../lib/dresscodePalette"
 import { DESIGN_CUSTOMIZATION_OPTIONS } from "../lib/designCustomization"
 
-export default function ClientEditor({ slug: slugProp, onProjectSaved, demoData, onDemoSave }) {
+export default function ClientEditor({ slug: slugProp, onProjectSaved, demoData, onDemoSave, embedded = false }) {
   const params = useParams()
   const slug = slugProp || params?.slug
   const router = useRouter()
@@ -237,8 +237,7 @@ export default function ClientEditor({ slug: slugProp, onProjectSaved, demoData,
       reception_venue_address: receptionVenueAddress,
     }
 
-    const supportsDesignCustomization = Object.hasOwn(project || {}, "design_font_variant") && Object.hasOwn(project || {}, "design_text_color")
-    if (supportsDesignCustomization) {
+    if (DESIGN_CUSTOMIZATION_OPTIONS[project?.design_family]) {
       projectPayload.design_font_variant = designFontVariant
       projectPayload.design_text_color = designTextColor
     }
@@ -366,12 +365,12 @@ export default function ClientEditor({ slug: slugProp, onProjectSaved, demoData,
   }
 
   return (
-    <main style={pageStyle}>
-      <form onSubmit={handleSubmit} style={cardStyle}>
-        <p style={eyebrowStyle}>Klientska zóna</p>
-        <h1 style={titleStyle}>Upraviť svadobný web</h1>
+    <main style={embedded ? embeddedPageStyle : pageStyle}>
+      <form onSubmit={handleSubmit} style={embedded ? embeddedCardStyle : cardStyle}>
+        {!embedded ? <p style={eyebrowStyle}>Klientska zóna</p> : null}
+        <h1 style={embedded ? embeddedTitleStyle : titleStyle}>Upraviť svadobný web</h1>
 
-        {!demoData && DESIGN_CUSTOMIZATION_OPTIONS[project?.design_family] && Object.hasOwn(project || {}, "design_font_variant") ? (
+        {!demoData && DESIGN_CUSTOMIZATION_OPTIONS[project?.design_family] ? (
           <>
             <h2 style={subtitleStyle}>Vzhľad šablóny</h2>
             <label style={labelStyle}>
@@ -648,12 +647,24 @@ const pageStyle = {
   fontFamily: "Georgia, Times New Roman, serif",
 }
 
+const embeddedPageStyle = {
+  color: "#4f4035",
+  fontFamily: "Georgia, Times New Roman, serif",
+}
+
 const cardStyle = {
   maxWidth: "860px",
   margin: "0 auto",
   padding: "40px",
   borderRadius: 0,
   background: "rgba(255, 250, 244, 0.92)",
+}
+
+const embeddedCardStyle = {
+  width: "100%",
+  margin: 0,
+  padding: 0,
+  background: "transparent",
 }
 
 const eyebrowStyle = {
@@ -668,6 +679,12 @@ const titleStyle = {
   margin: "16px 0 28px",
   fontSize: "42px",
   fontWeight: "normal",
+}
+
+const embeddedTitleStyle = {
+  ...titleStyle,
+  marginTop: 0,
+  fontSize: "clamp(30px, 8vw, 40px)",
 }
 
 const subtitleStyle = {

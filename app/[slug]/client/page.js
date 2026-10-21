@@ -9,6 +9,7 @@ import DianaStationerySet from "../../../components/DianaStationerySet"
 import AlternativeStationerySet from "../../../components/AlternativeStationerySet"
 import QRCode from "qrcode"
 import supabase from "../../../lib/supabase"
+import styles from "./client-zone.module.css"
 
 const TABS = {
   EDITOR: "Editor",
@@ -129,15 +130,15 @@ export default function ClientZonePage() {
   }
 
   return (
-    <main style={pageStyle}>
-      <section style={cardStyle}>
-        <div style={headerRowStyle}>
+    <main className={styles.page}>
+      <section className={styles.shell}>
+        <div className={styles.header}>
           <div>
             <p style={eyebrowStyle}>Klientska zóna</p>
             <h1 style={titleStyle}>Správa svadobného webu</h1>
           </div>
 
-          <div style={headerActionsStyle}>
+          <div className={styles.headerActions}>
             {weddingWebsiteUrl ? (
               <a href={weddingWebsiteUrl} target="_blank" rel="noopener noreferrer" style={guestWebsiteLinkStyle}>
                 Zobraziť web pre hostí
@@ -149,7 +150,7 @@ export default function ClientZonePage() {
           </div>
         </div>
 
-        <div style={tabsRowStyle}>
+        <div className={styles.tabs}>
           <TabButton
             label={TABS.EDITOR}
             isActive={activeTab === TABS.EDITOR}
@@ -174,9 +175,9 @@ export default function ClientZonePage() {
           ) : null}
         </div>
 
-        <section style={contentStyle}>
+        <section className={styles.content}>
           {activeTab === TABS.EDITOR && (
-            <ClientEditor slug={slug} onProjectSaved={setProject} />
+            <ClientEditor slug={slug} onProjectSaved={setProject} embedded />
           )}
 
           {activeTab === TABS.DASHBOARD && (
@@ -239,17 +240,6 @@ const pageStyle = {
   justifyContent: "center",
 }
 
-const cardStyle = {
-  width: "100%",
-  maxWidth: "860px",
-  marginTop: "28px",
-  borderRadius: 0,
-  background: "rgba(255, 250, 244, 0.9)",
-  border: "1px solid rgba(138, 111, 84, 0.15)",
-  boxShadow: "0 20px 60px rgba(106, 82, 58, 0.12)",
-  padding: "34px 22px 28px",
-}
-
 const eyebrowStyle = {
   margin: 0,
   fontSize: "12px",
@@ -263,21 +253,6 @@ const titleStyle = {
   fontSize: "clamp(28px, 5vw, 42px)",
   fontWeight: "normal",
   color: "#3f3128",
-}
-
-const headerRowStyle = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "flex-start",
-  gap: "12px",
-  flexWrap: "wrap",
-}
-
-const headerActionsStyle = {
-  display: "flex",
-  alignItems: "center",
-  gap: "10px",
-  flexWrap: "wrap",
 }
 
 const guestWebsiteLinkStyle = {
@@ -304,12 +279,6 @@ const logoutButtonStyle = {
   fontFamily: "inherit",
 }
 
-const tabsRowStyle = {
-  display: "flex",
-  gap: "10px",
-  flexWrap: "wrap",
-}
-
 const tabButtonStyle = {
   appearance: "none",
   borderWidth: "1px",
@@ -328,15 +297,6 @@ const activeTabButtonStyle = {
   background: "#5f4838",
   color: "#fffaf5",
   borderColor: "#5f4838",
-}
-
-const contentStyle = {
-  marginTop: "18px",
-  borderRadius: 0,
-  background: "rgba(255, 251, 246, 0.9)",
-  border: "1px solid rgba(176, 139, 105, 0.16)",
-  padding: "24px",
-  minHeight: "180px",
 }
 
 const qrSectionStyle = {

@@ -2,6 +2,8 @@ import supabase from '../../lib/supabase'
 import { sortScheduleItemsChronologically } from '../../lib/schedule'
 import WeddingWebsite, { WeddingNotFound } from '../../components/WeddingWebsite'
 
+export const dynamic = 'force-dynamic'
+
 export default async function WeddingPage({ params }) {
   const resolvedParams = await params
   const slug = resolvedParams?.slug
