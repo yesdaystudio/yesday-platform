@@ -364,19 +364,23 @@ export default function ClientEditor({ slug: slugProp, onProjectSaved, demoData,
     return <main style={pageStyle}>{error}</main>
   }
 
+  const designOptions = DESIGN_CUSTOMIZATION_OPTIONS[project?.design_family]
+  const activeDesignFont = designOptions?.fonts.find((option) => option.value === designFontVariant) || designOptions?.fonts[0]
+  const activeDesignColor = designOptions?.colors.find((option) => option.value === designTextColor) || designOptions?.colors[0]
+
   return (
     <main style={embedded ? embeddedPageStyle : pageStyle}>
       <form onSubmit={handleSubmit} style={embedded ? embeddedCardStyle : cardStyle}>
         {!embedded ? <p style={eyebrowStyle}>Klientska zóna</p> : null}
         <h1 style={embedded ? embeddedTitleStyle : titleStyle}>Upraviť svadobný web</h1>
 
-        {!demoData && DESIGN_CUSTOMIZATION_OPTIONS[project?.design_family] ? (
+        {!demoData && designOptions ? (
           <>
             <h2 style={subtitleStyle}>Vzhľad šablóny</h2>
             <label style={labelStyle}>
               <span style={labelTextStyle}>Písmo</span>
               <select value={designFontVariant} onChange={(event) => setDesignFontVariant(event.target.value)} style={inputStyle}>
-                {DESIGN_CUSTOMIZATION_OPTIONS[project.design_family].fonts.map((option) => (
+                {designOptions.fonts.map((option) => (
                   <option key={option.value} value={option.value}>{option.label}</option>
                 ))}
               </select>
@@ -384,7 +388,7 @@ export default function ClientEditor({ slug: slugProp, onProjectSaved, demoData,
             <fieldset style={paletteFieldsetStyle}>
               <legend style={labelTextStyle}>Farba písma</legend>
               <div style={paletteOptionsStyle}>
-                {DESIGN_CUSTOMIZATION_OPTIONS[project.design_family].colors.map((option) => (
+                {designOptions.colors.map((option) => (
                   <button
                     key={option.value}
                     type="button"
@@ -398,6 +402,13 @@ export default function ClientEditor({ slug: slugProp, onProjectSaved, demoData,
                 ))}
               </div>
             </fieldset>
+            <div style={designPreviewStyle}>
+              <span style={designPreviewLabelStyle}>Živý náhľad</span>
+              <p style={{ ...designPreviewTextStyle, color: activeDesignColor?.hex, fontFamily: activeDesignFont?.family }}>
+                {projectForm.couple_display_name || "Vaše mená"}
+              </p>
+              <small style={designPreviewHelpStyle}>Na svadobnom webe sa zmena zobrazí po uložení.</small>
+            </div>
           </>
         ) : null}
 
@@ -730,6 +741,36 @@ const paletteFieldsetStyle = {
   margin: "-4px 0 22px",
   padding: 0,
   border: 0,
+}
+
+const designPreviewStyle = {
+  margin: "-4px 0 28px",
+  padding: "22px 20px",
+  border: "1px solid rgba(138,111,84,0.15)",
+  background: "#fffdf9",
+  textAlign: "center",
+}
+
+const designPreviewLabelStyle = {
+  display: "block",
+  color: "#8d7a70",
+  fontFamily: "Inter, Arial, sans-serif",
+  fontSize: "10px",
+  letterSpacing: ".18em",
+  textTransform: "uppercase",
+}
+
+const designPreviewTextStyle = {
+  margin: "12px 0 8px",
+  fontSize: "clamp(34px, 8vw, 52px)",
+  fontWeight: 400,
+  lineHeight: 1,
+}
+
+const designPreviewHelpStyle = {
+  color: "#786d69",
+  fontFamily: "Inter, Arial, sans-serif",
+  fontSize: "12px",
 }
 
 const paletteToggleStyle = {
