@@ -14,7 +14,7 @@ export default function DashboardShowcase() {
   return (
     <section id="prehlad-pre-nevestu" className={styles.section} aria-labelledby="bride-view-title">
       <p className={styles.eyebrow}>A čo vidíte vy?</p>
-      <h2 id="bride-view-title" className={styles.title}>Všetko pod kontrolou, bez tabuliek</h2>
+      <h2 id="bride-view-title" className={styles.title}>Všetko pod kontrolou, bez chaotických tabuliek</h2>
       <p className={styles.intro}>
         Každá odpoveď hosťa sa automaticky zaradí do prehľadu. Okamžite vidíte,
         kto príde, čo potrebuje a komu ešte treba priradiť izbu.
