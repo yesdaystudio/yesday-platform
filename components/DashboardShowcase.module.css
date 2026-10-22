@@ -1,0 +1,122 @@
+.section {
+  width: min(1180px, 100%);
+  margin: 92px auto 0;
+  scroll-margin-top: 100px;
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0 0 18px;
+  color: #bd901e;
+  font: 600 0.72rem/1.4 Montserrat, Arial, sans-serif;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.title {
+  max-width: 780px;
+  margin: 0 auto;
+  color: #171717;
+  font: 400 clamp(2.2rem, 5vw, 4.3rem)/1.06 'Playfair Display', Georgia, serif;
+}
+
+.intro {
+  max-width: 800px;
+  margin: 25px auto 42px;
+  color: #6e6a64;
+  font: 400 1rem/1.85 Montserrat, Arial, sans-serif;
+}
+
+.browser {
+  overflow: hidden;
+  border: 1px solid #ded5c8;
+  background: #fff;
+  box-shadow: 0 28px 75px rgba(58, 47, 39, 0.11);
+  text-align: left;
+}
+
+.browserBar {
+  position: relative;
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #e6dfd6;
+  background: #f7f4ef;
+}
+
+.browserBar p {
+  margin: 0;
+  color: #766f68;
+  font: 500 11px/1 Montserrat, Arial, sans-serif;
+  letter-spacing: 0.08em;
+}
+
+.dots {
+  position: absolute;
+  left: 18px;
+  display: flex;
+  gap: 7px;
+}
+
+.dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #d7cec2;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: min(560px, calc(100% - 32px));
+  margin: 28px auto 0;
+  border: 1px solid #71584a;
+}
+
+.tabs button {
+  min-height: 48px;
+  padding: 10px 18px;
+  border: 0;
+  color: #71584a;
+  background: #fff;
+  font: 600 10px/1.4 Montserrat, Arial, sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.tabs button + button {
+  border-left: 1px solid #71584a;
+}
+
+.tabs .activeTab {
+  color: #fff;
+  background: #71584a;
+}
+
+.hint {
+  max-width: 760px;
+  margin: 20px auto 0;
+  padding: 0 20px;
+  color: #7b746d;
+  font: 400 13px/1.7 Montserrat, Arial, sans-serif;
+  text-align: center;
+}
+
+.viewport {
+  max-height: 720px;
+  margin-top: 22px;
+  overflow: auto;
+  border-top: 1px solid #eee8df;
+  background: #fbfaf8;
+}
+
+@media (max-width: 700px) {
+  .section { margin-top: 68px; }
+  .intro { margin-bottom: 30px; padding: 0 14px; }
+  .browserBar p { max-width: 230px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tabs { width: calc(100% - 24px); margin-top: 20px; }
+  .tabs button { min-height: 56px; padding: 8px 10px; font-size: 8px; letter-spacing: 0.1em; }
+  .viewport { max-height: 620px; }
+}

@@ -1,5 +1,6 @@
 import { normalizeDresscodePalette } from '../lib/dresscodePalette'
 import { buildGoogleCalendarUrl } from '../lib/googleCalendar'
+import { buildGoogleMapsSearchUrl } from '../lib/googleMaps'
 import DianaStickyHeader from '../app/[slug]/DianaStickyHeader'
 import AlternativeWeddingWebsite from './AlternativeWeddingWebsite'
 
@@ -26,6 +27,11 @@ export default function WeddingWebsite({ project, websiteContent = {}, scheduleI
   const isDianaHero = designFamily === 'diana'
   const ceremonyTime = formatScheduleTime(project.ceremony_time || scheduleItems[0]?.item_time || scheduleItems[0]?.time)
   const celebrationTime = formatScheduleTime(project.reception_time)
+  const ceremonyMapUrl = buildGoogleMapsSearchUrl(project.venue_name, project.venue_address)
+  const receptionMapUrl = buildGoogleMapsSearchUrl(
+    project.reception_venue_name || project.venue_name,
+    project.reception_venue_address || project.venue_address,
+  )
 
   if (designFamily === 'botanique' || designFamily === 'penelope') {
     return (
@@ -93,6 +99,8 @@ export default function WeddingWebsite({ project, websiteContent = {}, scheduleI
           ceremonyTime={ceremonyTime}
           celebrationTime={celebrationTime}
           googleCalendarUrl={googleCalendarUrl}
+          ceremonyMapUrl={ceremonyMapUrl}
+          receptionMapUrl={receptionMapUrl}
           rsvpHref={rsvpHref}
           styles={themeStyles}
         />
@@ -221,6 +229,8 @@ function DianaEditorialContent({
   ceremonyTime,
   celebrationTime,
   googleCalendarUrl,
+  ceremonyMapUrl,
+  receptionMapUrl,
   rsvpHref,
   styles,
 }) {
@@ -249,6 +259,11 @@ function DianaEditorialContent({
       >
         <p style={styles.editorialTimingVenue}>{project.venue_name || 'Miesto obradu bude doplnené'}</p>
         <p style={styles.editorialTimingAddress}>{project.venue_address || 'Adresa bude doplnená'}</p>
+        {ceremonyMapUrl ? (
+          <a href={ceremonyMapUrl} target="_blank" rel="noopener noreferrer" style={{ ...styles.editorialSecondaryAction, marginTop: '24px' }}>
+            Otvoriť mapu obradu
+          </a>
+        ) : null}
       </DianaEditorialBlock>
 
       <DianaEditorialSplitBlock
@@ -265,6 +280,11 @@ function DianaEditorialContent({
       >
         <p style={styles.editorialCelebrationVenue}>{receptionVenueName}</p>
         <p style={styles.editorialCelebrationAddress}>{receptionVenueAddress}</p>
+        {receptionMapUrl ? (
+          <a href={receptionMapUrl} target="_blank" rel="noopener noreferrer" style={{ ...styles.editorialSecondaryAction, marginTop: '24px' }}>
+            Otvoriť mapu oslavy
+          </a>
+        ) : null}
       </DianaEditorialSplitBlock>
 
       {wc.story_text ? (

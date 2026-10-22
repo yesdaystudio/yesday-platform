@@ -1,5 +1,6 @@
 import { getDesignCustomization } from '../lib/designCustomization'
 import { buildGoogleCalendarUrl } from '../lib/googleCalendar'
+import { buildGoogleMapsSearchUrl } from '../lib/googleMaps'
 
 const THEMES = {
   botanique: {
@@ -29,6 +30,11 @@ export default function AlternativeWeddingWebsite({
   const ceremonyTime = formatTime(project.ceremony_time || scheduleItems[0]?.item_time)
   const receptionTime = formatTime(project.reception_time)
   const googleCalendarUrl = buildGoogleCalendarUrl(project)
+  const ceremonyMapUrl = buildGoogleMapsSearchUrl(project.venue_name, project.venue_address)
+  const receptionMapUrl = buildGoogleMapsSearchUrl(
+    project.reception_venue_name || project.venue_name,
+    project.reception_venue_address || project.venue_address,
+  )
   const palette = websiteContent.dresscode_palette_enabled === true
     ? websiteContent.dresscode_palette || []
     : []
@@ -70,12 +76,14 @@ export default function AlternativeWeddingWebsite({
           <strong>{ceremonyTime}</strong>
           <h2>{project.venue_name || 'Miesto obradu'}</h2>
           <p>{project.venue_address}</p>
+          {ceremonyMapUrl ? <a className="signatureWedding__mapAction" href={ceremonyMapUrl} target="_blank" rel="noopener noreferrer">Otvoriť mapu obradu</a> : null}
         </article>
         <article>
           <p className="signatureWedding__eyebrow">Oslava</p>
           <strong>{receptionTime}</strong>
           <h2>{project.reception_venue_name || project.venue_name || 'Miesto oslavy'}</h2>
           <p>{project.reception_venue_address || project.venue_address}</p>
+          {receptionMapUrl ? <a className="signatureWedding__mapAction" href={receptionMapUrl} target="_blank" rel="noopener noreferrer">Otvoriť mapu oslavy</a> : null}
         </article>
       </section>
 
