@@ -388,10 +388,13 @@ const heroEyebrowStyle = {
 }
 
 const heroHeadingStyle = {
-  fontSize: 'clamp(2.8rem, 7vw, 5rem)',
-  lineHeight: 1.08,
-  letterSpacing: '-0.5px',
-  margin: 0,
+  maxWidth: '820px',
+  fontSize: 'clamp(2.15rem, 4.7vw, 3.85rem)',
+  fontWeight: 400,
+  lineHeight: 1.12,
+  letterSpacing: '-0.02em',
+  textWrap: 'balance',
+  margin: '0 auto',
   color: COLOR_DARK,
 }
 
