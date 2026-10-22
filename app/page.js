@@ -8,24 +8,24 @@ const sansClassName = 'font-montserrat'
 
 const BENEFITS = [
   {
-    title: 'Všetko dôležité v jednom QR kóde',
+    title: 'Všetko spolu ladí',
     description:
-      'Hostia naskenujú QR kód na pozvánke a okamžite sa dostanú ku kľúčovým informáciám - od harmonogramu po praktické detaily.',
+      'Svadobný web, pozvánka aj QR kartička vzniknú v jednom štýle, prispôsobenom vašej svadbe.',
   },
   {
-    title: 'Dokonalý vizuálny súlad',
+    title: 'Hostia majú jasno',
     description:
-      'Pozvánka, svadobný web a ďalšie výstupy môžu pôsobiť ako jeden premyslený celok s jednotným štýlom.',
+      'Program, miesta, mapy, ubytovanie aj RSVP nájdu jednoducho na vašom svadobnom webe.',
   },
   {
-    title: 'Menej chaosu okolo RSVP',
+    title: 'Bez ručného prepisovania',
     description:
-      'Odpovede hostí vidíte prehľadne na jednom mieste bez telefonátov, tabuliek a nejasností.',
+      'Účasť, deti, jedlá, alergie, doprava a ubytovanie sa z RSVP automaticky uložia do prehľadu.',
   },
   {
-    title: 'Flexibilné riešenie bez stresu',
+    title: 'Ubytovanie vyriešite ľahko',
     description:
-      'Ak sa niečo zmení, informácie na webe upravíte rýchlo. Komunikácia ostáva aktuálna a čistá.',
+      'Priradíte hotel a izbu a hosťovi jedným klikom odošlete pripravený e-mail so všetkými informáciami.',
   },
 ]
 
@@ -163,13 +163,14 @@ function Benefits() {
   return (
     <section style={sectionStyle}>
       <div style={sectionHeadingBlockStyle}>
-        <p style={sectionLabelStyle}>Prečo spojiť pozvánku a svadobný web</p>
-        <h2 className={serifClassName} style={sectionHeadingStyle}>
-          Premyslený systém pre pár aj hostí
+        <p style={sectionLabelStyle}>Prečo YesDay</p>
+        <h2 className={serifClassName} style={benefitsHeadingStyle}>
+          Krásny zážitok pre hostí. Menej starostí pre vás.
         </h2>
         <p style={sectionIntroStyle}>
-          Nekupujete len pekný dizajn. Získavate pokojnú organizáciu, jasnú
-          komunikáciu a jednotný výsledok, ktorý pôsobí kvalitne od prvého dojmu.
+          Získate zladený svadobný web, pozvánku a QR kartičku spolu s RSVP,
+          prehľadom hostí a ubytovaním. Jeden systém, ktorý dobre vyzerá a zároveň
+          vám reálne šetrí čas.
         </p>
       </div>
 
@@ -511,6 +512,15 @@ const sectionHeadingStyle = {
   marginBottom: '18px',
 }
 
+const benefitsHeadingStyle = {
+  maxWidth: '820px',
+  margin: '0 auto 18px',
+  fontSize: 'clamp(2rem, 4vw, 3rem)',
+  fontWeight: 400,
+  lineHeight: 1.18,
+  textWrap: 'balance',
+}
+
 const sectionIntroStyle = {
   maxWidth: '760px',
   margin: '0 auto 45px',
@@ -519,17 +529,17 @@ const sectionIntroStyle = {
 }
 
 const benefitsGridStyle = {
-  maxWidth: '1180px',
+  maxWidth: '960px',
   margin: '50px auto 0',
   display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 420px), 1fr))',
   gap: '24px',
 }
 
 const benefitCardStyle = {
   background: COLOR_WHITE,
   border: `1px solid ${COLOR_BORDER}`,
-  padding: '32px 28px',
+  padding: '36px 34px',
   textAlign: 'left',
 }
 
