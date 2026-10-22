@@ -347,7 +347,7 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
           <div>
             <p style={composerEyebrowStyle}>Ubytovania</p>
             <h2 style={catalogTitleStyle}>Hotely a informácie pre hostí</h2>
-            <p style={catalogHelpStyle}>Každé ubytovanie vyplníte iba raz. Pri hosťovi potom vyberiete hotel a doplníte číslo izby.</p>
+            <p style={catalogHelpStyle}>Každé ubytovanie vyplníte iba raz. Pri hosťovi potom vyberiete hotel, doplníte číslo izby a jedným klikom mu odošlete e-mail s adresou, check-inom, check-outom aj číslom izby.</p>
           </div>
           <button type="button" onClick={addAccommodation} style={emailButtonStyle}>+ Pridať ubytovanie</button>
         </div>

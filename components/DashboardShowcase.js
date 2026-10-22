@@ -50,7 +50,7 @@ export default function DashboardShowcase() {
         <p className={styles.hint}>
           {view === 'guests'
             ? 'Dospelí, deti, menu, alergie, doprava a požiadavky na ubytovanie na jednom mieste.'
-            : 'Hotely vyplníte raz, hosťom priradíte izby a pripravíte e-mail s informáciami.'}
+            : 'Hotely vyplníte raz. Po priradení izby jedným klikom odošlete hosťovi e-mail s hotelom, adresou, check-inom, check-outom aj číslom izby.'}
         </p>
 
         <div className={styles.viewport} role="tabpanel">

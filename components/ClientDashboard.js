@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import supabase from '../lib/supabase'
+import styles from './ClientDashboard.module.css'
 
 export default function ClientDashboard({ slug: slugProp, demoProject, demoResponses }) {
   const params = useParams()
@@ -275,35 +276,37 @@ export default function ClientDashboard({ slug: slugProp, demoProject, demoRespo
     <main style={pageStyle}>
       <h1 style={titleStyle}>{project?.couple_display_name || 'Dashboard'}</h1>
 
-      <section style={statsGridStyle}>
+      <section
+        className={`${styles.statsGrid} ${showAccommodationAndTransport ? styles.statsGridFull : styles.statsGridEssential}`}
+      >
         <StatCard label="RSVP odpovede" value={stats.totalResponses} />
-        <StatCard label="Prichádzajúce odpovede" value={stats.attendingResponses} />
+        <StatCard label="Potvrdené účasti" value={stats.attendingResponses} />
         <StatCard
-          label="Dospelí spolu"
+          label="Dospelí"
           value={stats.adults}
           onClick={() => setActiveSummary('adults')}
         />
         <StatCard
-          label="Deti spolu"
+          label="Deti"
           value={stats.children}
           onClick={() => setActiveSummary('children')}
         />
         <StatCard label="Hostia spolu" value={stats.totalGuests} />
         <StatCard
-          label="Počet alergií"
+          label="Uvedené alergie"
           value={stats.allergies}
           onClick={() => setActiveSummary('allergies')}
         />
         {showAccommodationAndTransport ? (
           <StatCard
-            label="Žiadosti o ubytovanie"
+            label="Potrebujú ubytovanie"
             value={stats.accommodation}
             onClick={() => setActiveSummary('accommodation')}
           />
         ) : null}
         {showAccommodationAndTransport ? (
           <StatCard
-            label="Žiadosti o transport"
+            label="Potrebujú dopravu"
             value={stats.transportRequests}
             onClick={() => setActiveSummary('transport')}
           />
@@ -463,18 +466,19 @@ function StatCard({ label, value, onClick }) {
       <button
         type="button"
         onClick={onClick}
+        className={`${styles.statCard} ${styles.interactiveStatCard}`}
         style={{ ...statCardStyle, ...interactiveStatCardStyle }}
         aria-label={`${label}: ${value ?? 0}. Zobraziť zoznam.`}
       >
         <p style={statLabelStyle}>{label}</p>
         <p style={statValueStyle}>{value ?? '—'}</p>
-        <span style={statActionStyle}>Zobraziť zoznam</span>
+        <span style={statActionStyle}>Pozrieť mená</span>
       </button>
     )
   }
 
   return (
-    <article style={statCardStyle}>
+    <article className={styles.statCard} style={statCardStyle}>
       <p style={statLabelStyle}>{label}</p>
       <p style={statValueStyle}>{value ?? '—'}</p>
     </article>
@@ -633,17 +637,11 @@ const titleStyle = {
   color: '#3f3128',
 }
 
-const statsGridStyle = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
-  gap: '12px',
-}
-
 const statCardStyle = {
-  background: 'rgba(255, 251, 246, 0.92)',
-  border: '1px solid rgba(176, 139, 105, 0.2)',
+  background: 'rgba(255, 253, 249, 0.96)',
+  border: 0,
   borderRadius: 0,
-  padding: '12px 14px',
+  padding: '16px 17px 14px',
 }
 
 const interactiveStatCardStyle = {
@@ -657,27 +655,29 @@ const interactiveStatCardStyle = {
 
 const statLabelStyle = {
   margin: 0,
-  fontSize: '12px',
-  letterSpacing: '0.05em',
+  fontSize: '10px',
+  lineHeight: 1.5,
+  letterSpacing: '0.12em',
   textTransform: 'uppercase',
   color: '#8d735f',
 }
 
 const statValueStyle = {
-  margin: '6px 0 0',
-  fontSize: '26px',
+  margin: '9px 0 0',
+  fontFamily: 'inherit',
+  fontSize: '30px',
+  fontWeight: 400,
+  lineHeight: 1,
   color: '#4a392d',
 }
 
 const statActionStyle = {
   display: 'block',
-  marginTop: '8px',
-  fontSize: '11px',
-  letterSpacing: '0.04em',
+  marginTop: '11px',
+  fontSize: '9px',
+  letterSpacing: '0.1em',
   textTransform: 'uppercase',
   color: '#8d735f',
-  textDecoration: 'underline',
-  textUnderlineOffset: '3px',
 }
 
 const modalBackdropStyle = {

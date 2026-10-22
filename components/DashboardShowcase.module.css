@@ -108,8 +108,13 @@
   max-height: 720px;
   margin-top: 22px;
   overflow: auto;
+  scrollbar-width: none;
   border-top: 1px solid #eee8df;
   background: #fbfaf8;
+}
+
+.viewport::-webkit-scrollbar {
+  display: none;
 }
 
 @media (max-width: 700px) {

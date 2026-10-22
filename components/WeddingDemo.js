@@ -141,7 +141,7 @@ export default function WeddingDemo({ initialValues }) {
           <p className={styles.hint}>Prehľad hostí z klientskej zóny: dospelí, deti, alergie, požiadavky na ubytovanie a dopravu. Kliknutím na jednotlivé prehľady zobrazíte mená a detaily.</p>
           <ClientDashboard demoProject={project} demoResponses={responses} />
         </div>}
-        {tab === 'accommodation' && <div className={styles.dashboard}><p className={styles.hint}>Vyskúšajte priradiť hotel, izbu, doplniť poznámku a pripraviť e-mail hosťovi. Zmeny sa uchovajú pri prepínaní záložiek.</p><ClientAccommodation demoProject={project} demoResponses={responses} onDemoResponseUpdate={updateDemoResponse} /></div>}
+        {tab === 'accommodation' && <div className={styles.dashboard}><p className={styles.hint}>Vyskúšajte priradiť hotel a izbu. Jedným klikom potom odošlete hosťovi e-mail s adresou, check-inom, check-outom aj číslom izby. Zmeny sa uchovajú pri prepínaní záložiek.</p><ClientAccommodation demoProject={project} demoResponses={responses} onDemoResponseUpdate={updateDemoResponse} /></div>}
         {tab === 'rsvp' && <div className={styles.rsvp}><DemoRsvp onSubmit={submitRsvp} /></div>}
         <p role="status" className={styles.hint}>{notice}</p>
       </section>
