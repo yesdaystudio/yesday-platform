@@ -132,6 +132,21 @@ export default function ClientZonePage() {
     }
   }
 
+  function rememberOnboardingStep(key) {
+    if (!slug) return
+
+    try {
+      const storageKey = `yesday:onboarding:${slug}`
+      const current = JSON.parse(window.localStorage.getItem(storageKey) || "{}")
+      window.localStorage.setItem(storageKey, JSON.stringify({ ...current, [key]: true }))
+    } catch {}
+  }
+
+  function openStationeryTab() {
+    rememberOnboardingStep("stationery")
+    setActiveTab(TABS.QR_CODE)
+  }
+
   if (loading) {
     return <main style={pageStyle}>Načítavam klientsku zónu...</main>
   }
@@ -180,7 +195,7 @@ export default function ClientZonePage() {
           <TabButton
             label={TABS.QR_CODE}
             isActive={activeTab === TABS.QR_CODE}
-            onClick={() => setActiveTab(TABS.QR_CODE)}
+            onClick={openStationeryTab}
           />
           {showAccommodationTab ? (
             <TabButton
@@ -201,7 +216,7 @@ export default function ClientZonePage() {
               weddingWebsiteUrl={weddingWebsiteUrl}
               qrReady={Boolean(qrDataUrl)}
               onOpenEditor={() => setActiveTab(TABS.EDITOR)}
-              onOpenStationery={() => setActiveTab(TABS.QR_CODE)}
+              onOpenStationery={openStationeryTab}
             />
           )}
 
