@@ -115,7 +115,7 @@ function Nav() {
           Kontakty
         </Link>
         <Link href="/login" style={navLinkStyle}>
-          Prihlásenie pre klientov
+          Klientska zóna
         </Link>
       </nav>
     </header>

@@ -89,11 +89,11 @@ export default function LoginPage() {
   return (
     <main style={pageStyle}>
       <form onSubmit={handleLogin} style={cardStyle}>
-        <p style={eyebrowStyle}>YesDay</p>
-        <h1 style={titleStyle}>Klientske prihlásenie</h1>
+        <p style={eyebrowStyle}>Klientska zóna · pre zákazníčky</p>
+        <h1 style={titleStyle}>Vitajte späť</h1>
         <p style={accessInfoStyle}>
-          Klientske konto vznikne po zakúpení balíka. Registračný odkaz a nastavenie hesla vám následne pošleme e-mailom.{' '}
-          <Link href="/#cennik" style={accessLinkStyle}>Pozrieť balíky</Link>
+          Prístup získate po zakúpení balíka. Na e-mail z objednávky vám pošleme
+          odkaz na vytvorenie hesla.
         </p>
 
         <label style={labelStyle}>
@@ -131,6 +131,11 @@ export default function LoginPage() {
           {resetting ? "Odosielam resetovací e-mail..." : "Zabudli ste heslo?"}
         </button>
 
+        <p style={purchaseInfoStyle}>
+          Ešte nemáte YesDay?{' '}
+          <Link href="/#cennik" style={accessLinkStyle}>Pozrieť balíky</Link>
+        </p>
+
         {message ? <p style={successStyle}>{message}</p> : null}
         {error ? <p style={errorStyle}>{error}</p> : null}
       </form>
@@ -152,6 +157,7 @@ const cardStyle = {
   width: "100%",
   maxWidth: "480px",
   padding: "42px",
+  boxSizing: "border-box",
   borderRadius: "28px",
   background: "rgba(255, 250, 244, 0.94)",
   boxShadow: "0 20px 60px rgba(106, 82, 58, 0.12)",
@@ -185,6 +191,16 @@ const accessLinkStyle = {
   textUnderlineOffset: "3px",
 }
 
+const purchaseInfoStyle = {
+  margin: "22px 0 0",
+  paddingTop: "20px",
+  borderTop: "1px solid rgba(138,111,84,0.18)",
+  color: "#75675e",
+  fontSize: "14px",
+  lineHeight: 1.6,
+  textAlign: "center",
+}
+
 const labelStyle = {
   display: "block",
   marginBottom: "20px",
@@ -198,6 +214,7 @@ const labelTextStyle = {
 
 const inputStyle = {
   width: "100%",
+  boxSizing: "border-box",
   padding: "14px",
   borderRadius: "16px",
   border: "1px solid rgba(138,111,84,0.22)",
