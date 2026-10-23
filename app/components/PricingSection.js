@@ -1,7 +1,24 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import Image from 'next/image'
 import CheckoutModal from './CheckoutModal'
+
+const DESIGNS = {
+  diana: {
+    name: 'Diana',
+    image: '/templates/diana/diana-anton-hero.png',
+  },
+  penelope: {
+    name: 'Penelope',
+    image: '/templates/penelope/hero-v2.jpg',
+  },
+  botanique: {
+    name: 'Botanique',
+    image: '/templates/botanique/hero.jpg',
+  },
+}
 
 const PACKAGES = [
   {
@@ -98,6 +115,67 @@ const prelaunchNoticeStyle = {
   lineHeight: 1.6,
 }
 
+const selectedDesignStyle = {
+  maxWidth: '960px',
+  margin: '0 auto 38px',
+  padding: '16px',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '20px',
+  flexWrap: 'wrap',
+  border: '1px solid #ded5c8',
+  background: '#f8f4ed',
+  textAlign: 'left',
+}
+
+const selectedDesignImageStyle = {
+  width: '148px',
+  height: '94px',
+  flex: '0 0 148px',
+  objectFit: 'cover',
+}
+
+const selectedDesignCopyStyle = {
+  minWidth: '190px',
+  flex: '1 1 260px',
+}
+
+const selectedDesignLabelStyle = {
+  margin: '0 0 5px',
+  color: '#9a7a54',
+  fontSize: '10px',
+  fontWeight: 600,
+  letterSpacing: '1.8px',
+  textTransform: 'uppercase',
+}
+
+const selectedDesignTitleStyle = {
+  margin: '0 0 4px',
+  color: COLOR_DARK,
+  fontFamily: "'Playfair Display', Georgia, serif",
+  fontSize: '1.45rem',
+  fontWeight: 400,
+}
+
+const selectedDesignNoteStyle = {
+  margin: 0,
+  color: COLOR_GREY,
+  fontSize: '0.84rem',
+  lineHeight: 1.55,
+}
+
+const changeDesignLinkStyle = {
+  flex: '0 0 auto',
+  padding: '11px 15px',
+  border: '1px solid #6b5544',
+  color: '#4c3b2e',
+  fontSize: '10px',
+  fontWeight: 600,
+  letterSpacing: '1.2px',
+  textDecoration: 'none',
+  textTransform: 'uppercase',
+}
+
 const pricingGridStyle = {
   display: 'grid',
   gap: '28px',
@@ -187,6 +265,26 @@ const priceButtonStyle = {
 
 export default function PricingSection() {
   const [activeModal, setActiveModal] = useState(null)
+  const [selectedDesign, setSelectedDesign] = useState(null)
+  const selectedDesignInfo = selectedDesign ? DESIGNS[selectedDesign] : null
+
+  useEffect(() => {
+    function syncSelectedDesign() {
+      const design = new URLSearchParams(window.location.search).get('design')
+      setSelectedDesign(DESIGNS[design] ? design : null)
+    }
+
+    syncSelectedDesign()
+    window.addEventListener('popstate', syncSelectedDesign)
+    return () => window.removeEventListener('popstate', syncSelectedDesign)
+  }, [])
+
+  function interestHref(pkg) {
+    const subject = `Nezáväzný záujem o balík ${pkg.name}`
+    const designLine = selectedDesignInfo ? `Vybraný dizajn: ${selectedDesignInfo.name}\n` : ''
+    const body = `Dobrý deň,\n\nmám záujem o balík YesDay ${pkg.name}.\n${designLine}\nProsím, kontaktujte ma s ďalšími informáciami.`
+    return `mailto:info.yesdaystudio@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+  }
 
   return (
     <>
@@ -201,6 +299,26 @@ export default function PricingSection() {
             <p style={prelaunchNoticeStyle}>
               Online objednávky práve pripravujeme. O balík môžete prejaviť nezáväzný záujem a ozveme sa vám pred spustením.
             </p>
+          ) : null}
+
+          {selectedDesignInfo ? (
+            <div style={selectedDesignStyle} aria-label={`Vybraný dizajn ${selectedDesignInfo.name}`}>
+              <Image
+                src={selectedDesignInfo.image}
+                alt=""
+                width={296}
+                height={188}
+                style={selectedDesignImageStyle}
+              />
+              <div style={selectedDesignCopyStyle}>
+                <p style={selectedDesignLabelStyle}>Váš vybraný dizajn</p>
+                <h3 style={selectedDesignTitleStyle}>{selectedDesignInfo.name}</h3>
+                <p style={selectedDesignNoteStyle}>Dizajn zostane zachovaný pri výbere balíka aj v objednávke.</p>
+              </div>
+              <Link href={`/ukazka?design=${selectedDesign}`} style={changeDesignLinkStyle}>
+                Zmeniť dizajn
+              </Link>
+            </div>
           ) : null}
 
           <div style={pricingGridStyle}>
@@ -225,7 +343,7 @@ export default function PricingSection() {
                 </ul>
                 {pkg.customQuote || !SALES_OPEN ? (
                   <a
-                    href={`mailto:info.yesdaystudio@gmail.com?subject=Nez%C3%A1v%C3%A4zn%C3%BD%20z%C3%A1ujem%20o%20bal%C3%ADk%20${encodeURIComponent(pkg.name)}`}
+                    href={interestHref(pkg)}
                     style={priceButtonStyle}
                   >
                     Mám záujem
@@ -239,6 +357,7 @@ export default function PricingSection() {
                         name: pkg.name,
                         type: pkg.packageType,
                         price: pkg.price,
+                        design: selectedDesign || 'diana',
                       })
                     }
                   >
@@ -256,6 +375,7 @@ export default function PricingSection() {
           packageName={activeModal.name}
           packageType={activeModal.type}
           packagePrice={activeModal.price}
+          selectedDesign={activeModal.design}
           onClose={() => setActiveModal(null)}
         />
       )}

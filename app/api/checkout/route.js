@@ -22,6 +22,12 @@ const PACKAGE_PRICE_DATA = {
   },
 }
 
+const DESIGN_NAMES = {
+  diana: 'Diana',
+  botanique: 'Botanique',
+  penelope: 'Penelope',
+}
+
 export async function POST(request) {
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
@@ -89,13 +95,14 @@ export async function POST(request) {
 
   const cleanSiteUrl = siteUrl.replace(/\/$/, '')
   const priceData = PACKAGE_PRICE_DATA[package_type]
+  const cleanDesignFamily = ['diana', 'botanique', 'penelope'].includes(String(design_family || '').trim().toLowerCase())
+    ? String(design_family).trim().toLowerCase()
+    : 'diana'
 
   const metadata = {
     package_type,
     couple_display_name: couple_display_name.trim(),
-    design_family: ['diana', 'botanique', 'penelope'].includes(String(design_family || '').trim().toLowerCase())
-      ? String(design_family).trim().toLowerCase()
-      : 'diana',
+    design_family: cleanDesignFamily,
   }
   if (slug && typeof slug === 'string') {
     metadata.slug = slug.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-')
@@ -115,15 +122,15 @@ export async function POST(request) {
             currency: 'eur',
             unit_amount: priceData.unit_amount,
             product_data: {
-              name: priceData.name,
-              description: `Svadobný web YesDay – balík ${priceData.name}`,
+              name: `${priceData.name} · ${DESIGN_NAMES[cleanDesignFamily]}`,
+              description: `Svadobný systém YesDay – dizajn ${DESIGN_NAMES[cleanDesignFamily]}`,
             },
           },
         },
       ],
       metadata,
       success_url: `${cleanSiteUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${cleanSiteUrl}/#ponuka`,
+      cancel_url: `${cleanSiteUrl}/?design=${cleanDesignFamily}#cennik`,
     })
   } catch (err) {
     console.error('[checkout] Stripe session creation failed:', err)

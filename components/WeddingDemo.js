@@ -146,6 +146,6 @@ export default function WeddingDemo({ initialValues }) {
         <p role="status" className={styles.hint}>{notice}</p>
       </section>
     </div>
-    <section className={styles.cta}><h2>Páči sa vám vaša svadba v štýle {designName}?</h2><Link href="/#cennik">Pozrieť balíky</Link></section>
+    <section className={styles.cta}><h2>Páči sa vám vaša svadba v štýle {designName}?</h2><Link href={`/?design=${project.design_family}#cennik`} target="_blank" rel="noopener noreferrer">Pozrieť balíky</Link></section>
   </main>
 }

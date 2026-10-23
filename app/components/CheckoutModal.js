@@ -1,13 +1,21 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 
-export default function CheckoutModal({ packageName, packageType, packagePrice, onClose }) {
+const DESIGNS = {
+  diana: { name: 'Diana', image: '/templates/diana/diana-anton-hero.png' },
+  penelope: { name: 'Penelope', image: '/templates/penelope/hero-v2.jpg' },
+  botanique: { name: 'Botanique', image: '/templates/botanique/hero.jpg' },
+}
+
+export default function CheckoutModal({ packageName, packageType, packagePrice, selectedDesign = 'diana', onClose }) {
   const [email, setEmail] = useState('')
   const [coupleName, setCoupleName] = useState('')
   const [slug, setSlug] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const design = DESIGNS[selectedDesign] || DESIGNS.diana
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -24,7 +32,6 @@ export default function CheckoutModal({ packageName, packageType, packagePrice, 
 
     setLoading(true)
     try {
-      const selectedDesign = new URLSearchParams(window.location.search).get('design')
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -33,7 +40,7 @@ export default function CheckoutModal({ packageName, packageType, packagePrice, 
           couple_display_name: coupleName.trim(),
           slug: slug.trim() || undefined,
           customer_email: email.trim(),
-          design_family: ['diana', 'botanique', 'penelope'].includes(selectedDesign) ? selectedDesign : 'diana',
+          design_family: DESIGNS[selectedDesign] ? selectedDesign : 'diana',
         }),
       })
 
@@ -59,9 +66,14 @@ export default function CheckoutModal({ packageName, packageType, packagePrice, 
           &#x2715;
         </button>
 
-        <p style={modalLabelStyle}>Objednávka</p>
-        <h2 style={modalHeadingStyle}>{packageName}</h2>
-        <p style={modalPriceStyle}>{packagePrice}</p>
+        <p style={modalLabelStyle}>Vaša objednávka</p>
+        <div style={orderSummaryStyle}>
+          <Image src={design.image} alt="" width={184} height={132} style={orderThumbnailStyle} />
+          <div>
+            <h2 style={modalHeadingStyle}>{design.name} + {packageName}</h2>
+            <p style={modalPriceStyle}>{packagePrice}</p>
+          </div>
+        </div>
         <div style={modalDividerStyle} />
 
         <form onSubmit={handleSubmit} noValidate>
@@ -179,6 +191,19 @@ const modalHeadingStyle = {
   fontSize: '2rem',
   fontWeight: 400,
   color: '#1a1a1a',
+}
+
+const orderSummaryStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '16px',
+}
+
+const orderThumbnailStyle = {
+  width: '92px',
+  height: '66px',
+  flex: '0 0 92px',
+  objectFit: 'cover',
 }
 
 const modalPriceStyle = {
