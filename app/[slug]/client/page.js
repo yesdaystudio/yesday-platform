@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import ClientEditor from "../../../components/ClientEditor"
+import ClientOverview from "../../../components/ClientOverview"
 import ClientDashboard from "../../../components/ClientDashboard"
 import ClientAccommodation from "../../../components/ClientAccommodation"
 import DianaStationerySet from "../../../components/DianaStationerySet"
@@ -12,6 +13,7 @@ import supabase from "../../../lib/supabase"
 import styles from "./client-zone.module.css"
 
 const TABS = {
+  OVERVIEW: "Prehľad",
   EDITOR: "Editor",
   DASHBOARD: "Hostia",
   ACCOMMODATION: "Ubytovanie",
@@ -38,11 +40,12 @@ export default function ClientZonePage() {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [accessDenied, setAccessDenied] = useState(false)
-  const [activeTab, setActiveTab] = useState(TABS.EDITOR)
+  const [activeTab, setActiveTab] = useState(TABS.OVERVIEW)
   const [packageType, setPackageType] = useState("signature")
   const [qrDataUrl, setQrDataUrl] = useState("")
   const [qrError, setQrError] = useState("")
   const [project, setProject] = useState(null)
+  const [overviewData, setOverviewData] = useState({ content: null, schedule: [] })
   const baseUrl = getBaseUrl()
   const weddingWebsiteUrl = slug && baseUrl ? `${baseUrl}/${slug}` : ""
   const showAccommodationTab = packageType === "signature" || packageType === "atelier"
@@ -78,6 +81,7 @@ export default function ClientZonePage() {
         } else {
           setProject(projectData)
           setPackageType(String(projectData?.package_type || "signature").toLowerCase().trim())
+          setOverviewData(await loadOverviewData(projectData.id))
         }
       }
 
@@ -121,6 +125,13 @@ export default function ClientZonePage() {
     }
   }, [weddingWebsiteUrl])
 
+  async function handleProjectSaved(updatedProject) {
+    setProject(updatedProject)
+    if (updatedProject?.id) {
+      setOverviewData(await loadOverviewData(updatedProject.id))
+    }
+  }
+
   if (loading) {
     return <main style={pageStyle}>Načítavam klientsku zónu...</main>
   }
@@ -135,7 +146,7 @@ export default function ClientZonePage() {
         <div className={styles.header}>
           <div>
             <p style={eyebrowStyle}>Klientska zóna</p>
-            <h1 style={titleStyle}>Správa svadobného webu</h1>
+            <h1 style={titleStyle}>Vaša svadba v YesDay</h1>
           </div>
 
           <div className={styles.headerActions}>
@@ -151,6 +162,11 @@ export default function ClientZonePage() {
         </div>
 
         <div className={styles.tabs}>
+          <TabButton
+            label={TABS.OVERVIEW}
+            isActive={activeTab === TABS.OVERVIEW}
+            onClick={() => setActiveTab(TABS.OVERVIEW)}
+          />
           <TabButton
             label={TABS.EDITOR}
             isActive={activeTab === TABS.EDITOR}
@@ -176,8 +192,21 @@ export default function ClientZonePage() {
         </div>
 
         <section className={styles.content}>
+          {activeTab === TABS.OVERVIEW && (
+            <ClientOverview
+              slug={slug}
+              project={project}
+              content={overviewData.content}
+              schedule={overviewData.schedule}
+              weddingWebsiteUrl={weddingWebsiteUrl}
+              qrReady={Boolean(qrDataUrl)}
+              onOpenEditor={() => setActiveTab(TABS.EDITOR)}
+              onOpenStationery={() => setActiveTab(TABS.QR_CODE)}
+            />
+          )}
+
           {activeTab === TABS.EDITOR && (
-            <ClientEditor slug={slug} onProjectSaved={setProject} embedded />
+            <ClientEditor slug={slug} onProjectSaved={handleProjectSaved} embedded />
           )}
 
           {activeTab === TABS.DASHBOARD && (
@@ -212,6 +241,28 @@ export default function ClientZonePage() {
       </section>
     </main>
   )
+}
+
+async function loadOverviewData(projectId) {
+  if (!projectId) return { content: null, schedule: [] }
+
+  const [contentResult, scheduleResult] = await Promise.all([
+    supabase
+      .from("website_content")
+      .select("welcome_text, story_text, menu_intro_text")
+      .eq("project_id", projectId)
+      .maybeSingle(),
+    supabase
+      .from("schedule_items")
+      .select("item_time, item_title")
+      .eq("project_id", projectId)
+      .order("sort_order", { ascending: true }),
+  ])
+
+  return {
+    content: contentResult.data || null,
+    schedule: scheduleResult.data || [],
+  }
 }
 
 function TabButton({ label, isActive, onClick }) {
