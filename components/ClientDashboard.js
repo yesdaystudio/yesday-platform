@@ -19,6 +19,8 @@ export default function ClientDashboard({ slug: slugProp, demoProject, demoRespo
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('all')
   const [activeSummary, setActiveSummary] = useState(null)
+  const [deletingResponseId, setDeletingResponseId] = useState('')
+  const [dashboardMessage, setDashboardMessage] = useState('')
 
   const packageType = String(project?.package_type || 'signature').toLowerCase().trim()
   const showAccommodationAndTransport = packageType === 'signature' || packageType === 'atelier'
@@ -208,6 +210,29 @@ export default function ClientDashboard({ slug: slugProp, demoProject, demoRespo
     return value || '-'
   }
 
+  async function removeResponse(response) {
+    if (demoProject || !project?.id || !response?.id) return
+    const confirmed = window.confirm(`Naozaj chcete odstrániť RSVP odpoveď hosťa ${response.guest_name || ''}?`)
+    if (!confirmed) return
+
+    setDeletingResponseId(response.id)
+    setDashboardMessage('')
+    const { error } = await supabase
+      .from('rsvp_responses')
+      .delete()
+      .eq('id', response.id)
+      .eq('project_id', project.id)
+
+    if (error) {
+      console.error('RSVP delete error:', error)
+      setDashboardMessage('Odpoveď sa nepodarilo odstrániť.')
+    } else {
+      setResponses((current) => current.filter((item) => item.id !== response.id))
+      setDashboardMessage('RSVP odpoveď bola odstránená.')
+    }
+    setDeletingResponseId('')
+  }
+
   function getTransport(row) {
     const peopleTransport = Array.isArray(row.people)
       ? row.people.find((person) => String(person?.transport_request || '').trim())?.transport_request
@@ -345,6 +370,8 @@ export default function ClientDashboard({ slug: slugProp, demoProject, demoRespo
         </select>
       </section>
 
+      {dashboardMessage ? <p style={dashboardMessageStyle}>{dashboardMessage}</p> : null}
+
       <section style={responseListStyle}>
         {filteredResponses.length === 0 ? (
           <p style={emptyStyle}>Zatiaľ tu nie sú žiadne odpovede, ktoré zodpovedajú filtru.</p>
@@ -407,6 +434,16 @@ export default function ClientDashboard({ slug: slugProp, demoProject, demoRespo
 
                   <DetailItem label="Poznámka" value={displayValue(row.message)} />
                 </div>
+                {!demoProject ? (
+                  <button
+                    type="button"
+                    onClick={() => removeResponse(row)}
+                    disabled={deletingResponseId === row.id}
+                    style={deleteResponseButtonStyle}
+                  >
+                    {deletingResponseId === row.id ? 'Odstraňujem…' : 'Odstrániť odpoveď'}
+                  </button>
+                ) : null}
               </article>
             )
           })
@@ -880,6 +917,15 @@ const responseListStyle = {
   gap: '12px',
 }
 
+const dashboardMessageStyle = {
+  margin: 0,
+  padding: '10px 12px',
+  border: '1px solid rgba(85, 120, 83, 0.22)',
+  background: 'rgba(235, 244, 232, 0.72)',
+  color: '#3d633d',
+  fontSize: '13px',
+}
+
 const responseCardStyle = {
   background: 'rgba(255, 251, 246, 0.9)',
   border: '1px solid rgba(176, 139, 105, 0.16)',
@@ -1002,6 +1048,19 @@ const detailValueStyle = {
   margin: '4px 0 0',
   color: '#4f4035',
   whiteSpace: 'pre-wrap',
+}
+
+const deleteResponseButtonStyle = {
+  justifySelf: 'start',
+  padding: '7px 0',
+  border: 0,
+  background: 'transparent',
+  color: '#8a4f4f',
+  fontFamily: 'inherit',
+  fontSize: '12px',
+  textDecoration: 'underline',
+  textUnderlineOffset: '3px',
+  cursor: 'pointer',
 }
 
 const emptyStyle = {

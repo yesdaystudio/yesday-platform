@@ -10,7 +10,8 @@
     "test:accommodation-reminders": "node --test tests/accommodation-reminders.test.mjs",
     "test:personalized-invitations": "node --test tests/personalized-invitations.test.mjs",
     "test:menu-sections": "node --test tests/menu-sections.test.mjs",
-    "test:schedule": "node --test tests/schedule.test.mjs"
+    "test:schedule": "node --test tests/schedule.test.mjs",
+    "test:rsvp-submission": "node --test tests/rsvp-submission.test.mjs"
   },
   "dependencies": {
     "@openfonts/cormorant-garamond_all": "^1.44.3",

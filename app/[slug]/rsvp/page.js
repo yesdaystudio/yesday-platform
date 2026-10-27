@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'next/navigation'
 import supabase from '../../../lib/supabase'
 
@@ -30,6 +30,8 @@ export default function RSVPPage() {
   const [message, setMessage] = useState('')
   const [status, setStatus] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
+  const submitLockRef = useRef(false)
 
   const isEssential = packageType === 'essential'
   const showAccommodation = packageType === 'signature' || packageType === 'atelier'
@@ -113,12 +115,15 @@ export default function RSVPPage() {
 
   async function handleSubmit(e) {
     e.preventDefault()
+    if (submitLockRef.current || submitted) return
+    submitLockRef.current = true
     setStatus('')
     setIsSubmitting(true)
 
     if (!project?.id) {
       setStatus('Nepodarilo sa nájsť svadobný projekt.')
       setIsSubmitting(false)
+      submitLockRef.current = false
       return
     }
 
@@ -163,25 +168,32 @@ export default function RSVPPage() {
         error = new Error('Odpoveď sa nepodarilo uložiť.')
       }
     } else {
-      const result = await supabase.from('rsvp_responses').insert(responsePayload)
-      error = result.error
-    }
-
-    if (!invitationToken && isMissingTransportColumnError(error)) {
-      const legacyPayload = { ...responsePayload }
-      delete legacyPayload.transport
-      const fallbackResult = await supabase.from('rsvp_responses').insert(legacyPayload)
-      error = fallbackResult.error
+      try {
+        const response = await fetch(`/api/rsvp/${encodeURIComponent(slug)}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...responsePayload,
+            submission_key: getOrCreateSubmissionKey(slug),
+          }),
+        })
+        const result = await response.json()
+        if (!response.ok) error = new Error(result?.error || 'Odpoveď sa nepodarilo uložiť.')
+      } catch {
+        error = new Error('Odpoveď sa nepodarilo uložiť.')
+      }
     }
 
     if (error) {
       console.error('RSVP submit error:', error)
       setStatus(`Nepodarilo sa odoslať RSVP: ${error.message}`)
       setIsSubmitting(false)
+      submitLockRef.current = false
       return
     }
 
     setStatus('Ďakujeme, vaša odpoveď bola uložená. ♡')
+    setSubmitted(true)
     setIsSubmitting(false)
   }
 
@@ -381,8 +393,8 @@ export default function RSVPPage() {
             />
           </div>
 
-          <button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Odosielam...' : 'Odoslať potvrdenie'}
+          <button type="submit" disabled={isSubmitting || submitted}>
+            {isSubmitting ? 'Odosielam...' : submitted ? 'Odpoveď bola odoslaná' : 'Odoslať potvrdenie'}
           </button>
 
           {status && (
@@ -398,10 +410,17 @@ export default function RSVPPage() {
   )
 }
 
-function isMissingTransportColumnError(error) {
-  if (!error) return false
-  const details = [error.message, error.details, error.hint].filter(Boolean).join(' ').toLowerCase()
-  return error.code === '42703' || error.code === 'PGRST204' || details.includes('transport')
+function getOrCreateSubmissionKey(slug) {
+  const storageKey = `yesday:rsvp-submission:${slug}`
+  try {
+    const stored = window.sessionStorage.getItem(storageKey)
+    if (stored) return stored
+    const created = window.crypto.randomUUID()
+    window.sessionStorage.setItem(storageKey, created)
+    return created
+  } catch {
+    return window.crypto.randomUUID()
+  }
 }
 
 function Styles() {
