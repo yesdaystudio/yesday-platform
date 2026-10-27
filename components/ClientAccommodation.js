@@ -236,7 +236,7 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
       onDemoResponseUpdate(row.id, payload)
       setStatus('Ubytovanie bolo uložené v ukážke.')
       setSavingId(null)
-      return
+      return true
     }
 
     const { error } = await supabase
@@ -248,11 +248,24 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
       console.error('Accommodation save error:', error)
       setStatus(`Nepodarilo sa uložiť záznam: ${error.message}`)
       setSavingId(null)
-      return
+      return false
     }
 
     setStatus('Ubytovanie bolo uložené.')
     setSavingId(null)
+    return true
+  }
+
+  async function prepareAccommodationEmail(row) {
+    if (!row.assignedAccommodationId) return
+    const saved = await saveRow(row)
+    if (!saved) return
+
+    setEmailDraft(buildAccommodationEmailDraft(
+      row,
+      project,
+      accommodations.find((option) => option.id === row.assignedAccommodationId)
+    ))
   }
 
   async function updateEmailStatus(row, sent) {
@@ -638,14 +651,14 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
                 <>
                   <button
                     type="button"
-                    onClick={() => setEmailDraft(buildAccommodationEmailDraft(
-                      row,
-                      project,
-                      accommodations.find((option) => option.id === row.assignedAccommodationId)
-                    ))}
-                    style={emailButtonStyle}
+                    onClick={() => prepareAccommodationEmail(row)}
+                    disabled={!row.assignedAccommodationId}
+                    title={!row.assignedAccommodationId ? 'Najprv vyberte a uložte ubytovanie hosťa.' : undefined}
+                    style={!row.assignedAccommodationId
+                      ? { ...emailButtonStyle, ...disabledButtonStyle }
+                      : emailButtonStyle}
                   >
-                    Pripraviť e-mail
+                    {row.assignedAccommodationId ? 'Pripraviť e-mail' : 'Najprv priraďte ubytovanie'}
                   </button>
                   {row.emailSentAt ? (
                     <button
