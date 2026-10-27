@@ -52,7 +52,6 @@ const PACKAGES = [
       'Manažment ubytovania – požiadavky, hotely, izby a poznámky',
       'Prehľad dopravy a komunikácie s hosťami',
       'Voliteľné personalizované QR kartičky pre hostí, páry alebo rodiny',
-      'Bohatšia personalizácia a max 3 fotografie',
       'Galéria po svadbe',
     ],
     featured: true,
