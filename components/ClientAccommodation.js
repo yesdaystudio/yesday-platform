@@ -3,6 +3,11 @@
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import supabase from '../lib/supabase'
+import {
+  getReminderStatus,
+  normalizeReminderDays,
+  requiresDateChangeConfirmation,
+} from '../lib/accommodationReminderRules.mjs'
 
 export default function ClientAccommodation({ slug: slugProp, demoProject, demoResponses, onDemoResponseUpdate }) {
   const params = useParams()
@@ -12,14 +17,18 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
   const [project, setProject] = useState(demoProject || null)
   const [rows, setRows] = useState(() => (demoResponses || []).filter(row => row.needs_accommodation).map(mapAccommodationRow))
   const [accommodations, setAccommodations] = useState(() => buildDemoAccommodationOptions(demoResponses || []))
+  const [reminderDeliveries, setReminderDeliveries] = useState([])
   const [loading, setLoading] = useState(!demoProject)
   const [accessDenied, setAccessDenied] = useState(false)
   const [savingId, setSavingId] = useState(null)
   const [savingAccommodationId, setSavingAccommodationId] = useState(null)
   const [savingEmailStatusId, setSavingEmailStatusId] = useState(null)
   const [sendingEmail, setSendingEmail] = useState(false)
+  const [savingReminderSetting, setSavingReminderSetting] = useState(false)
+  const [confirmingDateChange, setConfirmingDateChange] = useState(false)
   const [status, setStatus] = useState('')
   const [emailDraft, setEmailDraft] = useState(null)
+  const [reminderPreview, setReminderPreview] = useState(null)
 
   const packageType = String(project?.package_type || 'signature').toLowerCase().trim()
   const canManageAccommodation = packageType === 'signature' || packageType === 'atelier'
@@ -28,6 +37,8 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
     row.assignedAccommodationId && String(row.roomNumber || '').trim() ? getRequestedRoomCount(row) : 0
   ), 0)
   const accommodationGuests = rows.reduce((sum, row) => sum + Math.max(0, Number(row.adults_count || 0)) + Math.max(0, Number(row.children_count || 0)), 0)
+  const reminderDays = normalizeReminderDays(project?.accommodation_reminder_days)
+  const dateChangeConfirmationRequired = requiresDateChangeConfirmation(project, reminderDeliveries)
 
   useEffect(() => {
     if (demoProject) return
@@ -71,7 +82,7 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
         return
       }
 
-      const [responseResult, accommodationResult] = await Promise.all([
+      const [responseResult, accommodationResult, reminderResult] = await Promise.all([
         supabase
           .from('rsvp_responses')
           .select('*')
@@ -83,19 +94,26 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
           .select('*')
           .eq('project_id', projectData.id)
           .order('created_at', { ascending: true }),
+        supabase
+          .from('accommodation_reminder_deliveries')
+          .select('id, rsvp_response_id, wedding_date, reminder_days, status, accepted_at, last_error, created_at')
+          .eq('project_id', projectData.id)
+          .order('created_at', { ascending: false }),
       ])
 
       const { data: responseData, error: responseError } = responseResult
       const { data: accommodationData, error: accommodationError } = accommodationResult
+      const { data: reminderData, error: reminderError } = reminderResult
 
-      if (responseError || accommodationError) {
-        console.error(responseError || accommodationError)
+      if (responseError || accommodationError || reminderError) {
+        console.error(responseError || accommodationError || reminderError)
         setLoading(false)
         return
       }
 
       setAccommodations((accommodationData || []).map(mapAccommodationOption))
       setRows((responseData || []).map(mapAccommodationRow))
+      setReminderDeliveries(reminderData || [])
 
       setLoading(false)
     }
@@ -311,6 +329,71 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
     }
   }
 
+  async function saveReminderSetting(value) {
+    const days = normalizeReminderDays(value)
+    setStatus('')
+    setSavingReminderSetting(true)
+
+    if (demoProject) {
+      setProject((current) => ({
+        ...current,
+        accommodation_reminder_days: days,
+        accommodation_reminder_setting_updated_at: new Date().toISOString(),
+      }))
+      setStatus(days ? `V ukážke je pripomienka nastavená ${days === 1 ? '1 deň' : '2 dni'} pred svadbou.` : 'V ukážke je pripomienka vypnutá.')
+      setSavingReminderSetting(false)
+      return
+    }
+
+    const { data, error } = await supabase
+      .from('projects')
+      .update({ accommodation_reminder_days: days })
+      .eq('id', project.id)
+      .select('*')
+      .single()
+
+    if (error) {
+      console.error('Accommodation reminder setting save error:', error)
+      setStatus('Nastavenie pripomienky sa nepodarilo uložiť.')
+    } else {
+      setProject(data)
+      setStatus(days ? `Pripomienka je nastavená ${days === 1 ? '1 deň' : '2 dni'} pred svadbou.` : 'Automatická pripomienka je vypnutá.')
+    }
+    setSavingReminderSetting(false)
+  }
+
+  async function confirmReminderForChangedDate() {
+    if (!project?.wedding_date) return
+    setStatus('')
+    setConfirmingDateChange(true)
+
+    if (demoProject) {
+      setProject((current) => ({
+        ...current,
+        accommodation_reminder_resend_confirmed_for_date: current.wedding_date,
+      }))
+      setStatus('Nová pripomienka pre zmenený dátum bola v ukážke potvrdená.')
+      setConfirmingDateChange(false)
+      return
+    }
+
+    const { data, error } = await supabase
+      .from('projects')
+      .update({ accommodation_reminder_resend_confirmed_for_date: project.wedding_date })
+      .eq('id', project.id)
+      .select('*')
+      .single()
+
+    if (error) {
+      console.error('Accommodation reminder date confirmation error:', error)
+      setStatus('Potvrdenie nového dátumu sa nepodarilo uložiť.')
+    } else {
+      setProject(data)
+      setStatus('Odoslanie pripomienky pre nový dátum svadby bolo potvrdené.')
+    }
+    setConfirmingDateChange(false)
+  }
+
   if (loading) {
     return <main style={{ padding: 16 }}>Načítavam ubytovanie...</main>
   }
@@ -341,6 +424,45 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
         </div>
       </section>
       {status ? <p role="status" style={statusStyle}>{status}</p> : null}
+
+      <section aria-label="Nastavenie automatickej pripomienky" style={reminderSettingsStyle}>
+        <div style={reminderSettingsCopyStyle}>
+          <p style={composerEyebrowStyle}>Automatická pripomienka ubytovania</p>
+          <h2 style={reminderSettingsTitleStyle}>Informácie hosťom pripomenieme pred svadbou</h2>
+          <p style={reminderSettingsHelpStyle}>
+            Pripomienku dostanú iba hostia s priradeným ubytovaním a e-mailom, ktorým ste už poslali prvé informácie cez YesDay. Použijú sa údaje aktuálne v čase odoslania.
+          </p>
+        </div>
+        <label style={reminderSelectLabelStyle}>
+          <span style={labelTextStyle}>Kedy odoslať</span>
+          <select
+            value={reminderDays || ''}
+            onChange={(event) => saveReminderSetting(event.target.value)}
+            disabled={savingReminderSetting}
+            style={inputStyle}
+          >
+            <option value="2">2 dni pred svadbou</option>
+            <option value="1">1 deň pred svadbou</option>
+            <option value="">Vypnuté</option>
+          </select>
+        </label>
+        {dateChangeConfirmationRequired ? (
+          <div style={dateConfirmationStyle}>
+            <div>
+              <strong style={dateConfirmationTitleStyle}>Dátum svadby sa po odoslaní pripomienky zmenil</strong>
+              <p style={dateConfirmationTextStyle}>Ďalšiu automatickú pripomienku neodošleme, kým ju výslovne nepotvrdíte pre dátum {formatWeddingDate(project.wedding_date)}.</p>
+            </div>
+            <button
+              type="button"
+              onClick={confirmReminderForChangedDate}
+              disabled={confirmingDateChange}
+              style={emailButtonStyle}
+            >
+              {confirmingDateChange ? 'Potvrdzujem...' : 'Povoliť pre nový dátum'}
+            </button>
+          </div>
+        ) : null}
+      </section>
 
       <section aria-label="Zoznam ubytovaní" style={catalogStyle}>
         <div style={catalogHeaderStyle}>
@@ -435,6 +557,13 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
         />
       ) : null}
 
+      {reminderPreview ? (
+        <ReminderPreview
+          preview={reminderPreview}
+          onClose={() => setReminderPreview(null)}
+        />
+      ) : null}
+
       {rows.length === 0 ? (
         <p style={emptyStyle}>Nikto zatiaľ nepožiadal o ubytovanie.</p>
       ) : (
@@ -452,6 +581,11 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
               <span style={countStyle}>
                 Dospelí: {displayValue(row.adults_count)} | Deti: {displayValue(row.children_count)}
               </span>
+              <ReminderStatus
+                project={project}
+                row={row}
+                deliveries={reminderDeliveries}
+              />
             </div>
 
             <div style={guestAssignmentGridStyle}>
@@ -521,6 +655,20 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
                       style={statusButtonStyle}
                     >
                       {savingEmailStatusId === row.id ? 'Ukladám stav...' : 'Označiť ako neodoslané'}
+                    </button>
+                  ) : null}
+                  {reminderDays && row.assignedAccommodationId ? (
+                    <button
+                      type="button"
+                      onClick={() => setReminderPreview(buildReminderPreview(
+                        row,
+                        project,
+                        accommodations.find((option) => option.id === row.assignedAccommodationId),
+                        reminderDays
+                      ))}
+                      style={previewButtonStyle}
+                    >
+                      Náhľad pripomienky
                     </button>
                   ) : null}
                 </>
@@ -630,6 +778,23 @@ function buildAccommodationEmailHref(draft) {
   return `mailto:${encodeURIComponent(draft.email)}?subject=${encodeURIComponent(draft.subject)}&body=${encodeURIComponent(draft.body)}`
 }
 
+function buildReminderPreview(row, project, accommodation, reminderDays) {
+  return {
+    greeting: row.guest_name ? `Dobrý deň, ${row.guest_name},` : 'Dobrý deň,',
+    intro: `${reminderDays === 1 ? 'už zajtra' : 'už o dva dni'} sa uskutoční svadba, na ktorú vás pozývajú ${project?.couple_display_name || 'nevesta a ženích'}. Aby ste mali všetko potrebné poruke, posielame vám krátke pripomenutie informácií o vašom ubytovaní.`,
+    details: [
+      ['Dátum svadby', formatWeddingDate(project?.wedding_date)],
+      ['Ubytovanie', accommodation?.name],
+      ['Adresa', accommodation?.address],
+      ['Izba', row.roomNumber],
+      ['Check-in', accommodation?.checkIn],
+      ['Check-out', accommodation?.checkOut],
+    ].filter(([, value]) => String(value || '').trim()),
+    note: accommodation?.guestNote || '',
+    couple: project?.couple_display_name || 'Nevesta a ženích',
+  }
+}
+
 function EmailComposer({ draft, isDemo, sending, onChange, onClose, onSend }) {
   return (
     <section aria-label="Náhľad e-mailu hosťovi" style={emailComposerStyle}>
@@ -684,6 +849,34 @@ function EmailComposer({ draft, isDemo, sending, onChange, onClose, onSend }) {
   )
 }
 
+function ReminderPreview({ preview, onClose }) {
+  return (
+    <section aria-label="Náhľad automatickej pripomienky" style={reminderPreviewStyle}>
+      <div style={headRowStyle}>
+        <div>
+          <p style={composerEyebrowStyle}>Náhľad bez odoslania</p>
+          <h3 style={composerTitleStyle}>Pripomienka ubytovania</h3>
+        </div>
+        <button type="button" onClick={onClose} style={closeButtonStyle}>Zavrieť</button>
+      </div>
+      <div style={reminderPreviewBodyStyle}>
+        <p style={reminderPreviewParagraphStyle}>{preview.greeting}</p>
+        <p style={reminderPreviewParagraphStyle}>{preview.intro}</p>
+        <dl style={reminderPreviewDetailsStyle}>
+          {preview.details.map(([label, value]) => (
+            <div key={label} style={reminderPreviewDetailRowStyle}>
+              <dt style={reminderPreviewTermStyle}>{label}</dt>
+              <dd style={reminderPreviewValueStyle}>{value}</dd>
+            </div>
+          ))}
+        </dl>
+        {preview.note ? <p style={reminderPreviewNoteStyle}>{preview.note}</p> : null}
+        <p style={reminderPreviewParagraphStyle}>Tešíme sa na vás!<br />{preview.couple}</p>
+      </div>
+    </section>
+  )
+}
+
 function formatEmailDate(value) {
   if (!value) return ''
 
@@ -699,6 +892,31 @@ function formatEmailDate(value) {
   })
 }
 
+function formatWeddingDate(value) {
+  const match = String(value || '').match(/^(\d{4})-(\d{2})-(\d{2})$/)
+  if (!match) return value || '—'
+  return new Intl.DateTimeFormat('sk-SK', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3]))))
+}
+
+function ReminderStatus({ project, row, deliveries }) {
+  const reminder = getReminderStatus({ project, guest: row, deliveries })
+  const timestamp = reminder.timestamp && reminder.code === 'accepted'
+    ? ` · ${formatEmailDate(reminder.timestamp)}`
+    : ''
+
+  return (
+    <div style={reminderStatusRowStyle}>
+      <span style={reminderStatusBadgeStyle(reminder.code)}>{reminder.label}{timestamp}</span>
+      <span style={reminderStatusDetailStyle}>{reminder.detail}</span>
+    </div>
+  )
+}
+
 const wrapperStyle = {
   display: 'grid',
   gap: '12px',
@@ -709,6 +927,122 @@ const summaryStyle = {
   gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
   gap: '10px',
 }
+
+const reminderSettingsStyle = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+  gap: '18px',
+  alignItems: 'end',
+  padding: '20px',
+  border: '1px solid rgba(176, 139, 105, 0.24)',
+  background: '#fffaf5',
+}
+
+const reminderSettingsCopyStyle = { minWidth: 0 }
+
+const reminderSettingsTitleStyle = {
+  margin: '7px 0 8px',
+  color: '#4f4035',
+  fontSize: '22px',
+  fontWeight: 400,
+}
+
+const reminderSettingsHelpStyle = {
+  maxWidth: '720px',
+  margin: 0,
+  color: '#76685e',
+  fontSize: '14px',
+  lineHeight: 1.65,
+}
+
+const reminderSelectLabelStyle = {
+  display: 'grid',
+  gap: '7px',
+  alignSelf: 'center',
+}
+
+const dateConfirmationStyle = {
+  gridColumn: '1 / -1',
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  gap: '14px',
+  padding: '15px 16px',
+  border: '1px solid #d6b8ac',
+  background: '#fbf2ed',
+}
+
+const dateConfirmationTitleStyle = { color: '#654b42', fontSize: '14px', fontWeight: 600 }
+const dateConfirmationTextStyle = { margin: '5px 0 0', color: '#765f56', fontSize: '13px', lineHeight: 1.5 }
+
+const reminderStatusRowStyle = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  alignItems: 'center',
+  gap: '7px 10px',
+  marginTop: '9px',
+}
+
+const reminderStatusBadgeStyle = (code) => {
+  const colors = {
+    accepted: ['#e8f2eb', '#496451'],
+    scheduled: ['#eee9f3', '#665671'],
+    processing_window: ['#eee9f3', '#665671'],
+    processing: ['#eee9f3', '#665671'],
+    needs_review: ['#f8eadf', '#865d3f'],
+    failed: ['#f8e5e3', '#8a4e4b'],
+    confirmation_required: ['#f8eadf', '#865d3f'],
+    missed: ['#eeeae7', '#706661'],
+  }
+  const [background, color] = colors[code] || ['#f2efed', '#736b67']
+  return {
+    display: 'inline-flex',
+    padding: '5px 8px',
+    background,
+    color,
+    fontSize: '11px',
+    fontWeight: 600,
+    letterSpacing: '.03em',
+  }
+}
+
+const reminderStatusDetailStyle = { color: '#80736a', fontSize: '12px', lineHeight: 1.45 }
+
+const previewButtonStyle = {
+  appearance: 'none',
+  border: 0,
+  borderBottom: '1px solid #9b7c62',
+  background: 'transparent',
+  color: '#765f4e',
+  padding: '7px 2px 5px',
+  fontFamily: 'inherit',
+  fontSize: '12px',
+  cursor: 'pointer',
+}
+
+const reminderPreviewStyle = {
+  padding: '20px',
+  border: '1px solid rgba(176, 139, 105, 0.26)',
+  background: '#f8f2ed',
+}
+
+const reminderPreviewBodyStyle = {
+  maxWidth: '620px',
+  marginTop: '16px',
+  padding: 'clamp(20px, 5vw, 36px)',
+  border: '1px solid #eadfd9',
+  background: '#fffdfb',
+  color: '#454043',
+  lineHeight: 1.7,
+}
+
+const reminderPreviewParagraphStyle = { margin: '0 0 18px' }
+const reminderPreviewDetailsStyle = { margin: '20px 0', padding: '14px 18px', background: '#fffaf7' }
+const reminderPreviewDetailRowStyle = { display: 'grid', gridTemplateColumns: 'minmax(90px, .45fr) 1fr', gap: '12px', padding: '6px 0' }
+const reminderPreviewTermStyle = { color: '#9b777c', fontSize: '10px', fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase' }
+const reminderPreviewValueStyle = { margin: 0, minWidth: 0 }
+const reminderPreviewNoteStyle = { margin: '20px 0', padding: '14px 16px', borderLeft: '2px solid #c9aeb1', background: '#f7f2ef' }
 
 const summaryLeadStyle = {
   border: '1px solid #5f4838',

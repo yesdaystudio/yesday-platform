@@ -6,7 +6,8 @@
     "dev": "next dev --webpack",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:accommodation-reminders": "node --test tests/accommodation-reminders.test.mjs"
   },
   "dependencies": {
     "@openfonts/cormorant-garamond_all": "^1.44.3",
