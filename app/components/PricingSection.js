@@ -115,6 +115,13 @@ const prelaunchNoticeStyle = {
   lineHeight: 1.6,
 }
 
+const testCheckoutNoticeStyle = {
+  ...prelaunchNoticeStyle,
+  borderColor: '#c8dccb',
+  background: '#f4fbf5',
+  color: '#365b3d',
+}
+
 const selectedDesignStyle = {
   maxWidth: '960px',
   margin: '0 auto 38px',
@@ -266,12 +273,17 @@ const priceButtonStyle = {
 export default function PricingSection() {
   const [activeModal, setActiveModal] = useState(null)
   const [selectedDesign, setSelectedDesign] = useState(null)
+  const [checkoutTestToken, setCheckoutTestToken] = useState('')
   const selectedDesignInfo = selectedDesign ? DESIGNS[selectedDesign] : null
+  const checkoutAvailable = SALES_OPEN || Boolean(checkoutTestToken)
 
   useEffect(() => {
     function syncSelectedDesign() {
-      const design = new URLSearchParams(window.location.search).get('design')
+      const searchParams = new URLSearchParams(window.location.search)
+      const design = searchParams.get('design')
+      const testToken = searchParams.get('checkout_test')
       setSelectedDesign(DESIGNS[design] ? design : null)
+      setCheckoutTestToken(String(testToken || '').trim())
     }
 
     syncSelectedDesign()
@@ -295,9 +307,13 @@ export default function PricingSection() {
             Vyberte si úroveň digitálneho svadobného riešenia podľa toho, či
             chcete elegantný základ alebo plne personalizovaný systém.
           </p>
-          {!SALES_OPEN ? (
+          {!checkoutAvailable ? (
             <p style={prelaunchNoticeStyle}>
               Online objednávky práve pripravujeme. O balík môžete prejaviť nezáväzný záujem a ozveme sa vám pred spustením.
+            </p>
+          ) : checkoutTestToken ? (
+            <p style={testCheckoutNoticeStyle}>
+              Súkromný test objednávky · Stripe použije skúšobnú platbu bez reálneho strhnutia peňazí.
             </p>
           ) : null}
 
@@ -341,7 +357,7 @@ export default function PricingSection() {
                     </li>
                   ))}
                 </ul>
-                {pkg.customQuote || !SALES_OPEN ? (
+                {pkg.customQuote || !checkoutAvailable ? (
                   <a
                     href={interestHref(pkg)}
                     style={priceButtonStyle}
@@ -376,6 +392,7 @@ export default function PricingSection() {
           packageType={activeModal.type}
           packagePrice={activeModal.price}
           selectedDesign={activeModal.design}
+          checkoutTestToken={checkoutTestToken}
           onClose={() => setActiveModal(null)}
         />
       )}

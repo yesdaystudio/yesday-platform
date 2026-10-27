@@ -2,6 +2,7 @@ import 'server-only'
 
 import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
+import { timingSafeEqual } from 'node:crypto'
 
 export const runtime = 'nodejs'
 
@@ -30,8 +31,9 @@ const DESIGN_NAMES = {
 
 export async function POST(request) {
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
+  const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL
   const salesOpen = process.env.SALES_OPEN === 'true' || process.env.NODE_ENV !== 'production'
+  const testOnly = process.env.CHECKOUT_TEST_ONLY === 'true'
 
   if (!salesOpen) {
     return NextResponse.json(
@@ -47,13 +49,15 @@ export async function POST(request) {
     )
   }
 
-  if (!siteUrl) {
+  if (!configuredSiteUrl) {
     return NextResponse.json(
       { error: 'NEXT_PUBLIC_SITE_URL is not configured' },
       { status: 500 }
     )
   }
 
+  const requestOrigin = new URL(request.url).origin
+  const siteUrl = process.env.VERCEL_ENV === 'preview' ? requestOrigin : configuredSiteUrl
   const isPublicProductionSite = /https:\/\/(?:www\.)?yesdaystudio\.com(?:\/|$)/i.test(siteUrl)
   if (isPublicProductionSite && stripeSecretKey.startsWith('sk_test_')) {
     console.error('[checkout] Blocked test Stripe key on the public production site')
@@ -68,6 +72,18 @@ export async function POST(request) {
     body = await request.json()
   } catch {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
+  }
+
+  if (testOnly) {
+    const expectedToken = String(process.env.CHECKOUT_TEST_ACCESS_TOKEN || '')
+    const providedToken = String(body?.test_access_token || '')
+    if (!safeTokenEqual(providedToken, expectedToken)) {
+      return NextResponse.json({ error: 'Súkromný testovací odkaz nie je platný.' }, { status: 403 })
+    }
+    if (!stripeSecretKey.startsWith('sk_test_')) {
+      console.error('[checkout] Test-only checkout does not have a Stripe test key')
+      return NextResponse.json({ error: 'Testovacia platba nie je bezpečne nakonfigurovaná.' }, { status: 503 })
+    }
   }
 
   const { package_type, couple_display_name, slug, customer_email, design_family } = body
@@ -141,4 +157,11 @@ export async function POST(request) {
   }
 
   return NextResponse.json({ url: session.url })
+}
+
+function safeTokenEqual(provided, expected) {
+  if (!provided || !expected) return false
+  const providedBuffer = Buffer.from(provided)
+  const expectedBuffer = Buffer.from(expected)
+  return providedBuffer.length === expectedBuffer.length && timingSafeEqual(providedBuffer, expectedBuffer)
 }

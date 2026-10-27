@@ -9,7 +9,7 @@ const DESIGNS = {
   botanique: { name: 'Botanique', image: '/templates/botanique/hero.jpg' },
 }
 
-export default function CheckoutModal({ packageName, packageType, packagePrice, selectedDesign = 'diana', onClose }) {
+export default function CheckoutModal({ packageName, packageType, packagePrice, selectedDesign = 'diana', checkoutTestToken = '', onClose }) {
   const [email, setEmail] = useState('')
   const [coupleName, setCoupleName] = useState('')
   const [slug, setSlug] = useState('')
@@ -41,6 +41,7 @@ export default function CheckoutModal({ packageName, packageType, packagePrice, 
           slug: slug.trim() || undefined,
           customer_email: email.trim(),
           design_family: DESIGNS[selectedDesign] ? selectedDesign : 'diana',
+          test_access_token: checkoutTestToken || undefined,
         }),
       })
 
