@@ -51,6 +51,7 @@ const PACKAGES = [
       'Rozšírené RSVP s požiadavkami na ubytovanie a dopravu',
       'Manažment ubytovania – požiadavky, hotely, izby a poznámky',
       'Prehľad dopravy a komunikácie s hosťami',
+      'Voliteľné personalizované QR kartičky pre hostí, páry alebo rodiny',
       'Bohatšia personalizácia a max 3 fotografie',
       'Galéria po svadbe',
     ],
@@ -67,7 +68,6 @@ const PACKAGES = [
     items: [
       'Všetko z balíka Signature',
       'Bespoke plná personalizácia webu',
-      'Unikátne guest QR pre hostí alebo skupiny',
       'Individuálne navrhnutý obsah a flow',
     ],
     featured: false,

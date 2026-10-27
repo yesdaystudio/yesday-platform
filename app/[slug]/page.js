@@ -1,11 +1,13 @@
 import supabase from '../../lib/supabase'
+import { getSupabaseAdmin } from '../../lib/supabaseAdmin'
 import { sortScheduleItemsChronologically } from '../../lib/schedule'
 import WeddingWebsite, { WeddingNotFound } from '../../components/WeddingWebsite'
 
 export const dynamic = 'force-dynamic'
 
-export default async function WeddingPage({ params }) {
+export default async function WeddingPage({ params, searchParams }) {
   const resolvedParams = await params
+  const resolvedSearchParams = await searchParams
   const slug = resolvedParams?.slug
 
   const { data: project, error: projectError } = await supabase
@@ -31,5 +33,31 @@ export default async function WeddingPage({ params }) {
     .eq('project_id', project.id)
     .single()
 
-  return <WeddingWebsite project={project} websiteContent={websiteContent || {}} scheduleItems={scheduleItems} scheduleError={scheduleError} rsvpHref={`/${slug}/rsvp`} />
+  const invitation = await loadInvitationForProject(resolvedSearchParams?.invite, project.id)
+  const invitationQuery = invitation ? `?invite=${encodeURIComponent(invitation.token)}` : ''
+
+  return (
+    <WeddingWebsite
+      project={project}
+      websiteContent={websiteContent || {}}
+      scheduleItems={scheduleItems}
+      scheduleError={scheduleError}
+      rsvpHref={`/${slug}/rsvp${invitationQuery}`}
+      invitationRecipient={invitation}
+    />
+  )
+}
+
+async function loadInvitationForProject(rawToken, projectId) {
+  const token = String(rawToken || '').trim().toLowerCase()
+  if (!/^[a-f0-9]{64}$/.test(token)) return null
+
+  const { data } = await getSupabaseAdmin()
+    .from('invitation_recipients')
+    .select('token, recipient_label, salutation')
+    .eq('token', token)
+    .eq('project_id', projectId)
+    .maybeSingle()
+
+  return data || null
 }

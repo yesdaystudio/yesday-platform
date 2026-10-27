@@ -8,6 +8,7 @@ import ClientDashboard from "../../../components/ClientDashboard"
 import ClientAccommodation from "../../../components/ClientAccommodation"
 import DianaStationerySet from "../../../components/DianaStationerySet"
 import AlternativeStationerySet from "../../../components/AlternativeStationerySet"
+import PersonalizedQrManager from "../../../components/PersonalizedQrManager"
 import QRCode from "qrcode"
 import supabase from "../../../lib/supabase"
 import styles from "./client-zone.module.css"
@@ -250,6 +251,9 @@ export default function ClientZonePage() {
                   qrError={qrError}
                 />
               )}
+              {packageType === "signature" || packageType === "atelier" ? (
+                <PersonalizedQrManager project={project} weddingWebsiteUrl={weddingWebsiteUrl} />
+              ) : null}
             </section>
           )}
         </section>

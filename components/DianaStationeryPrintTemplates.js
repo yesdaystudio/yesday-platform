@@ -60,7 +60,7 @@ export const DianaInvitationPrintTemplate = forwardRef(function DianaInvitationP
 })
 
 export const DianaQrCardPrintTemplate = forwardRef(function DianaQrCardPrintTemplate(
-  { data, qrDataUrl },
+  { data, qrDataUrl, recipient = null },
   ref
 ) {
   return (
@@ -97,7 +97,11 @@ export const DianaQrCardPrintTemplate = forwardRef(function DianaQrCardPrintTemp
       </div>
 
       <div style={qrBottomStyle}>
-        <p style={qrTextStyle}>{data.qrText}</p>
+        <p style={{ ...qrTextStyle, ...(recipient ? personalizedQrTextStyle : {}) }}>
+          {recipient
+            ? `${recipient.salutation || recipient.recipient_label},\nvšetky informácie o svadbe nájdete po naskenovaní QR kódu.`
+            : data.qrText}
+        </p>
         <DianaMonogram data={data} />
         <p style={qrUrlStyle}>{data.websiteDisplayUrl || data.weddingWebsiteUrl || "URL svadobného webu bude doplnená"}</p>
       </div>
@@ -410,6 +414,15 @@ const qrTextStyle = {
   letterSpacing: "0.17em",
   textTransform: "uppercase",
   color: "rgba(65, 53, 43, 0.72)",
+}
+
+const personalizedQrTextStyle = {
+  maxWidth: "190px",
+  whiteSpace: "pre-line",
+  fontSize: "10.5px",
+  lineHeight: 1.35,
+  letterSpacing: "0.035em",
+  textTransform: "none",
 }
 
 const qrUrlStyle = {

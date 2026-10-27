@@ -10,7 +10,7 @@ export function WeddingNotFound() {
   return <main style={emptyStateStyle}><div style={emptyCardStyle}><p style={eyebrowStyle}>Svadobná stránka</p><h1 style={emptyTitleStyle}>Projekt sa nenašiel</h1><p style={emptyTextStyle}>Skontrolujte prosím odkaz alebo skúste stránku otvoriť neskôr.</p></div></main>
 }
 
-export default function WeddingWebsite({ project, websiteContent = {}, scheduleItems = [], scheduleError = null, rsvpHref }) {
+export default function WeddingWebsite({ project, websiteContent = {}, scheduleItems = [], scheduleError = null, rsvpHref, invitationRecipient = null }) {
   const wc = websiteContent
   const dresscodePalette = wc.dresscode_palette_enabled === true
     ? normalizeDresscodePalette(wc.dresscode_palette)
@@ -42,6 +42,7 @@ export default function WeddingWebsite({ project, websiteContent = {}, scheduleI
         scheduleItems={scheduleItems}
         scheduleError={scheduleError}
         rsvpHref={rsvpHref}
+        invitationRecipient={invitationRecipient}
       />
     )
   }
@@ -87,6 +88,10 @@ export default function WeddingWebsite({ project, websiteContent = {}, scheduleI
           <p style={{ ...welcomeTextStyle, ...themeStyles.welcomeText, ...colorTheme.welcomeText }}>{wc.welcome_text}</p>
         ) : null}
       </section>
+
+      {invitationRecipient ? (
+        <PersonalizedWelcome recipient={invitationRecipient} />
+      ) : null}
 
       {isDianaHero ? (
         <DianaEditorialContent
@@ -165,6 +170,15 @@ export default function WeddingWebsite({ project, websiteContent = {}, scheduleI
         </>
       )}
     </main>
+  )
+}
+
+function PersonalizedWelcome({ recipient }) {
+  return (
+    <section style={personalizedWelcomeStyle} aria-label="Personalizovaná pozvánka">
+      <p style={personalizedWelcomeEyebrowStyle}>Táto pozvánka je pripravená pre</p>
+      <p style={personalizedWelcomeNameStyle}>{recipient.recipient_label}</p>
+    </section>
   )
 }
 
@@ -1555,6 +1569,28 @@ const buttonStyle = {
   fontSize: '15px',
   letterSpacing: '0.04em',
   boxShadow: '0 12px 24px rgba(95, 72, 56, 0.18)',
+}
+
+const personalizedWelcomeStyle = {
+  padding: '30px 24px 8px',
+  textAlign: 'center',
+  background: '#fffaf6',
+}
+
+const personalizedWelcomeEyebrowStyle = {
+  margin: 0,
+  fontFamily: 'Inter, Arial, sans-serif',
+  fontSize: '10px',
+  letterSpacing: '0.22em',
+  textTransform: 'uppercase',
+  color: 'rgba(79, 64, 53, 0.58)',
+}
+
+const personalizedWelcomeNameStyle = {
+  margin: '8px 0 0',
+  fontSize: 'clamp(24px, 4vw, 38px)',
+  fontWeight: 400,
+  color: '#4f4035',
 }
 
 const emptyStateStyle = {

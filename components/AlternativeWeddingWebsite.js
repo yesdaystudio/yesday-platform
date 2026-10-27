@@ -22,6 +22,7 @@ export default function AlternativeWeddingWebsite({
   scheduleItems = [],
   scheduleError = null,
   rsvpHref,
+  invitationRecipient = null,
 }) {
   const theme = THEMES[variant] || THEMES.botanique
   const customization = getDesignCustomization(variant, project)
@@ -63,6 +64,13 @@ export default function AlternativeWeddingWebsite({
           <strong>{date}</strong>
         </div>
       </section>
+
+      {invitationRecipient ? (
+        <section style={personalizedWelcomeStyle} aria-label="Personalizovaná pozvánka">
+          <p style={personalizedWelcomeEyebrowStyle}>Táto pozvánka je pripravená pre</p>
+          <p style={{ ...personalizedWelcomeNameStyle, color: customization.color.hex }}>{invitationRecipient.recipient_label}</p>
+        </section>
+      ) : null}
 
       <section className="signatureWedding__welcome signatureWedding__section">
         <p className="signatureWedding__eyebrow">Save the date</p>
@@ -164,6 +172,10 @@ export default function AlternativeWeddingWebsite({
     </main>
   )
 }
+
+const personalizedWelcomeStyle = { padding: '30px 24px 8px', textAlign: 'center', background: '#fffaf6' }
+const personalizedWelcomeEyebrowStyle = { margin: 0, fontFamily: 'Inter,Arial,sans-serif', fontSize: '10px', letterSpacing: '.22em', textTransform: 'uppercase', opacity: .58 }
+const personalizedWelcomeNameStyle = { margin: '8px 0 0', fontSize: 'clamp(24px,4vw,38px)', fontWeight: 400 }
 
 function splitCoupleName(value) {
   const parts = String(value || 'Naša svadba').split(/\s*(?:&|\+|\/|\ba\b)\s*/i).filter(Boolean)

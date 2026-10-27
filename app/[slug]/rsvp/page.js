@@ -9,6 +9,8 @@ export default function RSVPPage() {
   const slug = params.slug
 
   const [project, setProject] = useState(null)
+  const [invitation, setInvitation] = useState(null)
+  const [invitationToken, setInvitationToken] = useState('')
   const [packageType, setPackageType] = useState('signature')
   const [loading, setLoading] = useState(true)
 
@@ -48,6 +50,22 @@ export default function RSVPPage() {
       }
 
       const cleanPackage = String(data.package_type || 'signature').toLowerCase().trim()
+
+      const token = new URLSearchParams(window.location.search).get('invite') || ''
+      if (token) {
+        try {
+          const response = await fetch(`/api/invitations/${encodeURIComponent(token)}`, { cache: 'no-store' })
+          const invitationData = await response.json()
+          if (!response.ok || invitationData.project_slug !== slug) {
+            setStatus('Personalizovaná pozvánka sa nenašla. Skontrolujte prosím odkaz.')
+          } else {
+            setInvitation(invitationData)
+            setInvitationToken(token)
+          }
+        } catch {
+          setStatus('Personalizovanú pozvánku sa nepodarilo načítať.')
+        }
+      }
 
       setProject(data)
       setPackageType(cleanPackage)
@@ -130,9 +148,26 @@ export default function RSVPPage() {
       message
     }
 
-    let { error } = await supabase.from('rsvp_responses').insert(responsePayload)
+    let error = null
 
-    if (isMissingTransportColumnError(error)) {
+    if (invitationToken) {
+      try {
+        const response = await fetch(`/api/invitations/${encodeURIComponent(invitationToken)}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(responsePayload),
+        })
+        const result = await response.json()
+        if (!response.ok) error = new Error(result?.error || 'Odpoveď sa nepodarilo uložiť.')
+      } catch {
+        error = new Error('Odpoveď sa nepodarilo uložiť.')
+      }
+    } else {
+      const result = await supabase.from('rsvp_responses').insert(responsePayload)
+      error = result.error
+    }
+
+    if (!invitationToken && isMissingTransportColumnError(error)) {
       const legacyPayload = { ...responsePayload }
       delete legacyPayload.transport
       const fallbackResult = await supabase.from('rsvp_responses').insert(legacyPayload)
@@ -172,6 +207,14 @@ export default function RSVPPage() {
             Prosíme, vyplňte mená všetkých hostí, výber menu a prípadné alergie,
             aby mohli snúbenci pripraviť presný zoznam hostí.
           </p>
+
+          {invitation ? (
+            <div className="invitation-note">
+              <span>Personalizovaná pozvánka pre</span>
+              <strong>{invitation.recipient_label}</strong>
+              {invitation.has_responded ? <small>Vaša predošlá odpoveď už bola uložená. Opätovným odoslaním ju aktualizujete.</small> : null}
+            </div>
+          ) : null}
 
           {isEssential && (
             <div className="package-note">
@@ -607,6 +650,25 @@ function Styles() {
         font-size: 0.86rem;
         line-height: 1.6;
       }
+      .invitation-note {
+        display: grid;
+        justify-items: center;
+        gap: 5px;
+        max-width: 470px;
+        margin: 22px auto 0;
+        padding: 16px 20px;
+        border: 1px solid rgba(116, 91, 72, .18);
+        background: rgba(255, 252, 248, .76);
+      }
+      .invitation-note span {
+        font-family: Inter, Arial, sans-serif;
+        font-size: 10px;
+        letter-spacing: .18em;
+        text-transform: uppercase;
+        opacity: .62;
+      }
+      .invitation-note strong { font-size: 22px; font-weight: 400; }
+      .invitation-note small { margin-top: 5px; line-height: 1.45; opacity: .68; }
 
       button {
         display: block;

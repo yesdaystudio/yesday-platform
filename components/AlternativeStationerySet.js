@@ -6,14 +6,13 @@ import { getDianaStationeryData } from "../lib/dianaStationeryData"
 import { downloadStationeryPdf } from "../lib/dianaStationeryPdf"
 import { getDesignCustomization } from "../lib/designCustomization"
 
-const CONFIG = {
+export const ALTERNATIVE_STATIONERY_CONFIG = {
   botanique: { name: "Botanique", ink: "#26362b", accent: "#75836b", paper: "#f2efe5", ornament: "/templates/botanique/olive-sprig.png" },
   penelope: { name: "Penelope", ink: "#5a3f45", accent: "#b7868f", paper: "#fbf3f1", ornament: "/templates/penelope/sweet-pea.png" },
 }
 
 export default function AlternativeStationerySet({ variant, project, weddingWebsiteUrl, qrDataUrl, qrError, websiteDisplayUrl }) {
-  const customization = getDesignCustomization(variant, project)
-  const config = { ...(CONFIG[variant] || CONFIG.botanique), ink: customization.color.hex, fontFamily: customization.font.family, fontVariant: customization.font.value }
+  const config = getAlternativeStationeryConfig(variant, project)
   const invitationRef = useRef(null)
   const qrRef = useRef(null)
   const [exporting, setExporting] = useState("")
@@ -49,7 +48,7 @@ export default function AlternativeStationerySet({ variant, project, weddingWebs
       </div>
       <div style={{ ...stageStyle, background: config.paper }}>
         <Invitation ref={invitationRef} data={data} config={config} variant={variant} />
-        <QrCard ref={qrRef} data={data} config={config} variant={variant} qrDataUrl={qrDataUrl} />
+        <AlternativeQrCardPrintTemplate ref={qrRef} data={data} config={config} variant={variant} qrDataUrl={qrDataUrl} />
       </div>
       {qrError || exportError ? <p role="alert" style={errorStyle}>{qrError || exportError}</p> : null}
       <div style={actionsStyle}>
@@ -77,18 +76,30 @@ const Invitation = forwardRef(function Invitation({ data, config, variant }, ref
   )
 })
 
-const QrCard = forwardRef(function QrCard({ data, config, variant, qrDataUrl }, ref) {
+export const AlternativeQrCardPrintTemplate = forwardRef(function AlternativeQrCardPrintTemplate({ data, config, variant, qrDataUrl, recipient = null }, ref) {
   return (
     <article ref={ref} style={{ ...qrCardStyle, color: config.ink, background: config.paper, fontFamily: config.fontFamily }} aria-label={`${config.name} QR kartička`}>
       <Image src={config.ornament} alt="" width={90} height={90} unoptimized data-pdf-overlay-image="true" style={{ ...qrOrnamentStyle, ...(variant === "penelope" ? qrPenelopeOrnamentStyle : qrBotaniqueOrnamentStyle) }} />
       <p style={{ ...smallStyle, color: config.accent }}>Všetko o našej svadbe</p>
       <div style={{ ...qrNamePlateStyle, color: config.paper, background: config.ink }}><h3 style={qrNamesStyle}>{data.firstPartner} <i data-pdf-text-overlay="true" style={{ ...ampersandStyle, fontFamily: config.fontFamily }}>&amp;</i> {data.secondPartner}</h3></div>
       {qrDataUrl ? <Image src={qrDataUrl} alt="QR kód svadobného webu" width={126} height={126} unoptimized data-pdf-required-image="true" style={qrImageStyle} /> : <div style={qrPlaceholderStyle}>QR</div>}
-      <p style={qrTextStyle}>Naskenujte QR kód<br />a potvrďte svoju účasť.</p>
+      <p style={{ ...qrTextStyle, ...(recipient ? personalizedQrTextStyle : {}) }}>
+        {recipient ? <>{recipient.salutation || recipient.recipient_label},<br />všetky informácie o svadbe nájdete po naskenovaní QR kódu.</> : <>Naskenujte QR kód<br />a potvrďte svoju účasť.</>}
+      </p>
       <p style={{ ...urlStyle, color: config.accent }}>{data.websiteDisplayUrl}</p>
     </article>
   )
 })
+
+export function getAlternativeStationeryConfig(variant, project) {
+  const customization = getDesignCustomization(variant, project)
+  return {
+    ...(ALTERNATIVE_STATIONERY_CONFIG[variant] || ALTERNATIVE_STATIONERY_CONFIG.botanique),
+    ink: customization.color.hex,
+    fontFamily: customization.font.family,
+    fontVariant: customization.font.value,
+  }
+}
 
 const sectionStyle = { display: "grid", gap: "22px" }
 const introStyle = { display: "grid", gap: "8px" }
@@ -119,6 +130,7 @@ const qrNamesStyle = { margin: 0, fontSize: "27px", fontWeight: 400 }
 const qrImageStyle = { width: "126px", height: "126px", padding: "7px", background: "white" }
 const qrPlaceholderStyle = { display: "grid", width: "126px", height: "126px", placeItems: "center", background: "white" }
 const qrTextStyle = { margin: "16px 0 8px", fontSize: "14px", lineHeight: 1.45 }
+const personalizedQrTextStyle = { maxWidth: "220px", margin: "13px 0 7px", fontSize: "12px", lineHeight: 1.35 }
 const urlStyle = { maxWidth: "230px", margin: 0, overflow: "hidden", fontFamily: "Inter,Arial,sans-serif", fontSize: "8px", textOverflow: "ellipsis", whiteSpace: "nowrap" }
 const actionsStyle = { display: "flex", gap: "12px", flexWrap: "wrap", justifyContent: "center" }
 const errorStyle = { margin: 0, color: "#9a4d3e", fontSize: "12px", textAlign: "center" }
