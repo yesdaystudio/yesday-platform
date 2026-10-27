@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test:accommodation-reminders": "node --test tests/accommodation-reminders.test.mjs",
-    "test:personalized-invitations": "node --test tests/personalized-invitations.test.mjs"
+    "test:personalized-invitations": "node --test tests/personalized-invitations.test.mjs",
+    "test:menu-sections": "node --test tests/menu-sections.test.mjs"
   },
   "dependencies": {
     "@openfonts/cormorant-garamond_all": "^1.44.3",

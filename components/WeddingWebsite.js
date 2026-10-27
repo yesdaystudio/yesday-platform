@@ -3,6 +3,7 @@ import { buildGoogleCalendarUrl } from '../lib/googleCalendar'
 import { buildGoogleMapsSearchUrl } from '../lib/googleMaps'
 import DianaStickyHeader from '../app/[slug]/DianaStickyHeader'
 import AlternativeWeddingWebsite from './AlternativeWeddingWebsite'
+import { getVisibleMenuSections, serializeMenuSections } from '../lib/menuSections.mjs'
 
 const dianaHeroFontVariant = 'current'
 
@@ -12,6 +13,7 @@ export function WeddingNotFound() {
 
 export default function WeddingWebsite({ project, websiteContent = {}, scheduleItems = [], scheduleError = null, rsvpHref, invitationRecipient = null }) {
   const wc = websiteContent
+  const visibleMenuSections = getVisibleMenuSections(wc)
   const dresscodePalette = wc.dresscode_palette_enabled === true
     ? normalizeDresscodePalette(wc.dresscode_palette)
     : []
@@ -131,11 +133,11 @@ export default function WeddingWebsite({ project, websiteContent = {}, scheduleI
             )}
           </Section>
 
-          <Section title="Menu">
-            <p style={placeholderStyle}>
-              {wc.menu_intro_text || 'Informácie o slávnostnom menu, večernom bufete a prípadných alergiách doplníme čoskoro.'}
-            </p>
-          </Section>
+          {visibleMenuSections.length ? (
+            <Section title="Menu">
+              <MenuSectionList items={visibleMenuSections} />
+            </Section>
+          ) : null}
 
           <Section title="Dress code">
             <p style={placeholderStyle}>
@@ -250,6 +252,7 @@ function DianaEditorialContent({
 }) {
   const receptionVenueName = project.reception_venue_name || project.venue_name || 'Miesto oslavy bude doplnené'
   const receptionVenueAddress = project.reception_venue_address || project.venue_address || 'Adresa bude doplnená'
+  const visibleMenuSections = getVisibleMenuSections(wc)
   return (
     <section id="info" className="dianaEditorialSection" style={styles.editorialSection}>
       <DianaEditorialBlock
@@ -325,7 +328,7 @@ function DianaEditorialContent({
         )}
       </DianaEditorialBlock>
 
-      <DianaEditorialSplitBlock
+      {visibleMenuSections.length ? <DianaEditorialSplitBlock
         title="Slávnostné menu"
         imageSrc="/images/diana/menu.jpg"
         imageAlt="Slávnostné menu"
@@ -336,23 +339,9 @@ function DianaEditorialContent({
         copyStyle={styles.editorialMenuCopy}
       >
         <DianaMenuText styles={styles}>
-          {wc.menu_intro_text || `PREDJEDLO
-
-Kozí syr v pistáciovej kruste
-s medovo-horčicovým dressingom
-a mladými šalátovými lístkami
-
-POLIEVKA
-
-Consommé z bažanta
-s koreňovou zeleninou a bylinkami
-
-HLAVNÉ JEDLO
-
-Hovädzie líčka braizované
-na červenom víne`}
+          {serializeMenuSections(visibleMenuSections)}
         </DianaMenuText>
-      </DianaEditorialSplitBlock>
+      </DianaEditorialSplitBlock> : null}
 
       <DianaEditorialBlock eyebrow="Dress code" title="Štýl večera" styles={styles}>
         <DianaEditorialText styles={styles}>
@@ -585,6 +574,19 @@ function DianaMenuText({ children, styles }) {
           </div>
         )
       })}
+    </div>
+  )
+}
+
+function MenuSectionList({ items }) {
+  return (
+    <div style={menuSectionListStyle}>
+      {items.map((item) => (
+        <div key={item.key} style={menuSectionItemStyle}>
+          <p style={menuSectionLabelStyle}>{item.label}</p>
+          <p className="whitespace-pre-line" style={placeholderStyle}>{item.text}</p>
+        </div>
+      ))}
     </div>
   )
 }
@@ -1506,6 +1508,24 @@ const scheduleDescriptionStyle = {
 const placeholderStyle = {
   margin: 0,
   color: '#6f5b4b',
+}
+
+const menuSectionListStyle = {
+  display: 'grid',
+  gap: '22px',
+}
+
+const menuSectionItemStyle = {
+  paddingBottom: '22px',
+  borderBottom: '1px solid rgba(111, 91, 75, 0.14)',
+}
+
+const menuSectionLabelStyle = {
+  margin: '0 0 8px',
+  color: '#9a7557',
+  fontSize: '12px',
+  letterSpacing: '0.18em',
+  textTransform: 'uppercase',
 }
 
 const dresscodePaletteStyle = {

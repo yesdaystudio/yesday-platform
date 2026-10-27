@@ -126,8 +126,9 @@
 
 .signatureWedding__menu { display: grid; grid-template-columns: .85fr 1.15fr; gap: clamp(48px, 9vw, 120px); width: 100%; padding-right: max(24px, calc((100vw - 1120px) / 2)); padding-left: max(24px, calc((100vw - 1120px) / 2)); color: var(--signature-paper); background: var(--signature-ink); }
 .signatureWedding__menu .signatureWedding__eyebrow { color: color-mix(in srgb, var(--signature-accent) 55%, white); }
-.signatureWedding__menuCopy p { margin: 0; padding: 17px 0; border-bottom: 1px solid color-mix(in srgb, var(--signature-paper) 18%, transparent); font-size: clamp(18px, 2vw, 23px); line-height: 1.5; }
-.signatureWedding__menuCopy p:nth-child(odd) { padding-top: 28px; color: color-mix(in srgb, var(--signature-accent) 45%, white); font-family: Inter, Arial, sans-serif; font-size: 10px; letter-spacing: .22em; text-transform: uppercase; }
+.signatureWedding__menuCourse { padding: 22px 0; border-bottom: 1px solid color-mix(in srgb, var(--signature-paper) 18%, transparent); }
+.signatureWedding__menuCourse p { margin: 0; white-space: pre-line; font-size: clamp(18px, 2vw, 23px); line-height: 1.5; }
+.signatureWedding__menuCourse p:first-child { margin-bottom: 8px; color: color-mix(in srgb, var(--signature-accent) 45%, white); font-family: Inter, Arial, sans-serif; font-size: 10px; letter-spacing: .22em; text-transform: uppercase; }
 
 .signatureWedding__details { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(50px, 9vw, 120px); }
 .signatureWedding__details article { min-width: 0; }

@@ -1,6 +1,7 @@
 import { getDesignCustomization } from '../lib/designCustomization'
 import { buildGoogleCalendarUrl } from '../lib/googleCalendar'
 import { buildGoogleMapsSearchUrl } from '../lib/googleMaps'
+import { getVisibleMenuSections } from '../lib/menuSections.mjs'
 
 const THEMES = {
   botanique: {
@@ -39,6 +40,7 @@ export default function AlternativeWeddingWebsite({
   const palette = websiteContent.dresscode_palette_enabled === true
     ? websiteContent.dresscode_palette || []
     : []
+  const visibleMenuSections = getVisibleMenuSections(websiteContent)
 
   return (
     <main
@@ -124,17 +126,20 @@ export default function AlternativeWeddingWebsite({
         )}
       </section>
 
-      <section className="signatureWedding__menu signatureWedding__section">
+      {visibleMenuSections.length ? <section className="signatureWedding__menu signatureWedding__section">
         <div>
           <p className="signatureWedding__eyebrow">Pri spoločnom stole</p>
           <h2>Slávnostné menu</h2>
         </div>
         <div className="signatureWedding__menuCopy">
-          {parseParagraphs(websiteContent.menu_intro_text).map((paragraph, index) => (
-            <p key={`${variant}-menu-${index}`}>{paragraph}</p>
+          {visibleMenuSections.map((item) => (
+            <div key={item.key} className="signatureWedding__menuCourse">
+              <p>{item.label}</p>
+              <p>{item.text}</p>
+            </div>
           ))}
         </div>
-      </section>
+      </section> : null}
 
       <section className="signatureWedding__details signatureWedding__section">
         <article>

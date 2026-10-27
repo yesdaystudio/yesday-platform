@@ -10,6 +10,11 @@ import {
   normalizeDresscodePalette,
 } from "../lib/dresscodePalette"
 import { DESIGN_CUSTOMIZATION_OPTIONS } from "../lib/designCustomization"
+import {
+  createDefaultMenuSections,
+  normalizeMenuSections,
+  serializeMenuSections,
+} from "../lib/menuSections.mjs"
 
 export default function ClientEditor({ slug: slugProp, onProjectSaved, demoData, onDemoSave, embedded = false }) {
   const params = useParams()
@@ -40,6 +45,7 @@ export default function ClientEditor({ slug: slugProp, onProjectSaved, demoData,
     welcome_text: "",
     story_text: "",
     menu_intro_text: "",
+    menu_sections: { configured: false, items: createDefaultMenuSections() },
     dresscode_text: "",
     dresscode_palette_enabled: false,
     dresscode_palette: [],
@@ -116,6 +122,10 @@ export default function ClientEditor({ slug: slugProp, onProjectSaved, demoData,
           welcome_text: contentData.welcome_text || "",
           story_text: contentData.story_text || "",
           menu_intro_text: contentData.menu_intro_text || "",
+          menu_sections: {
+            configured: contentData.menu_sections?.configured === true,
+            items: normalizeMenuSections(contentData.menu_sections, contentData.menu_intro_text),
+          },
           dresscode_text: contentData.dresscode_text || "",
           dresscode_palette_enabled: contentData.dresscode_palette_enabled === true,
           dresscode_palette: normalizeDresscodePalette(contentData.dresscode_palette),
@@ -155,6 +165,18 @@ export default function ClientEditor({ slug: slugProp, onProjectSaved, demoData,
     setContentForm((current) => ({
       ...current,
       [name]: type === "checkbox" ? checked : value,
+    }))
+  }
+
+  function handleMenuSectionChange(key, field, value) {
+    setContentForm((current) => ({
+      ...current,
+      menu_sections: {
+        configured: true,
+        items: normalizeMenuSections(current.menu_sections, current.menu_intro_text).map((item) =>
+          item.key === key ? { ...item, [field]: value } : item
+        ),
+      },
     }))
   }
 
@@ -245,7 +267,8 @@ export default function ClientEditor({ slug: slugProp, onProjectSaved, demoData,
     if (demoData) {
       const updatedProject = { ...project, ...projectPayload }
       const schedule = sortScheduleItemsChronologically(scheduleForm)
-      onDemoSave({ project: updatedProject, content: { ...contentForm, dresscode_palette: normalizeDresscodePalette(contentForm.dresscode_palette) }, schedule })
+      const demoMenuItems = normalizeMenuSections(contentForm.menu_sections, contentForm.menu_intro_text)
+      onDemoSave({ project: updatedProject, content: { ...contentForm, menu_intro_text: serializeMenuSections(demoMenuItems), menu_sections: { configured: true, items: demoMenuItems }, dresscode_palette: normalizeDresscodePalette(contentForm.dresscode_palette) }, schedule })
       setProject(updatedProject)
       setScheduleForm(schedule)
       setMessage("Zmeny boli uložené v ukážke. Pozrite si svadobný web alebo tlačoviny.")
@@ -297,18 +320,36 @@ export default function ClientEditor({ slug: slugProp, onProjectSaved, demoData,
     const contentPayload = {
       project_id: project.id,
       ...contentForm,
+      menu_intro_text: serializeMenuSections(
+        normalizeMenuSections(contentForm.menu_sections, contentForm.menu_intro_text)
+      ),
+      menu_sections: {
+        configured: true,
+        items: normalizeMenuSections(contentForm.menu_sections, contentForm.menu_intro_text),
+      },
       dresscode_palette: normalizeDresscodePalette(
         contentForm.dresscode_palette
       ),
     }
 
-    let contentResult = await saveWebsiteContent(existingContent, contentPayload)
+    const compatibleContentPayload = { ...contentPayload }
+    let contentResult = await saveWebsiteContent(existingContent, compatibleContentPayload)
 
     if (isMissingDresscodePaletteColumnError(contentResult.error)) {
-      const legacyContentPayload = { ...contentPayload }
-      delete legacyContentPayload.dresscode_palette_enabled
-      delete legacyContentPayload.dresscode_palette
-      contentResult = await saveWebsiteContent(existingContent, legacyContentPayload)
+      delete compatibleContentPayload.dresscode_palette_enabled
+      delete compatibleContentPayload.dresscode_palette
+      contentResult = await saveWebsiteContent(existingContent, compatibleContentPayload)
+    }
+
+    if (isMissingMenuSectionsColumnError(contentResult.error)) {
+      delete compatibleContentPayload.menu_sections
+      contentResult = await saveWebsiteContent(existingContent, compatibleContentPayload)
+    }
+
+    if (isMissingDresscodePaletteColumnError(contentResult.error)) {
+      delete compatibleContentPayload.dresscode_palette_enabled
+      delete compatibleContentPayload.dresscode_palette
+      contentResult = await saveWebsiteContent(existingContent, compatibleContentPayload)
     }
 
     if (contentResult.error) {
@@ -427,12 +468,9 @@ export default function ClientEditor({ slug: slugProp, onProjectSaved, demoData,
 
         <TextField label="Úvodný text" name="welcome_text" value={contentForm.welcome_text} onChange={handleContentChange} />
         <TextField label="Náš príbeh" name="story_text" value={contentForm.story_text} onChange={handleContentChange} />
-        <TextField
-          label="Svadobné menu"
-          helperText="Napíšte menu, ktoré sa bude podávať na svadbe."
-          name="menu_intro_text"
-          value={contentForm.menu_intro_text}
-          onChange={handleContentChange}
+        <MenuSectionsField
+          items={normalizeMenuSections(contentForm.menu_sections, contentForm.menu_intro_text)}
+          onChange={handleMenuSectionChange}
         />
         <TextField label="Dress code" name="dresscode_text" value={contentForm.dresscode_text} onChange={handleContentChange} />
         <DresscodePaletteField
@@ -526,10 +564,45 @@ function isMissingDresscodePaletteColumnError(error) {
     .join(" ")
     .toLowerCase()
 
+  return details.includes("dresscode_palette")
+}
+
+function isMissingMenuSectionsColumnError(error) {
+  if (!error) return false
+  const details = [error.message, error.details, error.hint].filter(Boolean).join(" ").toLowerCase()
+  return details.includes("menu_sections")
+}
+
+function MenuSectionsField({ items, onChange }) {
   return (
-    error.code === "42703" ||
-    error.code === "PGRST204" ||
-    details.includes("dresscode_palette")
+    <fieldset style={menuFieldsetStyle}>
+      <legend style={labelTextStyle}>Svadobné menu</legend>
+      <p style={menuHelperStyle}>Zapnite iba chody, ktoré chcete zobraziť, a ku každému dopíšte jedlo.</p>
+      <div style={menuGridStyle}>
+        {items.map((item) => (
+          <div key={item.key} style={{ ...menuCourseStyle, ...(item.enabled ? menuCourseEnabledStyle : {}) }}>
+            <label style={menuToggleStyle}>
+              <input
+                type="checkbox"
+                checked={item.enabled}
+                onChange={(event) => onChange(item.key, "enabled", event.target.checked)}
+                style={paletteCheckboxStyle}
+              />
+              <span>{item.label}</span>
+            </label>
+            {item.enabled ? (
+              <textarea
+                value={item.text}
+                onChange={(event) => onChange(item.key, "text", event.target.value)}
+                rows={3}
+                placeholder={`Napíšte ${item.label.toLowerCase()}`}
+                style={menuTextareaStyle}
+              />
+            ) : null}
+          </div>
+        ))}
+      </div>
+    </fieldset>
   )
 }
 
@@ -735,6 +808,51 @@ const inputStyle = {
 const textareaStyle = {
   ...inputStyle,
   lineHeight: 1.6,
+}
+
+const menuFieldsetStyle = {
+  margin: "0 0 24px",
+  padding: 0,
+  border: 0,
+}
+
+const menuHelperStyle = {
+  margin: "0 0 14px",
+  color: "#6f5b4b",
+  fontSize: "14px",
+  lineHeight: 1.5,
+}
+
+const menuGridStyle = {
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+  gap: "12px",
+}
+
+const menuCourseStyle = {
+  padding: "15px",
+  border: "1px solid rgba(138,111,84,0.15)",
+  background: "rgba(255,250,245,0.55)",
+}
+
+const menuCourseEnabledStyle = {
+  borderColor: "rgba(127,102,82,0.35)",
+  background: "#fffaf5",
+}
+
+const menuToggleStyle = {
+  display: "flex",
+  alignItems: "center",
+  gap: "9px",
+  fontSize: "15px",
+  cursor: "pointer",
+}
+
+const menuTextareaStyle = {
+  ...textareaStyle,
+  marginTop: "12px",
+  minHeight: "88px",
+  resize: "vertical",
 }
 
 const paletteFieldsetStyle = {

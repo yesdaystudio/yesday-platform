@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { getVisibleMenuSections } from "../lib/menuSections.mjs"
 import styles from "./ClientOverview.module.css"
 
 export default function ClientOverview({
@@ -76,7 +77,7 @@ export default function ClientOverview({
   const contentReady = Boolean(
     content?.welcome_text &&
     content?.story_text &&
-    content?.menu_intro_text &&
+    getVisibleMenuSections(content).length > 0 &&
     Array.isArray(schedule) &&
     schedule.length >= 2 &&
     schedule.every((item) => item.item_time && item.item_title)

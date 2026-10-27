@@ -268,7 +268,7 @@ async function loadOverviewData(projectId) {
   const [contentResult, scheduleResult] = await Promise.all([
     supabase
       .from("website_content")
-      .select("welcome_text, story_text, menu_intro_text")
+      .select("welcome_text, story_text, menu_intro_text, menu_sections")
       .eq("project_id", projectId)
       .maybeSingle(),
     supabase
