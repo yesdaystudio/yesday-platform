@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import supabase from "../lib/supabase"
-import { sortScheduleItemsChronologically } from "../lib/schedule"
+import { sortScheduleItemsChronologically, withDefaultScheduleItems } from "../lib/schedule"
 import {
   DRESSCODE_PALETTE_OPTIONS,
   MAX_DRESSCODE_PALETTE_COLORS,
@@ -141,12 +141,14 @@ export default function ClientEditor({ slug: slugProp, onProjectSaved, demoData,
         .eq("project_id", projectData.id)
         .order("sort_order", { ascending: true })
 
-      setScheduleForm(
-        sortScheduleItemsChronologically(scheduleData?.map((item) => ({
+      const loadedSchedule = scheduleData?.map((item) => ({
           item_time: item.item_time || "",
           item_title: item.item_title || "",
           item_description: item.item_description || "",
-        })) || [])
+        })) || []
+
+      setScheduleForm(
+        sortScheduleItemsChronologically(withDefaultScheduleItems(loadedSchedule, projectData))
       )
 
       setLoading(false)
@@ -485,6 +487,7 @@ export default function ClientEditor({ slug: slugProp, onProjectSaved, demoData,
         <TextField label="FAQ" name="faq_text" value={contentForm.faq_text} onChange={handleContentChange} />
 
         <h2 style={subtitleStyle}>Harmonogram</h2>
+        <p style={scheduleHelperStyle}>Obrad a oslava sú pripravené vopred. Doplňte časy a podľa potreby pridajte ďalšie body programu.</p>
 
         {scheduleForm.map((item, index) => (
           <div key={index} style={scheduleCardStyle}>
@@ -528,7 +531,7 @@ export default function ClientEditor({ slug: slugProp, onProjectSaved, demoData,
           onClick={addScheduleItem}
           style={secondaryButtonStyle}
         >
-          + Pridať bod programu
+          + Pridať ďalší bod programu
         </button>
 
         <br />
@@ -814,6 +817,13 @@ const menuFieldsetStyle = {
   margin: "0 0 24px",
   padding: 0,
   border: 0,
+}
+
+const scheduleHelperStyle = {
+  margin: "-8px 0 18px",
+  color: "#6f5b4b",
+  fontSize: "14px",
+  lineHeight: 1.5,
 }
 
 const menuHelperStyle = {
