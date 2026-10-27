@@ -68,7 +68,7 @@ const Invitation = forwardRef(function Invitation({ data, config, variant }, ref
       <div style={invitationContentStyle}>
         <p style={{ ...smallStyle, color: config.accent }}>S radosťou vás pozývame</p>
         <div style={{ ...namePlateStyle, color: config.paper, background: config.ink }}>
-          <h3 style={{ ...namesStyle, ...(config.fontVariant === "editorial" ? editorialNamesStyle : {}) }}>{data.firstPartner}<i style={{ ...ampersandStyle, ...invitationAmpersandStyle, fontFamily: config.fontFamily }}>&amp;</i>{data.secondPartner}</h3>
+          <h3 style={{ ...namesStyle, ...(config.fontVariant === "editorial" ? editorialNamesStyle : {}) }}>{data.firstPartner}<i data-pdf-text-overlay="true" style={{ ...ampersandStyle, ...invitationAmpersandStyle, fontFamily: config.fontFamily }}>&amp;</i>{data.secondPartner}</h3>
         </div>
         <p style={dateStyle}>{data.displayDate}</p>
         <p style={detailStyle}>{data.timeLine}<br />{data.ceremonyVenue}<br />{data.ceremonyCity}</p>
@@ -82,7 +82,7 @@ const QrCard = forwardRef(function QrCard({ data, config, variant, qrDataUrl }, 
     <article ref={ref} style={{ ...qrCardStyle, color: config.ink, background: config.paper, fontFamily: config.fontFamily }} aria-label={`${config.name} QR kartička`}>
       <Image src={config.ornament} alt="" width={90} height={90} unoptimized data-pdf-overlay-image="true" style={{ ...qrOrnamentStyle, ...(variant === "penelope" ? qrPenelopeOrnamentStyle : qrBotaniqueOrnamentStyle) }} />
       <p style={{ ...smallStyle, color: config.accent }}>Všetko o našej svadbe</p>
-      <div style={{ ...qrNamePlateStyle, color: config.paper, background: config.ink }}><h3 style={qrNamesStyle}>{data.firstPartner} <i style={{ ...ampersandStyle, fontFamily: config.fontFamily }}>&amp;</i> {data.secondPartner}</h3></div>
+      <div style={{ ...qrNamePlateStyle, color: config.paper, background: config.ink }}><h3 style={qrNamesStyle}>{data.firstPartner} <i data-pdf-text-overlay="true" style={{ ...ampersandStyle, fontFamily: config.fontFamily }}>&amp;</i> {data.secondPartner}</h3></div>
       {qrDataUrl ? <Image src={qrDataUrl} alt="QR kód svadobného webu" width={126} height={126} unoptimized data-pdf-required-image="true" style={qrImageStyle} /> : <div style={qrPlaceholderStyle}>QR</div>}
       <p style={qrTextStyle}>Naskenujte QR kód<br />a potvrďte svoju účasť.</p>
       <p style={{ ...urlStyle, color: config.accent }}>{data.websiteDisplayUrl}</p>
