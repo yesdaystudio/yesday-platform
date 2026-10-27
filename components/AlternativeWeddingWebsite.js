@@ -69,7 +69,7 @@ export default function AlternativeWeddingWebsite({
 
       {invitationRecipient ? (
         <section style={personalizedWelcomeStyle} aria-label="Personalizovaná pozvánka">
-          <p style={personalizedWelcomeEyebrowStyle}>Táto pozvánka je pripravená pre</p>
+          <p style={personalizedWelcomeEyebrowStyle}>S radosťou vás pozývame</p>
           <p style={{ ...personalizedWelcomeNameStyle, color: customization.color.hex }}>{invitationRecipient.recipient_label}</p>
         </section>
       ) : null}

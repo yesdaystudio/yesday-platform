@@ -178,7 +178,7 @@ export default function WeddingWebsite({ project, websiteContent = {}, scheduleI
 function PersonalizedWelcome({ recipient }) {
   return (
     <section style={personalizedWelcomeStyle} aria-label="Personalizovaná pozvánka">
-      <p style={personalizedWelcomeEyebrowStyle}>Táto pozvánka je pripravená pre</p>
+      <p style={personalizedWelcomeEyebrowStyle}>S radosťou vás pozývame</p>
       <p style={personalizedWelcomeNameStyle}>{recipient.recipient_label}</p>
     </section>
   )
