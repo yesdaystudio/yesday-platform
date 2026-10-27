@@ -125,6 +125,8 @@ export async function POST(request) {
   }
 
   const stripe = new Stripe(stripeSecretKey)
+  const cancelParams = new URLSearchParams({ design: cleanDesignFamily })
+  if (testOnly) cancelParams.set('checkout_test', String(body.test_access_token || ''))
 
   let session
   try {
@@ -146,7 +148,7 @@ export async function POST(request) {
       ],
       metadata,
       success_url: `${cleanSiteUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${cleanSiteUrl}/?design=${cleanDesignFamily}#cennik`,
+      cancel_url: `${cleanSiteUrl}/?${cancelParams.toString()}#cennik`,
     })
   } catch (err) {
     console.error('[checkout] Stripe session creation failed:', err)
