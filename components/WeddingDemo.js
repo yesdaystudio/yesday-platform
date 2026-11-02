@@ -4,6 +4,7 @@ import { useEffect, useState, useSyncExternalStore } from 'react'
 import Link from 'next/link'
 import QRCode from 'qrcode'
 import DianaStationerySet from './DianaStationerySet'
+import ChloeStationerySet from './ChloeStationerySet'
 import AlternativeStationerySet from './AlternativeStationerySet'
 import ClientDashboard from './ClientDashboard'
 import ClientEditor from './ClientEditor'
@@ -18,7 +19,7 @@ const readOrigin = () => window.location.origin
 const serverOrigin = () => ''
 
 const TABS = [['web', 'Svadobný web'], ['editor', 'Editor'], ['dashboard', 'Hostia'], ['accommodation', 'Ubytovanie'], ['stationery', 'Pozvánka + QR'], ['rsvp', 'Vyskúšať RSVP']]
-const DESIGNS = [['diana', 'Diana'], ['botanique', 'Botanique'], ['penelope', 'Penelope']]
+const DESIGNS = [['diana', 'Diana'], ['botanique', 'Botanique'], ['penelope', 'Penelope'], ['chloe', 'Chloe']]
 
 export default function WeddingDemo({ initialValues }) {
   const [values, setValues] = useState(() => normalizeDemo(initialValues))
@@ -47,7 +48,7 @@ export default function WeddingDemo({ initialValues }) {
       const bytes = new Uint8Array(await new Response(compressed).arrayBuffer())
       const packed = btoa(String.fromCharCode(...bytes)).replaceAll('+', '-').replaceAll('/', '_').replace(/=+$/, '')
       const link = `${origin}/ukazka/web?packed=${packed}`
-      const url = await QRCode.toDataURL(link, { width: 320, margin: 2 })
+      const url = await QRCode.toDataURL(link, { width: demoData.project.design_family === 'chloe' ? 1024 : 320, margin: demoData.project.design_family === 'chloe' ? 4 : 2 })
       if (active) { setWebsiteUrl(link); setQrDataUrl(url); setQrError('') }
     }
     generateQr().catch(() => { if (active) { setWebsiteUrl(''); setQrDataUrl(''); setQrError('QR kód sa nepodarilo vytvoriť. Skúste skrátiť texty ukážky.') } })
@@ -135,7 +136,7 @@ export default function WeddingDemo({ initialValues }) {
           </div>
           <iframe title={`Živá ukážka svadobného webu ${designName}`} className={styles.frame} src={`/ukazka/web?${previewQuery}`} />
         </>}
-        {tab === 'stationery' && <div className={styles.stationery}>{project.design_family === 'diana' ? <DianaStationerySet project={project} weddingWebsiteUrl={websiteUrl} websiteDisplayUrl={origin ? `${origin}/ukazka/web` : "Ukážka svadobného webu"} qrDataUrl={qrDataUrl} qrError={qrError} /> : <AlternativeStationerySet variant={project.design_family} project={project} weddingWebsiteUrl={websiteUrl} websiteDisplayUrl={origin ? `${origin}/ukazka/web` : "Ukážka svadobného webu"} qrDataUrl={qrDataUrl} qrError={qrError} />}</div>}
+        {tab === 'stationery' && <div className={styles.stationery}>{project.design_family === 'diana' ? <DianaStationerySet project={project} weddingWebsiteUrl={websiteUrl} websiteDisplayUrl={origin ? `${origin}/ukazka/web` : "Ukážka svadobného webu"} qrDataUrl={qrDataUrl} qrError={qrError} /> : project.design_family === 'chloe' ? <ChloeStationerySet project={project} weddingWebsiteUrl={websiteUrl} websiteDisplayUrl={origin ? `${origin}/ukazka/web` : "Ukážka svadobného webu"} qrDataUrl={qrDataUrl} qrError={qrError} /> : <AlternativeStationerySet variant={project.design_family} project={project} weddingWebsiteUrl={websiteUrl} websiteDisplayUrl={origin ? `${origin}/ukazka/web` : "Ukážka svadobného webu"} qrDataUrl={qrDataUrl} qrError={qrError} />}</div>}
         {tab === 'editor' && <div className={styles.dashboard}><ClientEditor demoData={demoData} onDemoSave={saveDemo} /></div>}
         {tab === 'dashboard' && <div className={styles.dashboard}>
           <p className={styles.hint}>Prehľad hostí z klientskej zóny: dospelí, deti, alergie, požiadavky na ubytovanie a dopravu. Kliknutím na jednotlivé prehľady zobrazíte mená a detaily.</p>

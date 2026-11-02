@@ -1,0 +1,165 @@
+@font-face { font-family: Italiana; src: url('/templates/chloe/italiana.ttf') format('truetype'); font-style: normal; font-weight: 400; font-display: swap; }
+.signatureWedding--chloe { --signature-ink:#344f50; --signature-muted:#526565; --signature-paper:#f7f8f4; --signature-accent:#526565; --signature-line:#cbd8d1; }
+.signatureWedding--chloe .signatureWedding__nav { position:relative; min-height:66px; padding:0 5%; background:#f5f7f3; color:var(--signature-ink); backdrop-filter:none; }
+.signatureWedding--chloe .signatureWedding__brand { font-size:28px; letter-spacing:0; }
+.signatureWedding--chloe .signatureWedding__nav nav { gap:38px; letter-spacing:0; }
+.signatureWedding--chloe .signatureWedding__hero { height:714px; min-height:714px; background:url('/templates/chloe/watercolor.png') center/cover no-repeat; }
+.signatureWedding--chloe .signatureWedding__heroShade { display:none; }
+.chloeLayers { position:absolute; inset:0; pointer-events:none; }
+.signatureWedding__hero > .chloeLayers { width:1440px; left:50%; right:auto; transform:translateX(-50%); }
+.chloeLayers--mobile { display:none; }
+.chloeLayer { position:absolute; display:flex; align-items:center; justify-content:center; }
+.chloeLayer img { max-width:none; object-fit:contain; flex:none; }
+/* Rear flowers precede the live copy, foreground flowers follow it visually. */
+.signatureWedding__hero .chloeLayer:nth-child(-n+5) { z-index:0; }
+.signatureWedding__hero .chloeLayer:nth-child(n+6) { z-index:2; }
+.signatureWedding--chloe .signatureWedding__heroCopy { z-index:1; padding:70px 20px; width:min(100%,900px); color:var(--signature-ink); text-shadow:none; transform:translateY(-18px); }
+.signatureWedding--chloe .signatureWedding__heroCopy h1 { font-size:150px; line-height:.68; letter-spacing:0; max-width:100%; overflow-wrap:anywhere; }
+.signatureWedding--chloe .signatureWedding__heroCopy h1 span { font-family:'Ms Madi',cursive; font-size:1.14em; font-weight:400; line-height:.72; }
+.signatureWedding--chloe .signatureWedding__heroCopy h1 i { font-family:'Ms Madi',cursive; font-size:58px; line-height:.8; font-style:normal; margin:12px 0 8px; }
+.signatureWedding--chloe .signatureWedding__heroCopy strong { margin:0; font-size:12px; line-height:15px; letter-spacing:0; color:var(--signature-muted); }
+.signatureWedding--chloe .signatureWedding__section { width:100%; padding:120px max(28px,calc((100% - 1120px)/2)); }
+.signatureWedding--chloe .signatureWedding__eyebrow { margin:0 0 24px; font-size:12px; line-height:15px; letter-spacing:0; }
+.signatureWedding--chloe h2 { font-weight:400; }
+.signatureWedding--chloe .signatureWedding__welcome h2 { max-width:900px; font-size:72px; line-height:1.08; }
+.signatureWedding--chloe .signatureWedding__ornament { margin-top:24px; line-height:22px; }
+.signatureWedding--chloe .signatureWedding__places { padding:0; gap:0; }
+.signatureWedding--chloe .signatureWedding__places article { min-height:418px; padding:60px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; min-width:0; }
+.signatureWedding--chloe .signatureWedding__places strong { order:-1; font-family:Italiana,serif; font-size:86px; line-height:1; }
+.signatureWedding--chloe .signatureWedding__places .signatureWedding__eyebrow { margin:0; }
+.signatureWedding--chloe .signatureWedding__places h2 { margin:0; font-size:42px; line-height:1; }
+.signatureWedding--chloe .signatureWedding__places article > p:not(.signatureWedding__eyebrow) { font-size:22px; line-height:1.7; }
+.signatureWedding--chloe .signatureWedding__mapAction { margin:0; letter-spacing:0; }
+.signatureWedding--chloe .signatureWedding__story { display:block; padding:96px 24px; text-align:center; }
+.signatureWedding--chloe .signatureWedding__storyImage { display:none; }
+.signatureWedding--chloe .signatureWedding__story > div:last-child { position:relative; overflow:hidden; width:min(100%,760px); margin:auto; padding:48px 99px; border:1px solid var(--signature-line); border-radius:4px; background:#fff; box-shadow:0 12px 32px -8px #344f5014; }
+.signatureWedding--chloe .signatureWedding__story > div:last-child::before,
+.signatureWedding--chloe .signatureWedding__story > div:last-child::after { content:''; position:absolute; background:url('/templates/chloe/painted-flowers.png') center/contain no-repeat; pointer-events:none; }
+.signatureWedding--chloe .signatureWedding__story > div:last-child::before { width:180px; height:180px; top:-24px; left:calc(50% - 90px); transform:rotate(-8deg); opacity:.35; }
+.signatureWedding--chloe .signatureWedding__story > div:last-child::after { width:140px; height:140px; bottom:-24px; left:calc(50% - 70px); transform:rotate(12deg); opacity:.25; }
+.signatureWedding--chloe .signatureWedding__story p,.signatureWedding--chloe .signatureWedding__story h2 { position:relative; z-index:1; }
+.chloeStoryDivider { display:block; width:56px; height:1px; margin:0 auto 24px; background:#dce3dd; }
+.signatureWedding--chloe .signatureWedding__story h2 { margin:0 0 24px; font-size:84px; }
+.signatureWedding--chloe .signatureWedding__story div > p:last-child { font-size:22px; line-height:1.7; }
+.signatureWedding--chloe .signatureWedding__schedule { position:relative; }
+.signatureWedding--chloe .signatureWedding__schedule > h2 { margin:0; font-size:84px; }
+.signatureWedding--chloe .signatureWedding__timeline { position:relative; z-index:1; margin:65px auto 0; }
+.signatureWedding--chloe .signatureWedding__timeline article:last-child { border-bottom:1px solid var(--signature-line); }
+.signatureWedding--chloe .signatureWedding__timeline time { letter-spacing:0; line-height:15px; }
+.signatureWedding--chloe .signatureWedding__timeline h3 { margin:0 0 4px; line-height:36px; }
+.signatureWedding--chloe .signatureWedding__timeline p { line-height:1.7; }
+.signatureWedding--chloe .signatureWedding__menu { grid-template-columns:476fr 544fr; gap:100px; background:#3e6062; color:#f5f7f3; }
+.signatureWedding--chloe .signatureWedding__menu .signatureWedding__eyebrow { color:inherit; }
+.signatureWedding--chloe .signatureWedding__menu h2 { margin:0; font-size:84px; }
+.signatureWedding--chloe .signatureWedding__menuCourse { border-color:#f5f7f326; }
+.signatureWedding--chloe .signatureWedding__menuCourse p { line-height:28px; font-size:23px; }
+.signatureWedding--chloe .signatureWedding__menuCourse p:first-child { margin-bottom:10px; color:inherit; font-size:11px; line-height:13px; letter-spacing:0; }
+.signatureWedding--chloe .signatureWedding__details { grid-template-columns:479.5fr 540.5fr; gap:100px; }
+.signatureWedding--chloe .signatureWedding__details .signatureWedding__eyebrow { margin-bottom:20px; }
+.signatureWedding--chloe .signatureWedding__details article:first-child h2 { margin:0 0 20px; font-size:84px; line-height:1; }
+.signatureWedding--chloe .signatureWedding__details article+article { padding-left:60px; }
+.signatureWedding--chloe .signatureWedding__details article+article h2 { margin:20px 0; font-size:42px; line-height:1; }
+.signatureWedding--chloe .signatureWedding__palette { margin-top:20px; }
+.signatureWedding--chloe .signatureWedding__palette span { border:0; }
+.signatureWedding--chloe .signatureWedding__faq h2 { margin:0; font-size:84px; }
+.chloeQuestions { max-width:720px; margin:0 auto; padding:26px 0; text-align:left; border-block:1px solid var(--signature-line); }
+.chloeQuestions h3 { margin:0; font-size:30px; font-weight:400; line-height:36px; }
+.chloeQuestions p { margin:0; color:var(--signature-muted); font-size:22px; line-height:1.7; }
+.signatureWedding--chloe .signatureWedding__rsvp { background:#e3eef0; }
+.signatureWedding--chloe .signatureWedding__rsvp h2 { font-size:84px; margin:0 0 24px; }
+.signatureWedding--chloe .signatureWedding__rsvpActions { margin-top:24px; }
+.signatureWedding--chloe .signatureWedding__rsvp a { letter-spacing:0; background:#3e6062; border-color:#3e6062; }
+.signatureWedding--chloe .signatureWedding__rsvp .signatureWedding__calendarAction { background:transparent; color:#3e6062; }
+@media(max-width:760px) {
+  .signatureWedding--chloe .signatureWedding__nav { min-height:70px; padding:0 22px; gap:12px; }
+  .signatureWedding--chloe .signatureWedding__brand { font-size:23px; }
+  .signatureWedding--chloe .signatureWedding__nav nav { gap:16px; font-size:9px; }
+  .signatureWedding--chloe .signatureWedding__nav nav a:not(:last-child) { display:block; }
+  .signatureWedding--chloe .signatureWedding__hero { height:590px; min-height:590px; align-items:start; }
+  .chloeLayers--desktop { display:none; }
+  .chloeLayers--mobile { display:block; }
+  .signatureWedding__hero > .chloeLayers { width:390px; }
+  .signatureWedding__hero .chloeLayers--mobile .chloeLayer:nth-child(-n+3) { z-index:0; }
+  .signatureWedding__hero .chloeLayers--mobile .chloeLayer:nth-child(n+4) { z-index:2; }
+  .signatureWedding--chloe .signatureWedding__heroCopy { width:100%; padding:98px 28px 0; transform:translateY(-8px); }
+  .signatureWedding--chloe .signatureWedding__heroCopy h1 { font-size:100px; line-height:1; width:100%; }
+  .signatureWedding--chloe .signatureWedding__heroCopy h1 span { font-size:1.18em; line-height:.78; }
+  .signatureWedding--chloe .signatureWedding__heroCopy h1 span:last-child { line-height:.82; }
+  .signatureWedding--chloe .signatureWedding__heroCopy h1 i { margin:4px 0 0; font-size:42px; line-height:1; }
+  .signatureWedding--chloe .signatureWedding__heroCopy strong { font-size:11px; line-height:22px; }
+  .signatureWedding--chloe .signatureWedding__section { padding:72px 28px; }
+  .signatureWedding--chloe .signatureWedding__eyebrow { font-size:11px; line-height:1.6; }
+  .signatureWedding--chloe .signatureWedding__welcome { padding:76px 28px; }
+  .signatureWedding--chloe .signatureWedding__welcome .signatureWedding__eyebrow { margin-bottom:26px; }
+  .signatureWedding--chloe .signatureWedding__welcome h2 { font-size:43px; line-height:1.12; }
+  .signatureWedding--chloe .signatureWedding__ornament { margin-top:26px; }
+  .signatureWedding--chloe .signatureWedding__places { padding:0; }
+  .signatureWedding--chloe .signatureWedding__places article { padding:48px 28px; min-height:0; }
+  .signatureWedding--chloe .signatureWedding__places strong { font-size:68px; line-height:1.1; }
+  .signatureWedding--chloe .signatureWedding__places h2 { font-size:34px; line-height:1.15; }
+  .signatureWedding--chloe .signatureWedding__places article > p:not(.signatureWedding__eyebrow) { font-size:21px; line-height:1.55; }
+  .signatureWedding--chloe .signatureWedding__mapAction { margin-top:6px; width:min(260px,100%); min-height:50px; font-size:10px; }
+  .signatureWedding--chloe .signatureWedding__story { padding:76px 24px; }
+  .signatureWedding--chloe .signatureWedding__story > div:last-child { padding:52px 24px; }
+  .signatureWedding--chloe .signatureWedding__story .signatureWedding__eyebrow { margin-bottom:22px; }
+  .chloeStoryDivider { width:48px; margin-bottom:22px; }
+  .signatureWedding--chloe .signatureWedding__story h2 { font-size:48px; line-height:1.15; margin-bottom:22px; }
+  .signatureWedding--chloe .signatureWedding__story div > p:last-child { font-size:21px; line-height:1.55; }
+  .signatureWedding--chloe .signatureWedding__story > div:last-child::before { width:110px; height:110px; top:-22px; left:calc(50% - 55px); }
+  .signatureWedding--chloe .signatureWedding__story > div:last-child::after { width:90px; height:90px; bottom:-22px; left:calc(50% - 45px); }
+  .signatureWedding--chloe .signatureWedding__schedule { padding:30px 24px 72px 84px; text-align:left; }
+  .signatureWedding--chloe .signatureWedding__schedule > h2,.signatureWedding--chloe .signatureWedding__menu h2,.signatureWedding--chloe .signatureWedding__details article:first-child h2,.signatureWedding--chloe .signatureWedding__faq h2,.signatureWedding--chloe .signatureWedding__rsvp h2 { font-size:48px; line-height:1.15; }
+  .signatureWedding--chloe .signatureWedding__schedule > .signatureWedding__eyebrow { margin-bottom:20px; }
+  .signatureWedding--chloe .signatureWedding__timeline { margin-top:38px; }
+  .signatureWedding--chloe .signatureWedding__timeline article { grid-template-columns:52px minmax(0,1fr); gap:18px; padding:25px 0; }
+  .signatureWedding--chloe .signatureWedding__timeline time { font-family:Inter,Arial,sans-serif; font-size:11px; line-height:2.8; }
+  .signatureWedding--chloe .signatureWedding__timeline h3 { font-size:28px; line-height:1.15; margin-bottom:7px; }
+  .signatureWedding--chloe .signatureWedding__timeline p { font-size:19px; line-height:1.5; }
+  .signatureWedding--chloe .signatureWedding__menu { grid-template-columns:1fr; gap:34px; }
+  .signatureWedding--chloe .signatureWedding__menu .signatureWedding__eyebrow { margin-bottom:20px; }
+  .signatureWedding--chloe .signatureWedding__menuCourse p { font-size:25px; line-height:1.3; }
+  .signatureWedding--chloe .signatureWedding__menuCourse p:first-child { font-size:11px; line-height:18px; }
+  .signatureWedding--chloe .signatureWedding__details { grid-template-columns:1fr; gap:48px; padding-bottom:36px; }
+  .signatureWedding--chloe .signatureWedding__details .signatureWedding__eyebrow { margin-bottom:22px; }
+  .signatureWedding--chloe .signatureWedding__details article:first-child h2 { margin-bottom:22px; max-width:280px; }
+  .signatureWedding--chloe .signatureWedding__details article > p:not(.signatureWedding__eyebrow) { font-size:21px; line-height:1.55; }
+  .signatureWedding--chloe .signatureWedding__details article+article { padding:40px 0 0; }
+  .signatureWedding--chloe .signatureWedding__details article+article h2 { margin:24px 0 12px; font-size:36px; line-height:41px; }
+  .signatureWedding--chloe .signatureWedding__palette { margin-top:22px; }
+  .signatureWedding--chloe .signatureWedding__faq > .signatureWedding__eyebrow { margin-bottom:20px; }
+  .chloeQuestions { margin-top:34px; }
+  .chloeQuestions h3 { margin-bottom:14px; }
+  .chloeQuestions p { font-size:21px; line-height:1.55; }
+  .signatureWedding--chloe .signatureWedding__rsvp > .signatureWedding__eyebrow { margin-bottom:24px; }
+  .signatureWedding--chloe .signatureWedding__rsvp > p:not(.signatureWedding__eyebrow) { font-size:21px; line-height:1.55; }
+  .signatureWedding--chloe .signatureWedding__rsvpActions { flex-direction:column; padding-top:10px; }
+  .signatureWedding--chloe .signatureWedding__rsvp a { min-height:50px; }
+}
+@media(max-width:360px) {
+ .signatureWedding--chloe .signatureWedding__nav { padding-inline:14px; }
+ .signatureWedding--chloe .signatureWedding__brand { font-size:20px; }
+ .signatureWedding--chloe .signatureWedding__nav nav { gap:10px; }
+}
+/* Dedicated print families embed one verified face per family in PDF exports. */
+@font-face { font-family:'Chloe Print Serif'; src:url('/templates/chloe/cormorant-regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+@font-face { font-family:'Chloe Print Sans'; src:url('/templates/chloe/inter-regular.woff2') format('woff2'); font-weight:400 600; font-style:normal; font-display:swap; }
+@font-face { font-family:'Chloe Print Editorial'; src:url('/templates/chloe/playfair-regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+@font-face { font-family:'Chloe Print Script'; src:url('/templates/chloe/ms-madi-regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+/* Figma uses inside strokes, which must not add to the flow dimensions. */
+.signatureWedding--chloe .signatureWedding__story > div:last-child { border:0; box-shadow:inset 0 0 0 1px var(--signature-line),0 12px 32px -8px #344f5014; }
+.signatureWedding--chloe .signatureWedding__story div > p:last-child { line-height:37px; }
+.signatureWedding--chloe .signatureWedding__timeline article { border:0; box-shadow:inset 0 1px var(--signature-line); }
+.signatureWedding--chloe .signatureWedding__timeline article:last-child { border:0; box-shadow:inset 0 1px var(--signature-line),inset 0 -1px var(--signature-line); }
+.signatureWedding--chloe .signatureWedding__timeline p { line-height:31px; }
+.signatureWedding--chloe .signatureWedding__menuCourse { border:0; box-shadow:inset 0 -1px #f5f7f326; }
+.chloeQuestions { border-top:0; box-shadow:inset 0 1px var(--signature-line); }
+.chloeQuestions p { line-height:37px; }
+@media(max-width:760px) {
+ .signatureWedding--chloe .signatureWedding__places { border-top:0; box-shadow:inset 0 1px var(--signature-line); }
+ .signatureWedding--chloe .signatureWedding__story div > p:last-child { line-height:33px; }
+ .signatureWedding--chloe .signatureWedding__timeline h3 { line-height:32px; }
+ .signatureWedding--chloe .signatureWedding__timeline p { line-height:29px; }
+ .signatureWedding--chloe .signatureWedding__menuCourse p { line-height:32px; }
+ .chloeQuestions { border-top:1px solid var(--signature-line); box-shadow:none; }
+ .chloeQuestions p { line-height:33px; }
+}

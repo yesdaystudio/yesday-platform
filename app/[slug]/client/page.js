@@ -7,6 +7,7 @@ import ClientOverview from "../../../components/ClientOverview"
 import ClientDashboard from "../../../components/ClientDashboard"
 import ClientAccommodation from "../../../components/ClientAccommodation"
 import DianaStationerySet from "../../../components/DianaStationerySet"
+import ChloeStationerySet from "../../../components/ChloeStationerySet"
 import AlternativeStationerySet from "../../../components/AlternativeStationerySet"
 import PersonalizedQrManager from "../../../components/PersonalizedQrManager"
 import QRCode from "qrcode"
@@ -235,7 +236,14 @@ export default function ClientZonePage() {
 
           {activeTab === TABS.QR_CODE && (
             <section style={qrSectionStyle}>
-              {project?.design_family === "botanique" || project?.design_family === "penelope" ? (
+              {project?.design_family === "chloe" ? (
+                <ChloeStationerySet
+                  project={project}
+                  weddingWebsiteUrl={weddingWebsiteUrl}
+                  qrDataUrl={qrDataUrl}
+                  qrError={qrError}
+                />
+              ) : project?.design_family === "botanique" || project?.design_family === "penelope" ? (
                 <AlternativeStationerySet
                   variant={project.design_family}
                   project={project}

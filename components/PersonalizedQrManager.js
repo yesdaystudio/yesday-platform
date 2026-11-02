@@ -7,6 +7,7 @@ import { getDianaStationeryData } from "../lib/dianaStationeryData"
 import { downloadStationeryPdf, downloadStationeryPdfBundle } from "../lib/dianaStationeryPdf"
 import { DianaQrCardPrintTemplate } from "./DianaStationeryPrintTemplates"
 import { AlternativeQrCardPrintTemplate, getAlternativeStationeryConfig } from "./AlternativeStationerySet"
+import { ChloeQrCardPrintTemplate, getChloeStationeryConfig, getChloePrintFontCSS } from "./ChloeStationerySet"
 
 const EMPTY_FORM = { recipient_type: "individual", recipient_label: "", salutation: "" }
 
@@ -30,7 +31,7 @@ export default function PersonalizedQrManager({ project, weddingWebsiteUrl }) {
   const variant = String(project?.design_family || "diana").toLowerCase()
   const alternativeConfig = variant === "botanique" || variant === "penelope"
     ? getAlternativeStationeryConfig(variant, project)
-    : null
+    : variant === "chloe" ? getChloeStationeryConfig(project) : null
   const selectedRecipient = recipients.find((recipient) => recipient.id === selectedId) || recipients[0] || null
 
   useEffect(() => {
@@ -130,6 +131,7 @@ export default function PersonalizedQrManager({ project, weddingWebsiteUrl }) {
         filename: `${variant}-qr-${slugify(recipient.recipient_label)}.pdf`,
         title: `QR kartička pre ${recipient.recipient_label}`,
         requireImage: true,
+        fontEmbedCSS: variant === "chloe" ? await getChloePrintFontCSS() : undefined,
       })
     } catch {
       setMessage("PDF sa nepodarilo pripraviť. Skúste to znova.")
@@ -150,6 +152,7 @@ export default function PersonalizedQrManager({ project, weddingWebsiteUrl }) {
           filename: `${variant}-personalizovane-qr-${project.slug}.pdf`,
           title: "Personalizované QR kartičky",
           requireImage: true,
+        fontEmbedCSS: variant === "chloe" ? await getChloePrintFontCSS() : undefined,
         }
       )
     } catch {
@@ -250,6 +253,9 @@ export default function PersonalizedQrManager({ project, weddingWebsiteUrl }) {
 }
 
 function PersonalizedCard({ variant, data, config, recipient, qrDataUrl, ref }) {
+  if (variant === "chloe") {
+    return <ChloeQrCardPrintTemplate ref={ref} data={data} config={config} recipient={recipient} qrDataUrl={qrDataUrl} />
+  }
   if (variant === "botanique" || variant === "penelope") {
     return <AlternativeQrCardPrintTemplate ref={ref} data={data} config={config} variant={variant} recipient={recipient} qrDataUrl={qrDataUrl} />
   }

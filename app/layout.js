@@ -5,6 +5,7 @@ import "@openfonts/inter_all";
 import "@openfonts/great-vibes_all";
 import "@openfonts/ms-madi_all";
 import "./globals.css";
+import "./chloe.css";
 
 export const metadata = {
   title: "YesDay Studio — Svadobné weby s charakterom",

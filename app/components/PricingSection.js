@@ -18,6 +18,10 @@ const DESIGNS = {
     name: 'Botanique',
     image: '/templates/botanique/hero.jpg',
   },
+  chloe: {
+    name: 'Chloe',
+    image: '/templates/chloe/preview.jpg',
+  },
 }
 
 const PACKAGES = [

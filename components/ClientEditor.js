@@ -447,7 +447,7 @@ export default function ClientEditor({ slug: slugProp, onProjectSaved, demoData,
             </fieldset>
             <div style={designPreviewStyle}>
               <span style={designPreviewLabelStyle}>Živý náhľad</span>
-              <p style={{ ...designPreviewTextStyle, color: activeDesignColor?.hex, fontFamily: activeDesignFont?.family }}>
+              <p style={{ ...designPreviewTextStyle, color: activeDesignColor?.hex, fontFamily: activeDesignFont?.previewFamily || activeDesignFont?.family }}>
                 {projectForm.couple_display_name || "Vaše mená"}
               </p>
               <small style={designPreviewHelpStyle}>Na svadobnom webe sa zmena zobrazí po uložení.</small>

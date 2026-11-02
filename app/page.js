@@ -55,6 +55,13 @@ const TEMPLATES = [
     previewCoupleStyle: 'botanique',
     href: '/ukazka?design=botanique',
   },
+  {
+    name: 'Chloe',
+    description:
+      'Jemný akvarelový dizajn s gypsomilkou, papierovou textúrou a vzdušnou zelenomodrou paletou.',
+    previewImage: '/templates/chloe/preview.jpg',
+    href: '/ukazka?design=chloe',
+  },
 ]
 
 

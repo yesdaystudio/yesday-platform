@@ -35,7 +35,7 @@ export default function WeddingWebsite({ project, websiteContent = {}, scheduleI
     project.reception_venue_address || project.venue_address,
   )
 
-  if (designFamily === 'botanique' || designFamily === 'penelope') {
+  if (designFamily === 'botanique' || designFamily === 'penelope' || designFamily === 'chloe') {
     return (
       <AlternativeWeddingWebsite
         variant={designFamily}
@@ -665,6 +665,7 @@ const CLASSIC_LAYOUT_FAMILIES = new Set([
   'diana',
   'botanique',
   'penelope',
+  'chloe',
   'charlotte',
   'cate',
   'jewel',

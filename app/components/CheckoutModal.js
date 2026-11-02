@@ -7,6 +7,7 @@ const DESIGNS = {
   diana: { name: 'Diana', image: '/templates/diana/diana-anton-hero.png' },
   penelope: { name: 'Penelope', image: '/templates/penelope/hero-v2.jpg' },
   botanique: { name: 'Botanique', image: '/templates/botanique/hero.jpg' },
+  chloe: { name: 'Chloe', image: '/templates/chloe/preview.jpg' },
 }
 
 export default function CheckoutModal({ packageName, packageType, packagePrice, selectedDesign = 'diana', checkoutTestToken = '', onClose }) {

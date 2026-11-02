@@ -1,3 +1,4 @@
+import ChloeDecorations from './ChloeDecorations'
 import { getDesignCustomization } from '../lib/designCustomization'
 import { buildGoogleCalendarUrl } from '../lib/googleCalendar'
 import { buildGoogleMapsSearchUrl } from '../lib/googleMaps'
@@ -13,6 +14,11 @@ const THEMES = {
     label: 'Penelope',
     hero: '/templates/penelope/hero-v2.jpg',
     story: '/templates/penelope/story-v2.jpg',
+  },
+  chloe: {
+    label: 'Chloe',
+    hero: null,
+    story: null,
   },
 }
 
@@ -56,8 +62,9 @@ export default function AlternativeWeddingWebsite({
         </nav>
       </header>
 
-      <section id="top" className="signatureWedding__hero" style={{ '--signature-hero': `url("${theme.hero}")` }}>
+      <section id="top" className="signatureWedding__hero" style={{ '--signature-hero': theme.hero ? `url("${theme.hero}")` : 'none' }}>
         <div className="signatureWedding__heroShade" />
+        {variant === 'chloe' ? <ChloeDecorations /> : null}
         <div className="signatureWedding__heroCopy">
           <h1>
             <span>{firstPartner}</span>
@@ -102,6 +109,7 @@ export default function AlternativeWeddingWebsite({
           <div className="signatureWedding__storyImage" style={{ '--signature-hero': `url("${theme.story}")` }} />
           <div>
             <p className="signatureWedding__eyebrow">O nás</p>
+            {variant === 'chloe' ? <span className="chloeStoryDivider" aria-hidden="true" /> : null}
             <h2>Náš príbeh</h2>
             <p>{websiteContent.story_text}</p>
           </div>
@@ -109,6 +117,7 @@ export default function AlternativeWeddingWebsite({
       ) : null}
 
       <section id="program" className="signatureWedding__schedule signatureWedding__section">
+        {variant === 'chloe' ? <ChloeDecorations edge /> : null}
         <p className="signatureWedding__eyebrow">Svadobný deň</p>
         <h2>Program</h2>
         {scheduleError ? <p>Program sa momentálne nepodarilo načítať.</p> : (
@@ -161,7 +170,7 @@ export default function AlternativeWeddingWebsite({
         <section className="signatureWedding__faq signatureWedding__section">
           <p className="signatureWedding__eyebrow">Dobré vedieť</p>
           <h2>Otázky hostí</h2>
-          {parseParagraphs(websiteContent.faq_text).map((paragraph, index) => <p key={`${variant}-faq-${index}`}>{paragraph}</p>)}
+          {variant === 'chloe' ? <div className="chloeQuestions">{parseParagraphs(websiteContent.faq_text).map((paragraph, index) => index === 0 ? <h3 key={index}>{paragraph}</h3> : <p key={index}>{paragraph}</p>)}</div> : parseParagraphs(websiteContent.faq_text).map((paragraph, index) => <p key={`${variant}-faq-${index}`}>{paragraph}</p>)}
         </section>
       ) : null}
 
