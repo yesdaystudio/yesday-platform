@@ -55,23 +55,53 @@ export default function AlternativeWeddingWebsite({
     >
       <header className="signatureWedding__nav">
         <a href="#top" className="signatureWedding__brand">{firstPartner} {secondPartner ? `& ${secondPartner}` : ''}</a>
-        <nav aria-label={`${theme.label} wedding navigation`}>
-          <a href="#pribeh">Príbeh</a>
-          <a href="#program">Program</a>
-          <a href={rsvpHref}>RSVP</a>
-        </nav>
+        {variant === 'botanique' ? (
+          <>
+            <nav className="botaniqueHeroNav" aria-label={`${theme.label} wedding navigation`}>
+              <a href="#pribeh">Náš príbeh</a>
+              <a href="#detaily">Detaily</a>
+              <a href={rsvpHref}>RSVP</a>
+              <a className="botaniqueHeroNav__rsvp" href={rsvpHref}>Potvrdiť účasť</a>
+            </nav>
+            <details className="botaniqueHeroMobileNav">
+              <summary aria-label="Otvoriť menu"><span /><span /><span /></summary>
+              <nav aria-label={`${theme.label} mobile wedding navigation`}>
+                <a href="#pribeh">Náš príbeh</a>
+                <a href="#detaily">Detaily</a>
+                <a href={rsvpHref}>Potvrdiť účasť</a>
+              </nav>
+            </details>
+          </>
+        ) : (
+          <nav aria-label={`${theme.label} wedding navigation`}>
+            <a href="#pribeh">Príbeh</a>
+            <a href="#program">Program</a>
+            <a href={rsvpHref}>RSVP</a>
+          </nav>
+        )}
       </header>
 
       <section id="top" className="signatureWedding__hero" style={{ '--signature-hero': theme.hero ? `url("${theme.hero}")` : 'none' }}>
         <div className="signatureWedding__heroShade" />
+        {variant === 'botanique' ? <BotaniqueHeroDecorations /> : null}
         {variant === 'chloe' ? <ChloeDecorations /> : null}
         <div className="signatureWedding__heroCopy">
+          {variant === 'botanique' ? <p>Budeme sa brať</p> : null}
           <h1>
             <span>{firstPartner}</span>
             {secondPartner ? <><i>&amp;</i><span>{secondPartner}</span></> : null}
           </h1>
           <strong>{date}</strong>
+          {variant === 'botanique' ? (
+            <>
+              <span className="signatureWedding__heroSprig" aria-hidden="true" />
+              <a className="signatureWedding__heroAction" href={websiteContent.story_text ? '#pribeh' : '#detaily'}>
+                Viac o našej svadbe
+              </a>
+            </>
+          ) : null}
         </div>
+        {variant === 'botanique' ? <a className="signatureWedding__heroDown" href={websiteContent.story_text ? '#pribeh' : '#program'} aria-label="Prejsť na ďalšie informácie">⌄</a> : null}
       </section>
 
       {invitationRecipient ? (
@@ -87,7 +117,7 @@ export default function AlternativeWeddingWebsite({
         <div className="signatureWedding__ornament" aria-hidden="true">✦</div>
       </section>
 
-      <section className="signatureWedding__places signatureWedding__section">
+      <section id="detaily" className="signatureWedding__places signatureWedding__section">
         <article>
           <p className="signatureWedding__eyebrow">Obrad</p>
           <strong>{ceremonyTime}</strong>
@@ -106,8 +136,8 @@ export default function AlternativeWeddingWebsite({
 
       {websiteContent.story_text ? (
         <section id="pribeh" className="signatureWedding__story signatureWedding__section">
-          <div className="signatureWedding__storyImage" style={{ '--signature-hero': `url("${theme.story}")` }} />
-          <div>
+          {variant !== 'botanique' ? <div className="signatureWedding__storyImage" style={{ '--signature-hero': `url("${theme.story}")` }} /> : null}
+          <div className="signatureWedding__storyCopy">
             <p className="signatureWedding__eyebrow">O nás</p>
             {variant === 'chloe' ? <span className="chloeStoryDivider" aria-hidden="true" /> : null}
             <h2>Náš príbeh</h2>
@@ -115,6 +145,8 @@ export default function AlternativeWeddingWebsite({
           </div>
         </section>
       ) : null}
+
+      {websiteContent.story_text && variant === 'botanique' ? <BotaniqueSectionDivider /> : null}
 
       <section id="program" className="signatureWedding__schedule signatureWedding__section">
         {variant === 'chloe' ? <ChloeDecorations edge /> : null}
@@ -184,6 +216,29 @@ export default function AlternativeWeddingWebsite({
         </div>
       </section>
     </main>
+  )
+}
+
+function BotaniqueHeroDecorations() {
+  return (
+    <div className="botaniqueHeroDecorations" aria-hidden="true">
+      <span className="botaniqueHeroDecorations__branch botaniqueHeroDecorations__branch--top" />
+      <span className="botaniqueHeroDecorations__branch botaniqueHeroDecorations__branch--bottom" />
+      <i className="botaniqueHeroDecorations__petal botaniqueHeroDecorations__petal--one" />
+      <i className="botaniqueHeroDecorations__petal botaniqueHeroDecorations__petal--two" />
+      <i className="botaniqueHeroDecorations__petal botaniqueHeroDecorations__petal--three" />
+      <i className="botaniqueHeroDecorations__petal botaniqueHeroDecorations__petal--four" />
+    </div>
+  )
+}
+
+function BotaniqueSectionDivider() {
+  return (
+    <div className="botaniqueSectionDivider" aria-hidden="true">
+      <span className="botaniqueSectionDivider__sprig botaniqueSectionDivider__sprig--left" />
+      <i />
+      <span className="botaniqueSectionDivider__sprig botaniqueSectionDivider__sprig--right" />
+    </div>
   )
 }
 

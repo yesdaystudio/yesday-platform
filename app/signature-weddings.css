@@ -19,6 +19,11 @@
   --signature-line: rgba(130, 86, 96, 0.2);
 }
 
+.signatureWedding--botanique {
+  --signature-paper: #f7f5ed;
+  --signature-accent: #718162;
+}
+
 .signatureWedding__nav {
   position: sticky;
   top: 0;
@@ -37,6 +42,46 @@
 .signatureWedding__brand { font-size: clamp(20px, 2.2vw, 28px); letter-spacing: .04em; }
 .signatureWedding__nav nav { display: flex; gap: clamp(18px, 3vw, 38px); font-family: Inter, Arial, sans-serif; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; }
 
+.signatureWedding--botanique .signatureWedding__nav {
+  position: absolute;
+  top: clamp(58px, 8.5vh, 86px);
+  width: 100%;
+  justify-content: flex-end;
+  min-height: 58px;
+  padding-right: clamp(42px, 10vw, 172px);
+  color: var(--signature-ink);
+  background: transparent;
+  backdrop-filter: none;
+}
+.signatureWedding--botanique .signatureWedding__brand {
+  display: none;
+}
+.signatureWedding--botanique .botaniqueHeroNav {
+  display: flex;
+  align-items: center;
+  gap: clamp(28px, 3.5vw, 62px);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(16px, 1.3vw, 22px);
+  letter-spacing: 0;
+  text-transform: none;
+}
+.signatureWedding--botanique .botaniqueHeroNav__rsvp {
+  min-width: 218px;
+  padding: 16px 30px;
+  border-radius: 999px;
+  color: #fffdf7;
+  background: #71825d;
+  text-align: center;
+  transition: background .2s ease;
+}
+.signatureWedding--botanique .botaniqueHeroNav__rsvp:hover,
+.signatureWedding--botanique .botaniqueHeroNav__rsvp:focus-visible {
+  background: var(--signature-ink);
+}
+.botaniqueHeroMobileNav {
+  display: none;
+}
+
 .signatureWedding__hero {
   position: relative;
   display: grid;
@@ -50,6 +95,16 @@
 }
 
 .signatureWedding__heroShade { position: absolute; z-index: -1; inset: 0; background: linear-gradient(90deg, rgba(20,31,23,.48), rgba(20,31,23,.09) 48%, rgba(20,31,23,.34)); }
+.signatureWedding--botanique .signatureWedding__hero {
+  min-height: 100svh;
+  background-color: #f7f5ed;
+  background-image: url('/templates/botanique/hero-watercolor-v2.webp');
+  background-position: center;
+  background-size: cover;
+}
+.signatureWedding--botanique .signatureWedding__heroShade {
+  display: none;
+}
 .signatureWedding--penelope .signatureWedding__heroShade { background: linear-gradient(90deg, rgba(255,250,246,.24), rgba(255,250,246,.02) 50%, rgba(255,250,246,.16)); }
 .signatureWedding__heroCopy { display: grid; justify-items: center; width: min(92%, 900px); padding: 70px 20px; color: #fffdf7; text-align: center; text-shadow: 0 2px 28px rgba(19,27,20,.42); }
 .signatureWedding--penelope .signatureWedding__heroCopy { color: var(--signature-ink); text-shadow: 0 1px 20px rgba(255,252,248,.9); }
@@ -67,6 +122,149 @@
 .signatureWedding--font-editorial h3,
 .signatureWedding--font-editorial strong { font-family: 'Playfair Display', Georgia, serif; }
 .signatureWedding__heroCopy strong { margin-top: 38px; font-family: Inter, Arial, sans-serif; font-size: 12px; font-weight: 500; letter-spacing: .24em; text-transform: uppercase; }
+
+.signatureWedding--botanique .signatureWedding__heroCopy {
+  position: absolute;
+  z-index: 2;
+  top: 29.2%;
+  left: 50%;
+  width: min(88%, 1050px);
+  padding: 0;
+  color: var(--signature-ink);
+  text-shadow: none;
+  transform: translateX(-50%);
+}
+.signatureWedding--botanique .signatureWedding__heroCopy > p {
+  margin-bottom: clamp(24px, 3.3vh, 34px);
+  font-size: clamp(11px, 1.05vw, 17px);
+  letter-spacing: .52em;
+}
+.signatureWedding--botanique .signatureWedding__heroCopy h1 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0 .18em;
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(76px, 9.1vw, 148px);
+  letter-spacing: 0;
+  line-height: .95;
+}
+.signatureWedding--botanique .signatureWedding__heroCopy h1 i {
+  margin: 0;
+  font-family: inherit;
+  font-size: .58em;
+  line-height: 1;
+}
+.signatureWedding--botanique .signatureWedding__heroCopy strong {
+  margin-top: clamp(26px, 3.4vh, 35px);
+  font-size: clamp(11px, 1vw, 16px);
+  letter-spacing: .48em;
+}
+.signatureWedding__heroSprig {
+  width: clamp(150px, 14vw, 232px);
+  aspect-ratio: 280 / 90;
+  margin-top: clamp(17px, 2.2vh, 24px);
+  background: url('/templates/botanique/hero-sprig.png') center / contain no-repeat;
+}
+.signatureWedding__heroAction {
+  display: inline-flex;
+  min-width: min(100%, 354px);
+  min-height: 66px;
+  margin-top: clamp(14px, 2vh, 22px);
+  padding: 0 32px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  color: inherit;
+  background: rgba(255, 253, 247, .22);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(17px, 1.35vw, 22px);
+  text-decoration: none;
+  transition: background .2s ease, color .2s ease;
+}
+.signatureWedding__heroAction:hover,
+.signatureWedding__heroAction:focus-visible {
+  color: var(--signature-paper);
+  background: var(--signature-ink);
+}
+.signatureWedding__heroDown {
+  position: absolute;
+  z-index: 3;
+  bottom: 2.8%;
+  left: 50%;
+  color: var(--signature-ink);
+  font-size: 38px;
+  line-height: 1;
+  text-decoration: none;
+  transform: translateX(-50%);
+}
+
+.botaniqueHeroDecorations,
+.botaniqueHeroDecorations__branch {
+  position: absolute;
+  pointer-events: none;
+}
+.botaniqueHeroDecorations {
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+}
+.botaniqueHeroDecorations__branch {
+  display: block;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  will-change: transform;
+}
+.botaniqueHeroDecorations__branch--top {
+  top: 0;
+  left: 0;
+  width: min(55vw, 860px);
+  aspect-ratio: 860 / 620;
+  background-image: url('/templates/botanique/hero-branch-top.png');
+  transform-origin: 12% 8%;
+  animation: botaniqueBranchTop 5.6s ease-in-out infinite alternate;
+}
+.botaniqueHeroDecorations__branch--bottom {
+  right: 0;
+  bottom: 0;
+  width: min(42vw, 700px);
+  aspect-ratio: 612 / 641;
+  background-image: url('/templates/botanique/hero-branch-bottom.png');
+  transform-origin: 92% 92%;
+  animation: botaniqueBranchBottom 6.8s ease-in-out -2.4s infinite alternate;
+}
+.botaniqueHeroDecorations__petal {
+  position: absolute;
+  width: clamp(10px, 1.35vw, 22px);
+  aspect-ratio: 1.8 / 1;
+  border-radius: 100% 0 100% 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.2), rgba(202,211,157,.78));
+  filter: blur(.25px);
+  opacity: .62;
+  animation: botaniquePetalFloat 4.8s ease-in-out infinite alternate;
+}
+.botaniqueHeroDecorations__petal--one { top: 20%; right: 25%; transform: rotate(-30deg); }
+.botaniqueHeroDecorations__petal--two { top: 32%; right: 19%; transform: rotate(22deg); animation-delay: -2s; }
+.botaniqueHeroDecorations__petal--three { bottom: 31%; left: 22%; transform: rotate(42deg); animation-delay: -4s; }
+.botaniqueHeroDecorations__petal--four { bottom: 20%; left: 29%; transform: rotate(-18deg); animation-delay: -1s; }
+
+@keyframes botaniqueBranchTop {
+  from { transform: rotate(-1.15deg) translate3d(-2px, -1px, 0); }
+  to { transform: rotate(1.45deg) translate3d(12px, 10px, 0); }
+}
+
+@keyframes botaniqueBranchBottom {
+  from { transform: rotate(1.1deg) translate3d(3px, 2px, 0); }
+  to { transform: rotate(-1.4deg) translate3d(-12px, -9px, 0); }
+}
+
+@keyframes botaniquePetalFloat {
+  from { translate: -2px -3px; }
+  to { translate: 12px 18px; }
+}
 
 .signatureWedding__section { width: min(calc(100% - 48px), 1120px); margin: 0 auto; padding: clamp(76px, 10vw, 132px) 0; }
 .signatureWedding__eyebrow { color: var(--signature-accent); }
@@ -111,6 +309,71 @@
 .signatureWedding__story { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(320px, .9fr); gap: clamp(44px, 8vw, 110px); align-items: center; }
 .signatureWedding__storyImage { min-height: 620px; background-image: var(--signature-hero); background-position: left center; background-size: auto 125%; }
 .signatureWedding--penelope .signatureWedding__storyImage { background-position: center; background-size: cover; }
+.signatureWedding--botanique .signatureWedding__story {
+  display: block;
+  width: min(calc(100% - 48px), 760px);
+  padding: clamp(88px, 10vw, 126px) 0 clamp(58px, 7vw, 82px);
+  text-align: center;
+}
+.signatureWedding--botanique .signatureWedding__storyCopy {
+  max-width: 610px;
+  margin: 0 auto;
+}
+.signatureWedding--botanique .signatureWedding__storyCopy::before,
+.signatureWedding--botanique .signatureWedding__storyCopy::after {
+  display: block;
+  width: 54px;
+  height: 1px;
+  margin: 0 auto 28px;
+  background: var(--signature-accent);
+  content: '';
+  opacity: .5;
+}
+.signatureWedding--botanique .signatureWedding__storyCopy::after {
+  margin: 32px auto 0;
+}
+.botaniqueSectionDivider {
+  position: relative;
+  display: flex;
+  width: min(calc(100% - 48px), 540px);
+  height: 72px;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.botaniqueSectionDivider::before {
+  position: absolute;
+  top: 50%;
+  right: 8%;
+  left: 8%;
+  height: 1px;
+  background: color-mix(in srgb, var(--signature-accent) 48%, transparent);
+  content: '';
+}
+.botaniqueSectionDivider__sprig {
+  position: relative;
+  z-index: 1;
+  width: 50%;
+  aspect-ratio: 280 / 90;
+  background: var(--signature-paper) url('/templates/botanique/hero-sprig.png') center / contain no-repeat;
+  opacity: .82;
+}
+.botaniqueSectionDivider__sprig--left {
+  transform: rotate(-4deg);
+}
+.botaniqueSectionDivider__sprig--right {
+  transform: scaleX(-1) rotate(-4deg);
+}
+.botaniqueSectionDivider i {
+  position: absolute;
+  z-index: 2;
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--signature-accent);
+  border-radius: 50%;
+  background: var(--signature-paper);
+}
 .signatureWedding__story h2,
 .signatureWedding__schedule > h2,
 .signatureWedding__menu h2,
@@ -123,6 +386,7 @@
 .signatureWedding__timeline time { color: var(--signature-accent); font-family: Inter, Arial, sans-serif; font-size: 12px; letter-spacing: .16em; }
 .signatureWedding__timeline h3 { margin: -7px 0 4px; font-size: 30px; font-weight: 400; }
 .signatureWedding__timeline p { margin: 0; color: var(--signature-muted); font-size: 18px; }
+.signatureWedding--botanique .signatureWedding__schedule { padding-top: clamp(62px, 8vw, 94px); }
 
 .signatureWedding__menu { display: grid; grid-template-columns: .85fr 1.15fr; gap: clamp(48px, 9vw, 120px); width: 100%; padding-right: max(24px, calc((100vw - 1120px) / 2)); padding-left: max(24px, calc((100vw - 1120px) / 2)); color: var(--signature-paper); background: var(--signature-ink); }
 .signatureWedding__menu .signatureWedding__eyebrow { color: color-mix(in srgb, var(--signature-accent) 55%, white); }
@@ -159,4 +423,123 @@
   .signatureWedding__menu { width: 100%; padding: 72px 24px; }
   .signatureWedding__details article + article { padding-top: 48px; padding-left: 0; border-top: 1px solid var(--signature-line); border-left: 0; }
   .signatureWedding__timeline article { grid-template-columns: 76px 1fr; gap: 20px; }
+
+  .signatureWedding--botanique .signatureWedding__nav {
+    top: 0;
+    min-height: 58px;
+    padding-inline: 18px;
+  }
+  .signatureWedding--botanique .botaniqueHeroNav {
+    display: none;
+  }
+  .signatureWedding--botanique .botaniqueHeroMobileNav {
+    position: relative;
+    display: block;
+  }
+  .botaniqueHeroMobileNav summary {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    padding: 10px;
+    align-content: center;
+    gap: 4px;
+    border-radius: 50%;
+    background: rgba(255, 253, 247, .72);
+    cursor: pointer;
+    list-style: none;
+  }
+  .botaniqueHeroMobileNav summary::-webkit-details-marker { display: none; }
+  .botaniqueHeroMobileNav summary span {
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: var(--signature-ink);
+  }
+  .botaniqueHeroMobileNav nav {
+    position: absolute;
+    top: 46px;
+    right: 0;
+    display: grid;
+    width: 190px;
+    padding: 16px;
+    gap: 12px;
+    background: rgba(248, 246, 239, .96);
+    box-shadow: 0 14px 36px rgba(47, 67, 42, .14);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 17px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .signatureWedding--botanique .botaniqueHeroMobileNav nav a {
+    display: block;
+  }
+  .signatureWedding--botanique .signatureWedding__hero {
+    min-height: 720px;
+  }
+  .signatureWedding--botanique .signatureWedding__heroCopy {
+    top: 24%;
+    left: 50%;
+    width: min(90%, 560px);
+    padding: 0 18px;
+  }
+  .signatureWedding--botanique .signatureWedding__heroCopy > p {
+    margin-bottom: 28px;
+    font-size: 9px;
+    letter-spacing: .3em;
+  }
+  .signatureWedding--botanique .signatureWedding__heroCopy h1 {
+    gap: .02em .15em;
+    font-size: clamp(62px, 18vw, 96px);
+    line-height: .92;
+  }
+  .signatureWedding--botanique .signatureWedding__heroCopy strong {
+    max-width: 90%;
+    margin-top: 34px;
+    font-size: 10px;
+    letter-spacing: .26em;
+    line-height: 1.7;
+  }
+  .signatureWedding--botanique .signatureWedding__heroAction {
+    min-width: min(100%, 286px);
+    min-height: 50px;
+    margin-top: 16px;
+    font-size: 16px;
+  }
+  .signatureWedding--botanique .signatureWedding__heroDown {
+    bottom: 18px;
+  }
+  .botaniqueHeroDecorations__branch--top {
+    top: 0;
+    left: -34%;
+    width: 122vw;
+  }
+  .botaniqueHeroDecorations__branch--bottom {
+    right: -44%;
+    bottom: -2%;
+    width: 104vw;
+  }
+  .botaniqueHeroDecorations__petal--one { top: 22%; right: 12%; }
+  .botaniqueHeroDecorations__petal--two { top: 42%; right: 8%; }
+  .botaniqueHeroDecorations__petal--three { bottom: 32%; left: 10%; }
+  .botaniqueHeroDecorations__petal--four { bottom: 21%; left: 25%; }
+  .signatureWedding--botanique .signatureWedding__story {
+    width: min(calc(100% - 36px), 760px);
+    padding: 72px 0 42px;
+  }
+  .botaniqueSectionDivider {
+    width: min(calc(100% - 56px), 420px);
+    height: 58px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .botaniqueHeroDecorations__branch {
+    animation: none;
+  }
+  .botaniqueHeroDecorations__petal {
+    animation: none;
+  }
+  .signatureWedding__heroAction {
+    transition: none;
+  }
 }
