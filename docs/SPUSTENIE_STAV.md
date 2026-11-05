@@ -7,6 +7,7 @@ Stav: 5. november 2026. Online objednávky zostávajú zatvorené.
 - Web vrátane galérie má byť dostupný 12 mesiacov po svadbe (potvrdené používateľkou).
 - Predajcom bude pripravovaná s. r. o.; založenie sa má začať 5. 11. 2026. Obchodné meno, sídlo, IČO a daňové údaje sa doplnia po ich potvrdení.
 - Dvanásťmesačné trvanie je zatiaľ produktové rozhodnutie. Automatické ukončenie, upozornenie pred skončením, export a retenčný proces ešte nie sú implementované.
+- Overené cez read-only Vercel API: produkčný tím používa aktívny plán Hobby. Pred komerčným predajom treba plán povoľujúci komerčné použitie. Vercel Pro má k dátumu kontroly základ 20 USD/mesiac s jedným nasadzujúcim členom a kreditom na spotrebu; spotreba nad kredit a ďalšie položky môžu byť účtované navyše. Nebol vykonaný upgrade ani platba. [Hobby](https://vercel.com/docs/plans/hobby), [Pro](https://vercel.com/docs/plans/pro-plan).
 
 ## Krok 1: ochrana klientskych údajov — nasadená oprava
 
