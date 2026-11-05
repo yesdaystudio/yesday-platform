@@ -1,0 +1,208 @@
+.reviewPage {
+  min-height: 100vh;
+  padding: 22px clamp(16px, 3vw, 42px) 70px;
+  color: #2f3931;
+  background: #e9e6df;
+  font-family: Inter, Arial, sans-serif;
+}
+
+.reviewHeader {
+  display: flex;
+  width: min(100%, 1420px);
+  margin: 0 auto 52px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.reviewHeader > div:first-child { display: grid; gap: 4px; }
+.reviewHeader span { color: #758076; font-size: 10px; letter-spacing: .15em; text-transform: uppercase; }
+.reviewHeader strong { font-family: 'Iowan Old Style', Baskerville, Georgia, serif; font-size: 20px; font-weight: 400; }
+
+.viewSwitch { display: flex; border: 1px solid rgba(47, 57, 49, .18); background: rgba(255, 255, 255, .28); }
+.viewSwitch button { min-width: 88px; padding: 10px 16px; border: 0; color: #526055; background: transparent; font: inherit; font-size: 11px; cursor: pointer; }
+.viewSwitch button[aria-pressed='true'] { color: #f4f0e5; background: #39463c; }
+
+.reviewIntro { width: min(100%, 1420px); margin: 0 auto 26px; }
+.reviewIntro p { margin: 0 0 8px; color: #778177; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; }
+.reviewIntro h1 { max-width: 760px; margin: 0; font-family: 'Iowan Old Style', Baskerville, Georgia, serif; font-size: clamp(27px, 4vw, 48px); font-weight: 400; line-height: 1.08; }
+
+.stage {
+  display: grid;
+  margin: 0 auto;
+  overflow: hidden;
+  place-items: center;
+  transition: width .45s ease, max-width .45s ease;
+}
+
+.stageDesktop { width: min(100%, 1420px); }
+.stageMobile { width: min(100%, 430px); padding: 12px; border-radius: 34px; background: #272c28; box-shadow: 0 24px 70px rgba(34, 43, 36, .22); }
+
+.hero {
+  position: relative;
+  display: grid;
+  width: 100%;
+  min-height: min(790px, calc(100vh - 92px));
+  overflow: hidden;
+  place-items: center;
+  isolation: isolate;
+  color: #303c32;
+  background:
+    radial-gradient(circle at 48% 44%, rgba(255,255,255,.54), transparent 38%),
+    linear-gradient(112deg, #f0ecdf 0%, #f8f5ec 48%, #eee9db 100%);
+  box-shadow: 0 22px 60px rgba(50, 60, 52, .12);
+}
+
+.heroCompact { min-height: 760px; aspect-ratio: 390 / 780; box-shadow: none; }
+
+.paperGrain {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  opacity: .21;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.17'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+.botanicalArt {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.stemGroup {
+  fill: none;
+  stroke: #7d8978;
+  stroke-width: 1.35;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  opacity: .83;
+  transform-box: fill-box;
+}
+
+.stemGroup use { fill: rgba(255, 254, 247, .94); stroke: #9ba28f; stroke-width: .75; }
+.stemGroup .bloomCenter { fill: #c3b998; stroke: none; }
+.mainStem { stroke: #687665; stroke-width: 1.65; }
+.stemLeft { transform-origin: 2% 98%; animation: leftBreeze 15s ease-in-out infinite alternate; }
+.stemRight { transform-origin: 98% 99%; animation: rightBreeze 18s ease-in-out -4s infinite alternate; }
+.stemTop { transform-origin: 100% 20%; animation: topBreeze 13s ease-in-out -7s infinite alternate; opacity: .68; }
+
+.heroNav {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  min-height: 74px;
+  padding: 0 clamp(26px, 5vw, 78px);
+  align-items: center;
+  justify-content: space-between;
+  color: #4f5d51;
+  font-size: 9px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+
+.heroNav > div { display: flex; gap: clamp(22px, 3vw, 44px); }
+.monogram { font-family: 'Iowan Old Style', Baskerville, Georgia, serif; font-size: 16px; letter-spacing: .12em; }
+
+.heroCopy {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  width: min(70%, 720px);
+  padding: 80px 20px 70px;
+  justify-items: center;
+  text-align: center;
+  animation: revealCopy 1.6s cubic-bezier(.2,.8,.25,1) both;
+}
+
+.kicker {
+  margin: 0 0 34px;
+  color: #758074;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+}
+
+.heroCopy h2 {
+  display: grid;
+  margin: 0;
+  color: #344136;
+  font-family: 'Bodoni 72', Didot, 'Iowan Old Style', Georgia, serif;
+  font-size: clamp(78px, 10vw, 148px);
+  font-weight: 400;
+  letter-spacing: -.055em;
+  line-height: .75;
+}
+
+.heroCopy h2 i {
+  margin: .16em 0 .11em;
+  color: #8a9586;
+  font-family: 'Iowan Old Style', Baskerville, Georgia, serif;
+  font-size: .34em;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.dateLine { display: grid; width: min(100%, 410px); margin-top: 48px; grid-template-columns: 1fr auto 1fr; gap: 20px; align-items: center; color: #536154; font-size: 11px; letter-spacing: .28em; }
+.dateLine b { display: block; height: 1px; background: rgba(83, 97, 84, .35); }
+.location { margin: 16px 0 0; color: #7a8579; font-size: 9px; letter-spacing: .32em; text-transform: uppercase; }
+
+.scrollCue { position: absolute; bottom: 25px; left: 50%; width: 1px; height: 36px; overflow: hidden; background: rgba(73, 86, 75, .18); }
+.scrollCue span { display: block; width: 100%; height: 45%; background: #6e7a6f; animation: scrollLine 2.6s ease-in-out infinite; }
+
+.heroCompact .heroNav { min-height: 60px; padding: 0 20px; }
+.heroCompact .heroNav > div span:not(:last-child) { display: none; }
+.heroCompact .botanicalArt { width: 142%; max-width: none; transform: translateX(-15%); }
+.heroCompact .stemTop { opacity: .38; }
+.heroCompact .heroCopy { width: 92%; padding-right: 8px; padding-left: 8px; }
+.heroCompact .kicker { max-width: 230px; margin-bottom: 35px; font-size: 8px; line-height: 1.8; }
+.heroCompact .heroCopy h2 { font-size: clamp(66px, 22vw, 92px); line-height: .78; }
+.heroCompact .dateLine { width: 82%; margin-top: 44px; gap: 12px; font-size: 9px; }
+
+.conceptNotes {
+  display: grid;
+  width: min(100%, 1420px);
+  margin: 34px auto 0;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid rgba(47,57,49,.16);
+  border-bottom: 1px solid rgba(47,57,49,.16);
+}
+
+.conceptNotes > div { display: grid; min-height: 170px; padding: 28px; align-content: start; border-right: 1px solid rgba(47,57,49,.16); }
+.conceptNotes > div:last-child { border-right: 0; }
+.conceptNotes span { margin-bottom: 22px; color: #899289; font-size: 9px; letter-spacing: .18em; }
+.conceptNotes strong { font-family: 'Iowan Old Style', Baskerville, Georgia, serif; font-size: 22px; font-weight: 400; }
+.conceptNotes p { max-width: 330px; margin: 10px 0 0; color: #687269; font-size: 13px; line-height: 1.65; }
+
+.palette { display: flex; width: min(100%, 1420px); margin: 32px auto 0; align-items: center; gap: 24px; flex-wrap: wrap; }
+.palette > p { margin: 0 12px 0 0; color: #788279; font-size: 9px; letter-spacing: .18em; text-transform: uppercase; }
+.palette > div { display: flex; align-items: center; gap: 9px; color: #5f6a61; font-size: 11px; }
+.palette i { display: block; width: 30px; height: 30px; border: 1px solid rgba(45,55,47,.1); border-radius: 50%; box-shadow: 0 4px 12px rgba(45,55,47,.08); }
+
+@keyframes leftBreeze { from { transform: rotate(-.35deg) translateX(-2px); } to { transform: rotate(.55deg) translateX(2px); } }
+@keyframes rightBreeze { from { transform: rotate(.45deg) translateX(1px); } to { transform: rotate(-.5deg) translateX(-2px); } }
+@keyframes topBreeze { from { transform: rotate(-.4deg); } to { transform: rotate(.45deg); } }
+@keyframes revealCopy { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes scrollLine { 0% { transform: translateY(-120%); } 55%, 100% { transform: translateY(260%); } }
+
+@media (max-width: 720px) {
+  .reviewHeader { align-items: flex-start; flex-direction: column; margin-bottom: 38px; }
+  .reviewIntro h1 { font-size: 31px; }
+  .conceptNotes { grid-template-columns: 1fr; }
+  .conceptNotes > div { min-height: auto; border-right: 0; border-bottom: 1px solid rgba(47,57,49,.16); }
+  .conceptNotes > div:last-child { border-bottom: 0; }
+  .stageDesktop .hero { min-height: 690px; }
+  .stageDesktop .heroCopy { width: 92%; }
+  .stageDesktop .heroNav > div span:not(:last-child) { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stemLeft, .stemRight, .stemTop, .heroCopy, .scrollCue span { animation: none; }
+}

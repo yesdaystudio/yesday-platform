@@ -4,8 +4,11 @@ import "@openfonts/playfair-display_all";
 import "@openfonts/inter_all";
 import "@openfonts/great-vibes_all";
 import "@openfonts/ms-madi_all";
+import "@fontsource/windsong/400.css";
 import "./globals.css";
 import "./chloe.css";
+import "./veno.css";
+import "./riviera.css";
 
 export const metadata = {
   title: "YesDay Studio — Svadobné weby s charakterom",

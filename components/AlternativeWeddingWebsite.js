@@ -5,6 +5,8 @@ import { buildGoogleMapsSearchUrl } from '../lib/googleMaps'
 import { getVisibleMenuSections } from '../lib/menuSections.mjs'
 
 const THEMES = {
+  riviera: { label: 'Riviera', hero: '/templates/riviera/sea-oil-painting.webp', story: null },
+  veno: { label: 'Veno', hero: null, story: null },
   botanique: {
     label: 'Botanique',
     hero: '/templates/botanique/hero.jpg',
@@ -17,6 +19,21 @@ const THEMES = {
   },
   chloe: {
     label: 'Chloe',
+    hero: null,
+    story: null,
+  },
+  fleurie: {
+    label: 'Fleurie',
+    hero: null,
+    story: null,
+  },
+  provence: {
+    label: 'Provence',
+    hero: '/templates/provence/hero-lavender-garden.jpg',
+    story: '/templates/provence/story-wedding-attire.jpg',
+  },
+  lavande: {
+    label: 'Lavande',
     hero: null,
     story: null,
   },
@@ -72,6 +89,70 @@ export default function AlternativeWeddingWebsite({
               </nav>
             </details>
           </>
+        ) : variant === 'penelope' ? (
+          <>
+            <nav className="penelopeHeroNav" aria-label={`${theme.label} wedding navigation`}>
+              <a href="#pribeh">Náš príbeh</a>
+              <a href="#detaily">Detaily</a>
+              <a href="#program">Program</a>
+              <a className="penelopeHeroNav__rsvp" href={rsvpHref}>Potvrdiť účasť</a>
+            </nav>
+            <details className="penelopeHeroMobileNav">
+              <summary aria-label="Otvoriť menu"><span /><span /><span /></summary>
+              <nav aria-label={`${theme.label} mobile wedding navigation`}>
+                <a href="#pribeh">Náš príbeh</a>
+                <a href="#detaily">Detaily</a>
+                <a href="#program">Program</a>
+                <a href={rsvpHref}>Potvrdiť účasť</a>
+              </nav>
+            </details>
+          </>
+        ) : variant === 'provence' ? (
+          <>
+            <nav className="provenceHeroNav" aria-label={`${theme.label} wedding navigation`}>
+              <a href="#pribeh">Náš príbeh</a>
+              <a href="#detaily">Miesta</a>
+              <a href="#program">Program</a>
+              <a className="provenceHeroNav__rsvp" href={rsvpHref}>Potvrdiť účasť</a>
+            </nav>
+            <details className="provenceHeroMobileNav">
+              <summary aria-label="Otvoriť menu"><span /><span /><span /></summary>
+              <nav aria-label={`${theme.label} mobile wedding navigation`}>
+                <a href="#pribeh">Náš príbeh</a>
+                <a href="#detaily">Miesta</a>
+                <a href="#program">Program</a>
+                <a href={rsvpHref}>Potvrdiť účasť</a>
+              </nav>
+            </details>
+          </>
+        ) : variant === 'riviera' ? (
+          <>
+            <nav className="rivieraHeroNav" aria-label="Svadobná navigácia">
+              <a href="#pribeh">Náš príbeh</a><a href="#detaily">Miesta</a><a href="#program">Program</a><a className="rivieraHeroNav__rsvp" href={rsvpHref}>Potvrdiť účasť</a>
+            </nav>
+            <details className="rivieraMobileNav">
+              <summary aria-label="Otvoriť menu"><span /><span /><span /></summary>
+              <nav aria-label="Mobilná svadobná navigácia"><a href="#pribeh">Náš príbeh</a><a href="#detaily">Miesta</a><a href="#program">Program</a><a href={rsvpHref}>Potvrdiť účasť</a></nav>
+            </details>
+          </>
+        ) : variant === 'lavande' || variant === 'veno' ? (
+          <>
+            <nav className="lavandeHeroNav" aria-label={`${theme.label} wedding navigation`}>
+              <a href="#pribeh">Náš príbeh</a>
+              <a href="#detaily">Miesta</a>
+              <a href="#program">Program</a>
+              <a className="lavandeHeroNav__rsvp" href={rsvpHref}>Potvrdiť účasť</a>
+            </nav>
+            <details className="lavandeHeroMobileNav">
+              <summary aria-label="Otvoriť menu"><span /><span /><span /></summary>
+              <nav aria-label={`${theme.label} mobile wedding navigation`}>
+                <a href="#pribeh">Náš príbeh</a>
+                <a href="#detaily">Miesta</a>
+                <a href="#program">Program</a>
+                <a href={rsvpHref}>Potvrdiť účasť</a>
+              </nav>
+            </details>
+          </>
         ) : (
           <nav aria-label={`${theme.label} wedding navigation`}>
             <a href="#pribeh">Príbeh</a>
@@ -84,9 +165,18 @@ export default function AlternativeWeddingWebsite({
       <section id="top" className="signatureWedding__hero" style={{ '--signature-hero': theme.hero ? `url("${theme.hero}")` : 'none' }}>
         <div className="signatureWedding__heroShade" />
         {variant === 'botanique' ? <BotaniqueHeroDecorations /> : null}
+        {variant === 'penelope' ? <PenelopeHeroDecorations /> : null}
         {variant === 'chloe' ? <ChloeDecorations /> : null}
+        {variant === 'fleurie' ? <FleurieHeroDecorations /> : null}
+        {variant === 'provence' ? <ProvenceHeroDecorations /> : null}
+        {variant === 'lavande' ? <LavandeHeroDecorations /> : null}
+        {variant === 'veno' ? <div className="venoHeroArt" aria-hidden="true"><span className="venoHeroArt__lace" /><span className="venoHeroArt__embroidery" /><span className="venoHeroArt__seam" /></div> : null}
         <div className="signatureWedding__heroCopy">
-          {variant === 'botanique' ? <p>Budeme sa brať</p> : null}
+          {variant === 'botanique' || variant === 'fleurie' ? <p>Budeme sa brať</p> : null}
+          {variant === 'penelope' || variant === 'veno' ? <p>S radosťou vás pozývame</p> : null}
+          {variant === 'provence' ? <p>Un jour en Provence</p> : null}
+          {variant === 'lavande' ? <p>Sous le ciel de Provence</p> : null}
+          {variant === 'riviera' ? <p>S vami má leto krajší príbeh</p> : null}
           <h1>
             <span>{firstPartner}</span>
             {secondPartner ? <><i>&amp;</i><span>{secondPartner}</span></> : null}
@@ -99,9 +189,39 @@ export default function AlternativeWeddingWebsite({
                 Viac o našej svadbe
               </a>
             </>
+          ) : variant === 'penelope' ? (
+            <>
+              <span className="penelopeHeroFlourish" aria-hidden="true" />
+              <a className="signatureWedding__heroAction" href={websiteContent.story_text ? '#pribeh' : '#detaily'}>
+                Objaviť náš deň
+              </a>
+            </>
+          ) : variant === 'fleurie' ? (
+            <>
+              <span className="fleurieHeroFlourish" aria-hidden="true" />
+              <a className="signatureWedding__heroAction" href={websiteContent.story_text ? '#pribeh' : '#detaily'}>
+                Náš svadobný deň
+              </a>
+            </>
+          ) : variant === 'provence' ? (
+            <>
+              <span className="provenceHeroFlourish" aria-hidden="true">notre journée</span>
+              <a className="signatureWedding__heroAction" href={websiteContent.story_text ? '#pribeh' : '#detaily'}>
+                Objaviť náš deň
+              </a>
+            </>
+          ) : variant === 'riviera' ? (
+            <a className="signatureWedding__heroAction" href={websiteContent.story_text ? '#pribeh' : '#detaily'}>Náš svadobný deň <span aria-hidden="true">↓</span></a>
+          ) : variant === 'lavande' || variant === 'veno' ? (
+            <>
+              <span className="lavandeHeroFlourish" aria-hidden="true" />
+              <a className="signatureWedding__heroAction" href={websiteContent.story_text ? '#pribeh' : '#detaily'}>
+                Vstúpiť do nášho dňa
+              </a>
+            </>
           ) : null}
         </div>
-        {variant === 'botanique' ? <a className="signatureWedding__heroDown" href={websiteContent.story_text ? '#pribeh' : '#program'} aria-label="Prejsť na ďalšie informácie">⌄</a> : null}
+        {variant === 'botanique' || variant === 'penelope' || variant === 'fleurie' || variant === 'provence' || variant === 'lavande' ? <a className="signatureWedding__heroDown" href={websiteContent.story_text ? '#pribeh' : '#program'} aria-label="Prejsť na ďalšie informácie">⌄</a> : null}
       </section>
 
       {invitationRecipient ? (
@@ -112,9 +232,9 @@ export default function AlternativeWeddingWebsite({
       ) : null}
 
       <section className="signatureWedding__welcome signatureWedding__section">
-        <p className="signatureWedding__eyebrow">Save the date</p>
+        <p className="signatureWedding__eyebrow">{variant === 'veno' ? 'Jeden deň. Na celý život.' : variant === 'riviera' ? 'Láska má vôňu leta' : 'Save the date'}</p>
         <h2>{websiteContent.welcome_text || 'Tešíme sa, že náš deň oslávite s nami.'}</h2>
-        <div className="signatureWedding__ornament" aria-hidden="true">✦</div>
+        <div className="signatureWedding__ornament" aria-hidden="true">{variant === 'veno' || variant === 'riviera' ? null : '✦'}</div>
       </section>
 
       <section id="detaily" className="signatureWedding__places signatureWedding__section">
@@ -136,18 +256,20 @@ export default function AlternativeWeddingWebsite({
 
       {websiteContent.story_text ? (
         <section id="pribeh" className="signatureWedding__story signatureWedding__section">
-          {variant !== 'botanique' ? <div className="signatureWedding__storyImage" style={{ '--signature-hero': `url("${theme.story}")` }} /> : null}
+          {variant !== 'botanique' && variant !== 'penelope' && variant !== 'fleurie' && variant !== 'lavande' && variant !== 'veno' && variant !== 'riviera' ? <div className="signatureWedding__storyImage" style={{ '--signature-hero': `url("${theme.story}")` }} /> : null}
           <div className="signatureWedding__storyCopy">
             <p className="signatureWedding__eyebrow">O nás</p>
             {variant === 'chloe' ? <span className="chloeStoryDivider" aria-hidden="true" /> : null}
             <h2>Náš príbeh</h2>
+            {variant === 'penelope' ? <span className="penelopeStoryGarland" aria-hidden="true"><i /></span> : null}
+            {variant === 'fleurie' ? <span className="fleurieStoryGarland" aria-hidden="true" /> : null}
+            {variant === 'lavande' ? <span className="lavandeStoryMark" aria-hidden="true" /> : null}
             <p>{websiteContent.story_text}</p>
           </div>
         </section>
       ) : null}
 
       {websiteContent.story_text && variant === 'botanique' ? <BotaniqueSectionDivider /> : null}
-
       <section id="program" className="signatureWedding__schedule signatureWedding__section">
         {variant === 'chloe' ? <ChloeDecorations edge /> : null}
         <p className="signatureWedding__eyebrow">Svadobný deň</p>
@@ -180,6 +302,7 @@ export default function AlternativeWeddingWebsite({
             </div>
           ))}
         </div>
+        {variant === 'provence' ? <div className="provenceMenuPhoto" aria-hidden="true" /> : null}
       </section> : null}
 
       <section className="signatureWedding__details signatureWedding__section">
@@ -228,6 +351,42 @@ function BotaniqueHeroDecorations() {
       <i className="botaniqueHeroDecorations__petal botaniqueHeroDecorations__petal--two" />
       <i className="botaniqueHeroDecorations__petal botaniqueHeroDecorations__petal--three" />
       <i className="botaniqueHeroDecorations__petal botaniqueHeroDecorations__petal--four" />
+    </div>
+  )
+}
+
+function FleurieHeroDecorations() {
+  return <div className="fleurieHeroMeadow" aria-hidden="true" />
+}
+
+function ProvenceHeroDecorations() {
+  return (
+    <div className="provenceHeroVisual" aria-hidden="true">
+      <span className="provenceHeroVisual__image" />
+      <span className="provenceHeroVisual__caption">Entre pierre &amp; lavande</span>
+    </div>
+  )
+}
+
+function LavandeHeroDecorations() {
+  return (
+    <div className="lavandeHeroLayers" aria-hidden="true">
+      <span className="lavandeHeroLayers__wash" />
+      <span className="lavandeHeroLayers__olive" />
+      <span className="lavandeHeroLayers__meadow" />
+    </div>
+  )
+}
+
+
+function PenelopeHeroDecorations() {
+  return (
+    <div className="penelopeHeroDecorations" aria-hidden="true">
+      <span className="penelopeHeroDecorations__branch penelopeHeroDecorations__branch--top" />
+      <span className="penelopeHeroDecorations__branch penelopeHeroDecorations__branch--bottom" />
+      <i className="penelopeHeroDecorations__petal penelopeHeroDecorations__petal--one" />
+      <i className="penelopeHeroDecorations__petal penelopeHeroDecorations__petal--two" />
+      <i className="penelopeHeroDecorations__petal penelopeHeroDecorations__petal--three" />
     </div>
   )
 }

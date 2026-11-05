@@ -1,0 +1,107 @@
+/* Veno — original embroidery and openwork lace, inspired by Slovak craft. */
+.signatureWedding--veno {
+  --signature-paper: #f5f0e6;
+  --signature-muted: #72685d;
+  --signature-accent: #71343f;
+  --signature-line: #d9ccba;
+  color: var(--signature-ink);
+  background-color: #f5f0e6;
+  background-image: repeating-linear-gradient(0deg, transparent 0 3px, #b8a7860b 3px 4px), repeating-linear-gradient(90deg, transparent 0 3px, #b8a7860b 3px 4px);
+}
+.signatureWedding--veno .signatureWedding__nav { position: absolute; z-index: 10; top: 0; left: 0; width: 100%; min-height: 86px; padding: 0 6%; color: var(--signature-ink); background: transparent; backdrop-filter: none; border-bottom: 1px solid #71343f18; }
+.signatureWedding--veno .signatureWedding__brand { font-size: 24px; letter-spacing: -.02em; }
+.signatureWedding--veno .lavandeHeroNav { position: static; display: flex; gap: 30px !important; width: auto; min-height: 0; padding: 0; color: var(--signature-ink); background: transparent; backdrop-filter: none; font-family: Inter, sans-serif; font-size: 9px; letter-spacing: .14em; }
+.signatureWedding--veno .lavandeHeroNav__rsvp { padding: 13px 17px; border: 1px solid #71343f55; border-radius: 0; color: inherit; background: transparent; }
+.signatureWedding--veno .signatureWedding__hero { display: grid; min-height: min(920px, 100svh); padding-top: 86px; place-items: center start; background: transparent; }
+.signatureWedding--veno .signatureWedding__heroShade { display: none; }
+.signatureWedding--veno .signatureWedding__heroCopy { position: relative; z-index: 2; width: 59%; padding: 70px 6% 90px; color: var(--signature-ink); text-align: center; text-shadow: none; }
+.signatureWedding--veno .signatureWedding__heroCopy > p { max-width: 100%; font-size: 10px; letter-spacing: .28em; }
+.signatureWedding--veno .signatureWedding__heroCopy h1 { max-width: 100%; font-size: clamp(72px, 8.6vw, 142px); line-height: .92; letter-spacing: -.045em; overflow-wrap: anywhere; }
+.signatureWedding--veno .signatureWedding__heroCopy h1 i { margin: .16em 0; font-family: inherit; font-size: .33em; font-style: italic; line-height: 1; }
+.signatureWedding--veno .signatureWedding__heroCopy strong { margin-top: 32px; font-size: 10px; letter-spacing: .25em; }
+.signatureWedding--veno .signatureWedding__heroAction { min-width: 0; min-height: 44px; margin-top: 28px; padding: 0 0 5px; border: 0; border-bottom: 1px solid #71343f60; border-radius: 0; background: transparent; font-size: 17px; }
+.signatureWedding--veno .lavandeHeroFlourish { display: none; }
+.venoHeroArt { position: absolute; z-index: 0; top: 86px; right: 0; bottom: 0; width: 40%; background: #e9e1d1; box-shadow: inset 22px 0 50px #77654e09; }
+.venoHeroArt__embroidery { position: absolute; inset: 1% 5%; background: url('/templates/veno/embroidery.svg') center / contain no-repeat; }
+.venoHeroArt__lace { position: absolute; z-index: 1; top: 0; bottom: 0; left: -40px; width: 80px; background: url('/templates/veno/lace.svg') center top / 80px auto repeat-y; }
+.venoHeroArt__seam { position: absolute; inset: 26px 26px 26px auto; border-right: 1px dashed #71343f50; }
+.signatureWedding--veno .signatureWedding__welcome { padding-top: 110px; padding-bottom: 100px; }
+.signatureWedding--veno .signatureWedding__welcome h2 { max-width: 800px; font-size: clamp(40px, 5.4vw, 70px); }
+.signatureWedding--veno .signatureWedding__ornament { width: min(100%, 900px); height: 74px; margin-top: 44px; overflow: hidden; color: transparent; background: url('/templates/veno/woven-ribbon.svg') center / auto 100% repeat-x; }
+.signatureWedding--veno .signatureWedding__places { width: min(calc(100% - 48px), 1120px); border: 0; gap: 60px; padding-bottom: 100px; }
+.signatureWedding--veno .signatureWedding__places article { position: relative; min-height: 350px; padding: 56px 38px; border: 1px solid #d9ccba; background: #faf7ef85; }
+.signatureWedding--veno .signatureWedding__places article + article { border-left: 1px solid #d9ccba; }
+.signatureWedding--veno .signatureWedding__places article::before { position: absolute; top: 12px; right: 12px; bottom: 12px; left: 12px; border: 1px dashed #b8a78660; content: ''; pointer-events: none; }
+.signatureWedding--veno .signatureWedding__places strong { font-size: 66px; }
+.signatureWedding--veno .signatureWedding__places h2 { margin-top: 18px; font-size: 34px; }
+.signatureWedding--veno .signatureWedding__places .signatureWedding__mapAction { min-height: 32px; padding: 0; border: 0; border-bottom: 1px solid currentColor; }
+.signatureWedding--veno .signatureWedding__story { display: block; width: min(calc(100% - 48px), 1120px); padding: 100px 0 110px; border-top: 1px solid var(--signature-line); background: transparent; }
+.signatureWedding--veno .signatureWedding__story::before { display: none; }
+.signatureWedding--veno .signatureWedding__story::after { display: block; width: min(680px, 100%); aspect-ratio: 1962 / 801; margin: 42px auto 0; background: url('/templates/veno/story-painted-hat-wreath-clean.webp') center / contain no-repeat; content: ''; }
+.signatureWedding--veno .signatureWedding__storyCopy { max-width: 740px; margin: 0 auto; text-align: center; }
+.signatureWedding--veno .signatureWedding__storyCopy h2 { margin: 0 0 28px; font-size: clamp(48px, 5vw, 76px); font-weight: 400; }
+.signatureWedding--veno .signatureWedding__storyCopy > p:last-child { font-size: clamp(21px, 2.3vw, 27px); line-height: 1.7; }
+.signatureWedding--veno .signatureWedding__schedule { display: grid; grid-template-columns: .7fr 1fr; column-gap: 80px; }
+.signatureWedding--veno .signatureWedding__schedule > .signatureWedding__eyebrow { grid-column: 1; align-self: end; }
+.signatureWedding--veno .signatureWedding__schedule > h2 { grid-column: 1; margin: 0; font-size: clamp(56px, 6vw, 88px); font-weight: 400; }
+.signatureWedding--veno .signatureWedding__timeline { grid-column: 2; grid-row: 1 / span 3; width: 100%; margin: 0; }
+.signatureWedding--veno .signatureWedding__timeline article { position: relative; grid-template-columns: 64px minmax(0,1fr); gap: 35px; padding: 0 0 36px; border: 0; }
+.signatureWedding--veno .signatureWedding__timeline article::before { position: absolute; top: 8px; bottom: -8px; left: 81px; border-left: 1px dashed #71343f70; content: ''; }
+.signatureWedding--veno .signatureWedding__timeline article::after { position: absolute; top: 5px; left: 78px; width: 7px; height: 7px; background: var(--signature-ink); transform: rotate(45deg); content: ''; }
+.signatureWedding--veno .signatureWedding__timeline article:last-child { padding-bottom: 0; }
+.signatureWedding--veno .signatureWedding__timeline article:last-child::before { display: none; }
+.signatureWedding--veno .signatureWedding__timeline h3 { margin: -3px 0 8px; font-size: 28px; overflow-wrap: anywhere; }
+.signatureWedding--veno .signatureWedding__timeline time { padding-top: 1px; font-size: 11px; text-align: right; }
+.signatureWedding--veno .signatureWedding__timeline p { overflow-wrap: anywhere; }
+.signatureWedding--veno .signatureWedding__menu { position: relative; display: block; color: #f8f3e9; background: #65303a; text-align: center; }
+.signatureWedding--veno .signatureWedding__menu::before, .signatureWedding--veno .signatureWedding__menu::after { position: absolute; top: 0; bottom: 0; width: 65px; background: url('/templates/veno/lace.svg') center / 65px auto repeat-y; opacity: .5; content: ''; }
+.signatureWedding--veno .signatureWedding__menu::before { left: 22px; }
+.signatureWedding--veno .signatureWedding__menu::after { right: 22px; }
+.signatureWedding--veno .signatureWedding__menu .signatureWedding__eyebrow { color: #e1c9ab; }
+.signatureWedding--veno .signatureWedding__menu h2 { margin: 0 0 35px; font-size: clamp(48px, 6vw, 78px); font-weight: 400; }
+.signatureWedding--veno .signatureWedding__menuCopy { position: relative; max-width: 600px; margin: auto; }
+.signatureWedding--veno .signatureWedding__menuCourse { padding: 22px 0; border-bottom-color: #f5f0e630; }
+.signatureWedding--veno .signatureWedding__menuCourse:last-child { border: 0; }
+.signatureWedding--veno .signatureWedding__menuCourse p:first-child { color: #e1c9ab; }
+.signatureWedding--veno .signatureWedding__details { gap: 70px; }
+.signatureWedding--veno .signatureWedding__details h2 { font-size: 42px; }
+.signatureWedding--veno .signatureWedding__faq { max-width: 760px; text-align: center; }
+.signatureWedding--veno .signatureWedding__faq h2 { margin: 0 0 28px; font-size: 58px; font-weight: 400; }
+.signatureWedding--veno .signatureWedding__faq > p:not(.signatureWedding__eyebrow) { padding: 16px 0; border-bottom: 1px solid var(--signature-line); }
+.signatureWedding--veno .signatureWedding__rsvp { position: relative; width: 100%; padding: 100px 24px 140px; overflow: hidden; border-top: 1px dashed #71343f40; background: #e9e1d160; }
+.signatureWedding--veno .signatureWedding__rsvp h2 { margin: 0 0 22px; font-size: clamp(48px, 6vw, 84px); font-weight: 400; }
+.signatureWedding--veno .signatureWedding__rsvp > p { max-width: 580px; }
+.signatureWedding--veno .signatureWedding__rsvp a { border-radius: 0; }
+.signatureWedding--veno .signatureWedding__rsvp::after { position: absolute; right: -25px; bottom: -110px; width: 250px; height: 400px; background: url('/templates/veno/embroidery.svg') center / contain no-repeat; opacity: .6; content: ''; pointer-events: none; }
+.signatureWedding--veno a:focus-visible, .signatureWedding--veno summary:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
+@media (max-width: 760px) {
+  .signatureWedding--veno .signatureWedding__nav { min-height: 68px; padding: 0 24px; }
+  .signatureWedding--veno .signatureWedding__nav > .lavandeHeroNav { display: none; }
+  .signatureWedding--veno .lavandeHeroMobileNav { display: block; margin-left: auto; }
+  .signatureWedding--veno .lavandeHeroMobileNav nav { color: #71343f; background: #f8f4ea; }
+  .signatureWedding--veno .signatureWedding__hero { min-height: 850px; padding-top: 68px; align-items: start; }
+  .signatureWedding--veno .signatureWedding__heroCopy { width: 100%; padding: 78px 24px 330px; }
+  .signatureWedding--veno .signatureWedding__heroCopy h1 { font-size: clamp(68px, 16vw, 100px); }
+  .venoHeroArt { top: auto; left: 0; bottom: 0; width: 100%; height: 245px; }
+  .venoHeroArt__embroidery { inset: -35px 0 -30px; background-size: auto 100%; transform: rotate(90deg); }
+  .venoHeroArt__lace { top: -28px; left: 0; bottom: auto; width: 100%; height: 56px; background-size: 56px auto; background-repeat: repeat; }
+  .venoHeroArt__seam { inset: 18px; border-right: 0; border-bottom: 1px dashed #71343f50; }
+  .signatureWedding--veno .signatureWedding__welcome { padding-top: 76px; padding-bottom: 70px; }
+  .signatureWedding--veno .signatureWedding__places { grid-template-columns: 1fr; gap: 24px; padding-bottom: 70px; }
+  .signatureWedding--veno .signatureWedding__places article { min-height: 320px; padding: 50px 24px; }
+  .signatureWedding--veno .signatureWedding__story { padding: 65px 0 75px; }
+  .signatureWedding--veno .signatureWedding__story::after { margin-top: 30px; }
+  .signatureWedding--veno .signatureWedding__schedule { display: block; }
+  .signatureWedding--veno .signatureWedding__schedule > h2 { margin-bottom: 42px; }
+  .signatureWedding--veno .signatureWedding__timeline article { grid-template-columns: 52px minmax(0,1fr); gap: 30px; }
+  .signatureWedding--veno .signatureWedding__timeline article::before { left: 66px; }
+  .signatureWedding--veno .signatureWedding__timeline article::after { left: 63px; }
+  .signatureWedding--veno .signatureWedding__menu { padding: 76px 42px; }
+  .signatureWedding--veno .signatureWedding__menu::before, .signatureWedding--veno .signatureWedding__menu::after { width: 22px; background-size: 36px auto; }
+  .signatureWedding--veno .signatureWedding__menu::before { left: 5px; }
+  .signatureWedding--veno .signatureWedding__menu::after { right: 5px; }
+  .signatureWedding--veno .signatureWedding__details { grid-template-columns: 1fr; gap: 40px; }
+  .signatureWedding--veno .signatureWedding__details article + article { padding: 35px 0 0; border-left: 0; border-top: 1px solid var(--signature-line); }
+  .signatureWedding--veno .signatureWedding__rsvp { padding-bottom: 160px; }
+  .signatureWedding--veno .signatureWedding__rsvp::after { right: -75px; bottom: -165px; width: 210px; height: 330px; opacity: .4; }
+}

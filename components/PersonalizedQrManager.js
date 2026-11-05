@@ -29,7 +29,7 @@ export default function PersonalizedQrManager({ project, weddingWebsiteUrl }) {
     websiteDisplayUrl: weddingWebsiteUrl,
   }), [project, weddingWebsiteUrl])
   const variant = String(project?.design_family || "diana").toLowerCase()
-  const alternativeConfig = variant === "botanique" || variant === "penelope"
+  const alternativeConfig = variant === "botanique" || variant === "penelope" || variant === "fleurie" || variant === "provence" || variant === "lavande" || variant === "veno" || variant === "riviera"
     ? getAlternativeStationeryConfig(variant, project)
     : variant === "chloe" ? getChloeStationeryConfig(project) : null
   const selectedRecipient = recipients.find((recipient) => recipient.id === selectedId) || recipients[0] || null
@@ -256,7 +256,7 @@ function PersonalizedCard({ variant, data, config, recipient, qrDataUrl, ref }) 
   if (variant === "chloe") {
     return <ChloeQrCardPrintTemplate ref={ref} data={data} config={config} recipient={recipient} qrDataUrl={qrDataUrl} />
   }
-  if (variant === "botanique" || variant === "penelope") {
+  if (variant === "botanique" || variant === "penelope" || variant === "fleurie" || variant === "provence" || variant === "lavande" || variant === "veno" || variant === "riviera") {
     return <AlternativeQrCardPrintTemplate ref={ref} data={data} config={config} variant={variant} recipient={recipient} qrDataUrl={qrDataUrl} />
   }
   return <DianaQrCardPrintTemplate ref={ref} data={data} recipient={recipient} qrDataUrl={qrDataUrl} />

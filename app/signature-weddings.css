@@ -11,6 +11,773 @@
   font-family: var(--signature-serif, 'Cormorant Garamond', Georgia, serif);
 }
 
+/* Provence — lavender, limestone and linen */
+.signatureWedding--provence {
+  --signature-ink: #68546c;
+  --signature-muted: #746d70;
+  --signature-paper: #f3eee4;
+  --signature-accent: #a79bb7;
+  --signature-line: rgba(104, 84, 108, .2);
+  color: #3f3938;
+  background-color: var(--signature-paper);
+  background-image: linear-gradient(rgba(243, 238, 228, .84), rgba(243, 238, 228, .84)), url('/templates/provence/linen-paper-texture.jpg');
+  background-size: auto, 920px auto;
+}
+
+.signatureWedding--provence .signatureWedding__nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 55%;
+  min-height: 86px;
+  padding: 0 clamp(28px, 5vw, 86px);
+  color: #3f3938;
+  background: transparent;
+  backdrop-filter: none;
+}
+
+.signatureWedding--provence .signatureWedding__brand {
+  color: #68546c;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(18px, 1.55vw, 25px);
+  font-style: italic;
+  letter-spacing: -.03em;
+}
+
+.provenceHeroNav {
+  position: fixed;
+  z-index: 22;
+  top: 0;
+  left: 55%;
+  display: flex;
+  width: 45%;
+  min-height: 86px;
+  padding: 0 clamp(24px, 4vw, 66px);
+  align-items: center;
+  justify-content: flex-end;
+  gap: clamp(18px, 2.2vw, 36px) !important;
+  color: #f7f2e8;
+  background: rgba(63, 57, 56, .3);
+  backdrop-filter: blur(9px);
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-size: clamp(14px, 1.05vw, 17px) !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+.provenceHeroNav__rsvp {
+  padding: 10px 18px;
+  border: 1px solid rgba(247, 242, 232, .72);
+  border-radius: 999px;
+}
+
+.provenceHeroMobileNav { display: none; }
+
+.signatureWedding--provence .signatureWedding__hero {
+  grid-template-columns: 55% 45%;
+  min-height: 100svh;
+  place-items: stretch;
+  background: transparent;
+}
+
+.signatureWedding--provence .signatureWedding__heroShade { display: none; }
+
+.provenceHeroVisual {
+  position: relative;
+  z-index: 0;
+  grid-column: 2;
+  grid-row: 1;
+  min-height: 100svh;
+  overflow: hidden;
+  background: #7d826c;
+}
+
+.provenceHeroVisual__image {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: linear-gradient(180deg, rgba(52, 48, 43, .08), rgba(52, 48, 43, .2)), url('/templates/provence/hero-lavender-garden.jpg') 74% center / cover no-repeat;
+  transform: scale(1.03);
+  animation: provenceHeroBreath 14s ease-in-out infinite alternate;
+}
+
+.provenceHeroVisual::after {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(247, 242, 232, .34);
+  margin: 18px;
+  content: '';
+  pointer-events: none;
+}
+
+.provenceHeroVisual__caption {
+  position: absolute;
+  z-index: 1;
+  right: 34px;
+  bottom: 34px;
+  color: #f7f2e8;
+  font-family: 'Ms Madi', cursive;
+  font-size: clamp(20px, 2vw, 31px);
+  text-shadow: 0 2px 20px rgba(35, 30, 28, .32);
+  transform: rotate(-4deg);
+}
+
+.signatureWedding--provence .signatureWedding__heroCopy {
+  position: relative;
+  z-index: 2;
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  justify-self: stretch;
+  justify-items: start;
+  width: 100%;
+  padding: 150px clamp(40px, 7.4vw, 118px) 100px;
+  color: #3f3938;
+  text-align: left;
+  text-shadow: none;
+}
+
+.signatureWedding--provence .signatureWedding__heroCopy > p {
+  margin-bottom: clamp(28px, 4vh, 44px);
+  color: #7d826c;
+  font-size: 10px;
+  letter-spacing: .34em;
+}
+
+.signatureWedding--provence .signatureWedding__heroCopy h1 {
+  display: grid;
+  justify-items: start;
+  color: var(--signature-ink);
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(66px, 8.2vw, 126px);
+  font-style: italic;
+  letter-spacing: -.075em;
+  line-height: .72;
+}
+
+.signatureWedding--provence .signatureWedding__heroCopy h1 i {
+  margin: .1em 0 .05em .72em;
+  color: var(--signature-accent);
+  font-family: 'Ms Madi', cursive;
+  font-size: .46em;
+  font-style: normal;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+.signatureWedding--provence .signatureWedding__heroCopy strong {
+  margin-top: 38px;
+  color: #7d826c;
+  font-size: 10px;
+  letter-spacing: .28em;
+}
+
+.provenceHeroFlourish {
+  display: block;
+  margin: 24px 0 0 14px;
+  color: #a79bb7;
+  font-family: 'Ms Madi', cursive;
+  font-size: 27px;
+  transform: rotate(-4deg);
+}
+
+.signatureWedding--provence .signatureWedding__heroAction {
+  min-width: 208px;
+  min-height: 52px;
+  margin-top: 28px;
+  border-radius: 0;
+  color: #f7f2e8;
+  background: #68546c;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 17px;
+}
+
+.signatureWedding--provence .signatureWedding__heroDown {
+  left: 27.5%;
+  bottom: 22px;
+  color: #7d826c;
+}
+
+.signatureWedding--provence .signatureWedding__section {
+  width: 100%;
+  padding: clamp(80px, 10vw, 148px) max(30px, calc((100% - 1180px) / 2));
+}
+
+.signatureWedding--provence .signatureWedding__eyebrow {
+  color: #7d826c;
+  font-size: 9px;
+  letter-spacing: .28em;
+}
+
+.signatureWedding--provence h2,
+.signatureWedding--provence h3 {
+  color: #3f3938;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 400;
+}
+
+.signatureWedding--provence .signatureWedding__welcome {
+  min-height: 400px;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  text-align: center;
+}
+
+.signatureWedding--provence .signatureWedding__welcome h2 {
+  max-width: 820px;
+  margin: 0;
+  color: #68546c;
+  font-size: clamp(46px, 6vw, 82px);
+  font-style: italic;
+  line-height: 1.02;
+}
+
+.signatureWedding--provence .signatureWedding__ornament {
+  color: #c3a56d;
+  font-size: 15px;
+}
+
+.signatureWedding--provence .signatureWedding__places {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  padding-top: 68px;
+  padding-bottom: 68px;
+  background: rgba(255, 252, 246, .58);
+  border-block: 1px solid rgba(104, 84, 108, .12);
+}
+
+.signatureWedding--provence .signatureWedding__places::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1px;
+  height: 68%;
+  background: linear-gradient(transparent, #a79bb7, transparent);
+  content: '';
+  transform: translate(-50%, -50%);
+}
+
+.signatureWedding--provence .signatureWedding__places article {
+  display: grid;
+  min-height: 340px;
+  padding: 42px clamp(28px, 6vw, 90px);
+  align-content: center;
+  justify-items: start;
+  text-align: left;
+}
+
+.signatureWedding--provence .signatureWedding__places article:nth-child(2) { padding-top: 88px; }
+.signatureWedding--provence .signatureWedding__places strong { margin: 0 0 22px; color: #68546c; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(52px, 6vw, 82px); font-style: italic; font-weight: 400; line-height: 1; }
+.signatureWedding--provence .signatureWedding__places h2 { max-width: 430px; margin: 0 0 14px; font-size: clamp(30px, 3.5vw, 48px); line-height: 1; }
+.signatureWedding--provence .signatureWedding__places article > p:not(.signatureWedding__eyebrow) { margin: 0; color: #746d70; font-size: 17px; }
+.signatureWedding--provence .signatureWedding__mapAction { margin-top: 24px; padding-bottom: 5px; border-bottom: 1px solid #a79bb7; color: #68546c; font-family: Inter, Arial, sans-serif; font-size: 9px; letter-spacing: .16em; text-decoration: none; text-transform: uppercase; }
+
+.signatureWedding--provence .signatureWedding__story {
+  position: relative;
+  grid-template-columns: minmax(300px, .82fr) minmax(360px, 1.18fr);
+  gap: clamp(42px, 8vw, 120px);
+  align-items: center;
+  min-height: 760px;
+}
+
+.signatureWedding--provence .signatureWedding__storyImage {
+  width: 100%;
+  min-height: 570px;
+  background-image: var(--signature-hero);
+  background-position: center;
+  background-size: cover;
+  box-shadow: 24px 28px 0 rgba(167, 155, 183, .18);
+  clip-path: inset(0 0 0 0 round 45% 45% 3px 3px);
+}
+
+.signatureWedding--provence .signatureWedding__storyCopy {
+  position: relative;
+  padding: clamp(36px, 5vw, 72px);
+  background: rgba(255, 252, 246, .72);
+  box-shadow: 0 18px 50px rgba(63, 57, 56, .06);
+}
+
+.signatureWedding--provence .signatureWedding__storyCopy::after {
+  display: none;
+}
+
+.signatureWedding--provence .signatureWedding__storyCopy h2 { margin: 0 0 30px; color: #68546c; font-size: clamp(50px, 6vw, 86px); font-style: italic; line-height: .95; }
+.signatureWedding--provence .signatureWedding__storyCopy > p:last-child { color: #625c5c; font-size: 19px; line-height: 1.8; }
+
+.signatureWedding--provence .signatureWedding__schedule { overflow: hidden; text-align: center; }
+.signatureWedding--provence .signatureWedding__schedule > h2 { margin: 0; color: #68546c; font-size: clamp(52px, 6vw, 84px); font-style: italic; }
+.signatureWedding--provence .signatureWedding__timeline {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  width: min(100%, 1100px);
+  margin: 80px auto 0;
+  padding-top: 54px;
+  gap: 24px;
+}
+
+.signatureWedding--provence .signatureWedding__timeline::before {
+  position: absolute;
+  top: 15px;
+  right: 5%;
+  left: 5%;
+  height: 44px;
+  border-top: 1px solid #a79bb7;
+  border-radius: 50%;
+  content: '';
+}
+
+.signatureWedding--provence .signatureWedding__timeline article {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  padding: 28px 20px;
+  border: 0;
+  text-align: center;
+}
+
+.signatureWedding--provence .signatureWedding__timeline article::before {
+  position: absolute;
+  top: -42px;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  border: 2px solid #f3eee4;
+  border-radius: 50%;
+  background: #68546c;
+  box-shadow: 0 0 0 1px #a79bb7;
+  content: '';
+  transform: translateX(-50%);
+}
+
+.signatureWedding--provence .signatureWedding__timeline time { color: #7d826c; font-family: Inter, Arial, sans-serif; font-size: 9px; letter-spacing: .2em; }
+.signatureWedding--provence .signatureWedding__timeline h3 { margin: 0 0 8px; color: #68546c; font-size: 25px; font-style: italic; }
+.signatureWedding--provence .signatureWedding__timeline p { margin: 0; color: #746d70; line-height: 1.55; }
+
+.signatureWedding--provence .signatureWedding__menu {
+  position: relative;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 0;
+  min-height: 760px;
+  padding: 0;
+  overflow: hidden;
+  isolation: isolate;
+  color: #3f3938;
+  background: #f8f4ed;
+}
+
+.signatureWedding--provence .signatureWedding__menu > div:first-child {
+  grid-column: 1;
+  grid-row: 1;
+  padding: clamp(76px, 8vw, 122px) clamp(44px, 7vw, 104px) 26px max(34px, calc((100vw - 1180px) / 2));
+}
+
+.signatureWedding--provence .signatureWedding__menuCopy {
+  grid-column: 1;
+  grid-row: 2;
+  padding: 0 clamp(44px, 7vw, 104px) clamp(76px, 8vw, 122px) max(34px, calc((100vw - 1180px) / 2));
+}
+
+.provenceMenuPhoto {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  min-height: 760px;
+  background: url('/templates/provence/menu-flatware-plaster.jpg') 65% center / cover no-repeat;
+}
+
+.signatureWedding--provence .signatureWedding__menu h2 { max-width: 400px; margin: 0; color: #68546c; font-size: clamp(52px, 6vw, 82px); font-style: italic; line-height: .96; }
+.signatureWedding--provence .signatureWedding__menu .signatureWedding__eyebrow,
+.signatureWedding--provence .signatureWedding__menuCourse p:first-child { color: #7d826c; }
+.signatureWedding--provence .signatureWedding__menuCourse { display: grid; grid-template-columns: 140px 1fr; padding: 22px 0; border-color: rgba(104, 84, 108, .16); }
+.signatureWedding--provence .signatureWedding__menuCourse p { color: #3f3938; }
+
+.signatureWedding--provence .signatureWedding__details { grid-template-columns: 1fr 1fr; gap: 0; padding: 0; }
+.signatureWedding--provence .signatureWedding__details article { min-height: 540px; padding: clamp(70px, 9vw, 130px) max(34px, calc((100vw - 1180px) / 2)); }
+.signatureWedding--provence .signatureWedding__details article:first-child { padding-right: clamp(38px, 7vw, 110px); padding-left: max(34px, calc((100vw - 1180px) / 2)); background: rgba(255, 252, 246, .66); }
+.signatureWedding--provence .signatureWedding__details article:last-child { padding-right: max(34px, calc((100vw - 1180px) / 2)); padding-left: clamp(38px, 7vw, 110px); background: rgba(125, 130, 108, .18); }
+.signatureWedding--provence .signatureWedding__details h2 { margin: 0 0 18px; color: #68546c; font-size: clamp(38px, 4vw, 58px); font-style: italic; }
+.signatureWedding--provence .signatureWedding__details article:last-child h2 + p + h2 { margin-top: 42px; }
+.signatureWedding--provence .signatureWedding__palette span { border-color: rgba(63, 57, 56, .14); }
+
+.signatureWedding--provence .signatureWedding__faq { text-align: left; }
+.signatureWedding--provence .signatureWedding__faq h2 { margin: 0 0 40px; color: #68546c; font-size: clamp(50px, 6vw, 84px); font-style: italic; }
+.signatureWedding--provence .signatureWedding__faq > p:not(.signatureWedding__eyebrow) { max-width: 760px; margin-right: auto; margin-left: 0; padding: 16px 0; border-bottom: 1px solid rgba(104,84,108,.16); }
+
+.signatureWedding--provence .signatureWedding__rsvp {
+  position: relative;
+  min-height: 690px;
+  padding-right: 52%;
+  overflow: hidden;
+  background: #eee7dc;
+  text-align: left;
+}
+
+.signatureWedding--provence .signatureWedding__rsvp::after {
+  position: absolute;
+  top: 74px;
+  right: max(36px, calc((100% - 1180px) / 2));
+  bottom: 0;
+  width: 41%;
+  border-radius: 50% 50% 0 0 / 24% 24% 0 0;
+  background: linear-gradient(rgba(63,57,56,.02), rgba(63,57,56,.08)), url('/templates/provence/rsvp-coupe-olive.jpg') center / cover no-repeat;
+  box-shadow: 0 24px 60px rgba(63,57,56,.12);
+  content: '';
+}
+
+.signatureWedding--provence .signatureWedding__rsvp h2 { margin: 0 0 24px; color: #68546c; font-size: clamp(54px, 6vw, 86px); font-style: italic; line-height: .95; }
+.signatureWedding--provence .signatureWedding__rsvp > p:not(.signatureWedding__eyebrow) { max-width: 500px; margin-left: 0; color: #625c5c; }
+.signatureWedding--provence .signatureWedding__rsvpActions { justify-content: flex-start; }
+.signatureWedding--provence .signatureWedding__rsvp a { border-radius: 0; color: #f7f2e8; background: #68546c; }
+.signatureWedding--provence .signatureWedding__rsvp .signatureWedding__calendarAction { color: #68546c; background: transparent; }
+
+@keyframes provenceHeroBreath {
+  from { transform: scale(1.03) translate3d(0, 0, 0); }
+  to { transform: scale(1.07) translate3d(-1.2%, -.7%, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .provenceHeroVisual__image { animation: none; }
+}
+
+@media (max-width: 760px) {
+  .signatureWedding--provence .signatureWedding__nav {
+    position: absolute;
+    z-index: 23;
+    width: 100%;
+    min-height: 68px;
+    padding: 0 20px;
+    color: #f7f2e8;
+    background: linear-gradient(rgba(43,39,36,.34), transparent);
+  }
+
+  .signatureWedding--provence .signatureWedding__brand { color: inherit; font-size: 18px; }
+  .signatureWedding--provence .signatureWedding__nav > nav { display: none; }
+  .provenceHeroMobileNav { display: block; margin-left: auto; }
+  .provenceHeroMobileNav summary { display: grid; width: 34px; height: 34px; padding: 8px; align-content: center; gap: 4px; list-style: none; cursor: pointer; }
+  .provenceHeroMobileNav summary::-webkit-details-marker { display: none; }
+  .provenceHeroMobileNav summary span { display: block; height: 1px; background: currentColor; }
+  .provenceHeroMobileNav nav { position: absolute; top: 58px; right: 16px; display: grid !important; min-width: 200px; padding: 18px; gap: 14px !important; color: #3f3938; background: rgba(247,242,232,.97); box-shadow: 0 14px 34px rgba(63,57,56,.12); font-size: 9px !important; }
+
+  .signatureWedding--provence .signatureWedding__hero { display: grid; grid-template-columns: 1fr; grid-template-rows: 52svh auto; min-height: 100svh; }
+  .provenceHeroVisual { grid-column: 1; grid-row: 1; min-height: 52svh; }
+  .provenceHeroVisual__image { background-position: 72% center; }
+  .provenceHeroVisual::after { margin: 12px; }
+  .provenceHeroVisual__caption { right: 22px; bottom: 22px; font-size: 20px; }
+  .signatureWedding--provence .signatureWedding__heroCopy { grid-column: 1; grid-row: 2; align-self: start; padding: 52px 28px 84px; }
+  .signatureWedding--provence .signatureWedding__heroCopy > p { margin-bottom: 24px; }
+  .signatureWedding--provence .signatureWedding__heroCopy h1 { font-size: clamp(64px, 22vw, 92px); line-height: .7; }
+  .signatureWedding--provence .signatureWedding__heroCopy strong { margin-top: 28px; }
+  .provenceHeroFlourish { margin-top: 18px; }
+  .signatureWedding--provence .signatureWedding__heroAction { min-height: 48px; margin-top: 22px; }
+  .signatureWedding--provence .signatureWedding__heroDown { display: none; }
+
+  .signatureWedding--provence .signatureWedding__section { padding: 76px 24px; }
+  .signatureWedding--provence .signatureWedding__welcome { min-height: 360px; }
+  .signatureWedding--provence .signatureWedding__welcome h2 { font-size: 47px; }
+
+  .signatureWedding--provence .signatureWedding__places { grid-template-columns: 1fr; padding: 22px 24px; }
+  .signatureWedding--provence .signatureWedding__places::before { top: 50%; left: 24px; width: calc(100% - 48px); height: 1px; background: linear-gradient(90deg, transparent, #a79bb7, transparent); transform: none; }
+  .signatureWedding--provence .signatureWedding__places article,
+  .signatureWedding--provence .signatureWedding__places article:nth-child(2) { min-height: 300px; padding: 44px 12px; }
+  .signatureWedding--provence .signatureWedding__places strong { font-size: 56px; }
+  .signatureWedding--provence .signatureWedding__places h2 { font-size: 34px; }
+
+  .signatureWedding--provence .signatureWedding__story { display: grid; grid-template-columns: 1fr; gap: 52px; min-height: auto; }
+  .signatureWedding--provence .signatureWedding__storyImage { min-height: 420px; width: calc(100% - 24px); }
+  .signatureWedding--provence .signatureWedding__storyCopy { padding: 38px 28px; }
+  .signatureWedding--provence .signatureWedding__storyCopy::after { width: 142px; margin: 10px -8px -58px auto; }
+  .signatureWedding--provence .signatureWedding__storyCopy h2 { font-size: 52px; }
+
+  .signatureWedding--provence .signatureWedding__timeline { grid-template-columns: 1fr; margin-top: 46px; padding: 0; gap: 0; }
+  .signatureWedding--provence .signatureWedding__timeline::before { top: 0; right: auto; bottom: 0; left: 16px; width: 1px; height: auto; border: 0; border-left: 1px solid #a79bb7; border-radius: 0; }
+  .signatureWedding--provence .signatureWedding__timeline article { grid-template-columns: 64px 1fr; padding: 24px 0 24px 42px; text-align: left; }
+  .signatureWedding--provence .signatureWedding__timeline article::before { top: 31px; left: 16px; }
+
+  .signatureWedding--provence .signatureWedding__menu { grid-template-columns: 1fr; grid-template-rows: auto auto 420px; min-height: 0; }
+  .signatureWedding--provence .signatureWedding__menu > div:first-child { grid-column: 1; grid-row: 1; padding: 76px 28px 26px; }
+  .signatureWedding--provence .signatureWedding__menuCopy { grid-column: 1; grid-row: 2; padding: 0 28px 72px; }
+  .provenceMenuPhoto { grid-column: 1; grid-row: 3; min-height: 420px; background-position: 67% center; }
+  .signatureWedding--provence .signatureWedding__menu h2 { font-size: 55px; }
+  .signatureWedding--provence .signatureWedding__menuCourse { grid-template-columns: 105px 1fr; }
+
+  .signatureWedding--provence .signatureWedding__details { grid-template-columns: 1fr; }
+  .signatureWedding--provence .signatureWedding__details article,
+  .signatureWedding--provence .signatureWedding__details article:first-child,
+  .signatureWedding--provence .signatureWedding__details article:last-child { min-height: auto; padding: 76px 28px; }
+
+  .signatureWedding--provence .signatureWedding__rsvp { min-height: 790px; padding: 78px 28px 410px; text-align: left; }
+  .signatureWedding--provence .signatureWedding__rsvp::after { top: auto; right: 24px; bottom: 0; left: 24px; width: auto; height: 350px; border-radius: 50% 50% 0 0 / 22% 22% 0 0; }
+  .signatureWedding--provence .signatureWedding__rsvp h2 { font-size: 55px; }
+}
+
+/* Lavande — layered watercolor, olive leaves and a soft breeze */
+.signatureWedding--lavande {
+  --signature-ink: #5f526f;
+  --signature-muted: #7c7480;
+  --signature-paper: #fbf8f1;
+  --signature-accent: #9b8eaf;
+  --signature-line: rgba(95, 82, 111, .16);
+  color: #443f46;
+  background-color: var(--signature-paper);
+  background-image:
+    radial-gradient(circle at 12% 14%, rgba(196,181,211,.16), transparent 28%),
+    radial-gradient(circle at 89% 40%, rgba(154,163,126,.13), transparent 25%),
+    linear-gradient(rgba(251,248,241,.78), rgba(251,248,241,.78)),
+    url('/templates/provence/linen-paper-texture.jpg');
+  background-size: auto, auto, auto, 880px auto;
+}
+
+.signatureWedding--lavande .signatureWedding__nav {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  min-height: 82px;
+  padding: 0 clamp(24px, 5vw, 74px);
+  color: #51465e;
+  background: transparent;
+  backdrop-filter: none;
+}
+
+.signatureWedding--lavande .signatureWedding__brand {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(20px, 2vw, 29px);
+  font-style: italic;
+  letter-spacing: .01em;
+}
+
+.lavandeHeroNav {
+  display: flex;
+  align-items: center;
+  gap: clamp(22px, 3vw, 48px) !important;
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-size: clamp(14px, 1.15vw, 18px) !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+.lavandeHeroNav__rsvp {
+  padding: 10px 20px;
+  border: 1px solid rgba(95,82,111,.48);
+  border-radius: 999px;
+  background: rgba(255,255,255,.28);
+}
+
+.lavandeHeroMobileNav { display: none; }
+
+.signatureWedding--lavande .signatureWedding__hero {
+  min-height: 100svh;
+  place-items: center;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse at 50% 47%, rgba(255,255,255,.82), rgba(251,248,241,.32) 48%, transparent 72%),
+    linear-gradient(145deg, #fbf8f1, #f5f1e8 62%, #f2ede3);
+}
+
+.signatureWedding--lavande .signatureWedding__heroShade { display: none; }
+
+.lavandeHeroLayers,
+.lavandeHeroLayers span { position: absolute; inset: 0; pointer-events: none; }
+
+.lavandeHeroLayers { z-index: -1; overflow: hidden; }
+.lavandeHeroLayers__wash {
+  background:
+    radial-gradient(ellipse at 14% 82%, rgba(181,163,204,.13), transparent 24%),
+    radial-gradient(ellipse at 88% 58%, rgba(145,157,116,.1), transparent 26%);
+  filter: blur(7px);
+}
+.lavandeHeroLayers__olive {
+  background: url('/templates/lavande/hero-olive-corner.png') center top / 100% auto no-repeat;
+  opacity: .68;
+}
+.lavandeHeroLayers__meadow {
+  top: auto !important;
+  right: -1.5% !important;
+  bottom: -2.5% !important;
+  left: -1.5% !important;
+  height: min(43vw, 520px);
+  background: url('/templates/lavande/hero-lavender-meadow-v2.png') center bottom / 103% auto no-repeat;
+  filter: drop-shadow(0 12px 18px rgba(90,73,99,.045));
+  transform-origin: 50% 100%;
+  animation: lavandeLeftBreeze 5.8s ease-in-out infinite alternate;
+}
+
+.signatureWedding--lavande .signatureWedding__heroCopy {
+  z-index: 2;
+  justify-items: center;
+  width: min(86%, 920px);
+  padding: 112px 24px 76px;
+  color: #51465e;
+  text-align: center;
+  text-shadow: none;
+}
+.signatureWedding--lavande .signatureWedding__heroCopy > p { margin-bottom: 26px; color: #7f8870; font-size: 9px; letter-spacing: .42em; }
+.signatureWedding--lavande .signatureWedding__heroCopy h1 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0 .15em;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(82px, 10vw, 158px);
+  font-style: italic;
+  letter-spacing: -.055em;
+  line-height: .8;
+}
+.signatureWedding--lavande .signatureWedding__heroCopy h1 i { margin: 0; color: #9b8eaf; font-family: 'Ms Madi', cursive; font-size: .48em; font-style: normal; }
+.signatureWedding--lavande .signatureWedding__heroCopy strong { margin-top: 32px; color: #6f6b60; font-size: 10px; letter-spacing: .3em; }
+.lavandeHeroFlourish { display: block; width: 72px; height: 1px; margin-top: 24px; background: linear-gradient(90deg, transparent, #9b8eaf, transparent); }
+.signatureWedding--lavande .signatureWedding__heroAction { min-width: 210px; margin-top: 24px; border: 1px solid #756780; border-radius: 999px; color: #51465e; background: rgba(255,255,255,.46); font-family: 'Cormorant Garamond', Georgia, serif; font-size: 17px; }
+.signatureWedding--lavande .signatureWedding__heroDown { bottom: 22px; color: #6e765f; }
+
+.signatureWedding--lavande .signatureWedding__section { width: 100%; padding: clamp(82px, 10vw, 150px) max(28px, calc((100% - 1160px) / 2)); }
+.signatureWedding--lavande .signatureWedding__eyebrow { color: #7f8870; font-size: 9px; letter-spacing: .3em; }
+.signatureWedding--lavande h2,
+.signatureWedding--lavande h3 { color: #51465e; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 400; }
+
+.signatureWedding--lavande .signatureWedding__welcome { position: relative; min-height: 430px; display: grid; align-content: center; justify-items: center; text-align: center; }
+.signatureWedding--lavande .signatureWedding__welcome::before { position: absolute; width: min(78vw, 760px); height: 250px; border-radius: 50%; background: rgba(189,171,207,.1); filter: blur(22px); content: ''; }
+.signatureWedding--lavande .signatureWedding__welcome > * { position: relative; }
+.signatureWedding--lavande .signatureWedding__welcome h2 { max-width: 820px; margin: 0; font-size: clamp(48px, 6.5vw, 86px); font-style: italic; line-height: 1; }
+.signatureWedding--lavande .signatureWedding__ornament { color: #b29b6c; }
+
+.signatureWedding--lavande .signatureWedding__places {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(24px, 5vw, 72px);
+  padding-top: 90px;
+  padding-bottom: 90px;
+  background:
+    radial-gradient(ellipse at 16% 50%, rgba(178,158,201,.2), transparent 38%),
+    radial-gradient(ellipse at 86% 45%, rgba(142,156,116,.16), transparent 36%);
+}
+.signatureWedding--lavande .signatureWedding__places article { position: relative; min-height: 440px; padding: 86px clamp(36px, 5vw, 74px) 64px; background: rgba(255,253,248,.72); box-shadow: 0 18px 50px rgba(73,61,78,.06); text-align: left; }
+.signatureWedding--lavande .signatureWedding__places article:first-child::before { display: block; width: 154px; height: 92px; margin: -48px 0 18px -16px; background: url('/templates/lavande/ceremony-rings.png') center / contain no-repeat; content: ''; opacity: .88; }
+.signatureWedding--lavande .signatureWedding__places article:nth-child(2) { margin-top: 86px; }
+.signatureWedding--lavande .signatureWedding__places article:nth-child(2)::before { position: absolute; top: -44px; right: -20px; width: 150px; height: 180px; background: url('/templates/lavande/hero-rear-watercolor.png') right top / 340px auto no-repeat; content: ''; opacity: .46; }
+.signatureWedding--lavande .signatureWedding__places strong { display: block; margin: 0 0 18px; color: #7d6f8c; font-size: clamp(54px, 6vw, 80px); font-style: italic; font-weight: 400; line-height: 1; }
+.signatureWedding--lavande .signatureWedding__places h2 { max-width: 420px; margin: 0 0 12px; font-size: clamp(31px, 3vw, 46px); line-height: 1.02; }
+.signatureWedding--lavande .signatureWedding__places article > p:not(.signatureWedding__eyebrow) { color: #716a70; }
+.signatureWedding--lavande .signatureWedding__mapAction { display: inline-block; margin-top: 22px; padding-bottom: 4px; border-bottom: 1px solid #a89ab8; color: #5f526f; font-family: Inter,Arial,sans-serif; font-size: 9px; letter-spacing: .16em; text-decoration: none; text-transform: uppercase; }
+
+.signatureWedding--lavande .signatureWedding__story { position: relative; display: block; min-height: 660px; padding-top: 155px; padding-bottom: 155px; text-align: center; }
+.signatureWedding--lavande .signatureWedding__story::before { position: absolute; inset: 9% 4%; background: url('/templates/lavande/hero-rear-watercolor.png') center / 100% auto no-repeat; content: ''; opacity: .42; }
+.signatureWedding--lavande .signatureWedding__storyCopy { position: relative; width: min(760px, 88%); margin: 0 auto; padding: clamp(48px, 7vw, 90px); background: rgba(255,253,248,.78); box-shadow: 0 20px 56px rgba(79,66,84,.07); }
+.signatureWedding--lavande .signatureWedding__storyCopy h2 { margin: 0 0 24px; font-size: clamp(58px, 7vw, 96px); font-style: italic; line-height: .92; }
+.signatureWedding--lavande .signatureWedding__storyCopy > p:last-child { max-width: 580px; margin: 0 auto; color: #6f686e; font-size: 19px; line-height: 1.8; }
+.lavandeStoryMark { display: block; width: 94px; height: 26px; margin: 4px auto 20px; background: url('/templates/lavande/hero-foreground-lavender.png') center 61% / 260px auto no-repeat; opacity: .7; }
+
+.signatureWedding--lavande .signatureWedding__schedule { text-align: left; }
+.signatureWedding--lavande .signatureWedding__schedule > h2 { margin: 0; font-size: clamp(58px, 7vw, 94px); font-style: italic; }
+.signatureWedding--lavande .signatureWedding__timeline { display: grid; grid-template-columns: 1fr; width: min(760px, 100%); margin: 56px auto 0; gap: 0; border: 0; }
+.signatureWedding--lavande .signatureWedding__timeline article { position: relative; display: grid; grid-template-columns: 80px minmax(0, 1fr); gap: 42px; margin: 0; padding: 0 0 38px; border: 0; text-align: left; }
+.signatureWedding--lavande .signatureWedding__timeline article::before { position: absolute; top: 9px; bottom: -9px; left: 100px; width: 1px; background: rgba(95,82,111,.23); content: ''; }
+.signatureWedding--lavande .signatureWedding__timeline article::after { position: absolute; top: 6px; left: 96px; width: 9px; height: 9px; border: 2px solid #faf7f0; border-radius: 50%; background: #9b8eaf; box-sizing: border-box; content: ''; }
+.signatureWedding--lavande .signatureWedding__timeline article:last-child { padding-bottom: 0; }
+.signatureWedding--lavande .signatureWedding__timeline article:last-child::before { display: none; }
+.signatureWedding--lavande .signatureWedding__timeline time { padding-top: 3px; color: #7f8870; font-family: Inter,Arial,sans-serif; font-size: 11px; letter-spacing: .12em; text-align: right; }
+.signatureWedding--lavande .signatureWedding__timeline h3 { margin: 0 0 8px; font-size: 29px; font-style: italic; overflow-wrap: anywhere; }
+.signatureWedding--lavande .signatureWedding__timeline p { margin: 0; color: #746d73; line-height: 1.55; overflow-wrap: anywhere; }
+
+.signatureWedding--lavande .signatureWedding__menu { color: #51465e; position: relative; display: block; min-height: 700px; padding-top: 120px; padding-bottom: 120px; overflow: hidden; background: rgba(112,104,84,.12); }
+.signatureWedding--lavande .signatureWedding__menu::before,
+.signatureWedding--lavande .signatureWedding__menu::after { position: absolute; width: 430px; height: 430px; background: url('/templates/lavande/hero-foreground-lavender.png') center / 780px auto no-repeat; content: ''; opacity: .27; }
+.signatureWedding--lavande .signatureWedding__menu::before { bottom: -160px; left: -130px; transform: rotate(13deg); }
+.signatureWedding--lavande .signatureWedding__menu::after { top: -170px; right: -130px; transform: rotate(190deg); }
+.signatureWedding--lavande .signatureWedding__menu > div { position: relative; z-index: 1; width: min(720px, 100%); margin: 0 auto; }
+.signatureWedding--lavande .signatureWedding__menu > div:first-child { text-align: center; }
+.signatureWedding--lavande .signatureWedding__menu h2 { margin: 0 0 48px; font-size: clamp(56px, 7vw, 92px); font-style: italic; }
+.signatureWedding--lavande .signatureWedding__menuCourse { display: grid; grid-template-columns: 150px 1fr; padding: 20px 0; border-color: rgba(95,82,111,.15); }
+.signatureWedding--lavande .signatureWedding__menu .signatureWedding__eyebrow,
+.signatureWedding--lavande .signatureWedding__menuCourse p:first-child { color: #596348; }
+
+.signatureWedding--lavande .signatureWedding__details { grid-template-columns: 1.05fr .95fr; gap: 0; padding: 0; }
+.signatureWedding--lavande .signatureWedding__details article { min-height: 520px; padding: clamp(74px, 9vw, 130px); }
+.signatureWedding--lavande .signatureWedding__details article:first-child { background: rgba(255,253,248,.76); }
+.signatureWedding--lavande .signatureWedding__details article:last-child { background: linear-gradient(150deg, rgba(178,158,201,.2), rgba(145,157,116,.14)); }
+.signatureWedding--lavande .signatureWedding__details h2 { margin: 0 0 16px; font-size: clamp(40px, 4vw, 60px); font-style: italic; }
+.signatureWedding--lavande .signatureWedding__details article:last-child h2 + p + h2 { margin-top: 40px; }
+
+.signatureWedding--lavande .signatureWedding__faq { text-align: center; }
+.signatureWedding--lavande .signatureWedding__faq h2 { margin: 0 0 38px; font-size: clamp(56px, 7vw, 90px); font-style: italic; }
+.signatureWedding--lavande .signatureWedding__faq > p:not(.signatureWedding__eyebrow) { max-width: 700px; margin-right: auto; margin-left: auto; padding: 15px 0; border-bottom: 1px solid rgba(95,82,111,.14); }
+
+.signatureWedding--lavande .signatureWedding__rsvp { position: relative; min-height: 680px; padding-bottom: 250px; overflow: hidden; background: linear-gradient(180deg, #faf7f0, #f1ebdf); }
+.signatureWedding--lavande .signatureWedding__rsvp::after { position: absolute; z-index: 0; right: -4%; bottom: -8%; left: -4%; height: 420px; background: url('/templates/lavande/hero-foreground-lavender.png') center bottom / 104% auto no-repeat; content: ''; opacity: .72; transform-origin: 50% 100%; animation: lavandeFrontBreeze 6.4s ease-in-out infinite alternate-reverse; }
+.signatureWedding--lavande .signatureWedding__rsvp > * { position: relative; z-index: 1; }
+.signatureWedding--lavande .signatureWedding__rsvp h2 { margin: 0 0 22px; font-size: clamp(58px, 7vw, 94px); font-style: italic; line-height: .95; }
+.signatureWedding--lavande .signatureWedding__rsvp > p:not(.signatureWedding__eyebrow) { max-width: 560px; }
+.signatureWedding--lavande .signatureWedding__rsvp a { border-radius: 999px; color: #fffdf8; background: #5f526f; }
+.signatureWedding--lavande .signatureWedding__rsvp .signatureWedding__calendarAction { color: #5f526f; background: transparent; }
+
+@keyframes lavandeLeftBreeze {
+  from { transform: rotate(-1.1deg) translate3d(-.25%, .2%, 0); }
+  to { transform: rotate(1.45deg) translate3d(.4%, -.2%, 0); }
+}
+@keyframes lavandeRightBreeze {
+  from { transform: rotate(1.2deg) translate3d(.25%, .15%, 0); }
+  to { transform: rotate(-1.35deg) translate3d(-.35%, -.2%, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lavandeHeroLayers__meadow,
+  .signatureWedding--lavande .signatureWedding__rsvp::after { animation: none; }
+}
+
+@media (max-width: 760px) {
+  .signatureWedding--lavande .signatureWedding__nav { z-index: 23; min-height: 68px; padding: 0 20px; }
+  .signatureWedding--lavande .signatureWedding__brand { font-size: 18px; }
+  .signatureWedding--lavande .signatureWedding__nav > nav { display: none; }
+  .lavandeHeroMobileNav { display: block; margin-left: auto; }
+  .lavandeHeroMobileNav summary { display: grid; width: 34px; height: 34px; padding: 8px; align-content: center; gap: 4px; list-style: none; cursor: pointer; }
+  .lavandeHeroMobileNav summary::-webkit-details-marker { display: none; }
+  .lavandeHeroMobileNav summary span { display: block; height: 1px; background: currentColor; }
+  .lavandeHeroMobileNav nav { position: absolute; top: 58px; right: 16px; display: grid !important; min-width: 200px; padding: 18px; gap: 14px !important; color: #51465e; background: rgba(251,248,241,.97); box-shadow: 0 14px 34px rgba(73,61,78,.1); font-size: 9px !important; }
+
+  .signatureWedding--lavande .signatureWedding__heroCopy { width: 100%; padding: 96px 20px 148px; }
+  .signatureWedding--lavande .signatureWedding__heroCopy h1 { display: grid; justify-items: center; font-size: clamp(72px, 22vw, 98px); line-height: .68; }
+  .signatureWedding--lavande .signatureWedding__heroCopy h1 i { margin: .12em 0 .08em; }
+  .lavandeHeroLayers__olive { background-position: 20% top; background-size: 145% auto; opacity: .56; }
+  .lavandeHeroLayers__meadow { right: -18% !important; bottom: -1% !important; left: -18% !important; height: 42vh; max-height: 390px; background-size: auto 100%; }
+  .signatureWedding--lavande .signatureWedding__heroDown { display: none; }
+
+  .signatureWedding--lavande .signatureWedding__section { padding: 76px 24px; }
+  .signatureWedding--lavande .signatureWedding__welcome { min-height: 380px; }
+  .signatureWedding--lavande .signatureWedding__welcome h2 { font-size: 48px; }
+
+  .signatureWedding--lavande .signatureWedding__places { grid-template-columns: 1fr; gap: 28px; padding: 64px 24px; }
+  .signatureWedding--lavande .signatureWedding__places article { min-height: 390px; padding: 72px 30px 50px; }
+  .signatureWedding--lavande .signatureWedding__places article:nth-child(2) { margin-top: 0; }
+  .signatureWedding--lavande .signatureWedding__places strong { font-size: 58px; }
+  .signatureWedding--lavande .signatureWedding__places h2 { font-size: 35px; }
+
+  .signatureWedding--lavande .signatureWedding__story { min-height: 620px; padding: 110px 20px; }
+  .signatureWedding--lavande .signatureWedding__story::before { inset: 2% -42%; background-size: auto 100%; }
+  .signatureWedding--lavande .signatureWedding__storyCopy { width: 100%; padding: 52px 28px; }
+  .signatureWedding--lavande .signatureWedding__storyCopy h2 { font-size: 58px; }
+
+  .signatureWedding--lavande .signatureWedding__schedule { text-align: center; }
+  .signatureWedding--lavande .signatureWedding__timeline { margin-top: 38px; }
+  .signatureWedding--lavande .signatureWedding__timeline article { grid-template-columns: 54px minmax(0, 1fr); gap: 30px; padding-bottom: 32px; }
+  .signatureWedding--lavande .signatureWedding__timeline article::before { left: 68px; }
+  .signatureWedding--lavande .signatureWedding__timeline article::after { left: 64px; }
+
+  .signatureWedding--lavande .signatureWedding__menu { min-height: 0; padding: 82px 28px; }
+  .signatureWedding--lavande .signatureWedding__menu h2 { font-size: 58px; }
+  .signatureWedding--lavande .signatureWedding__menuCourse { grid-template-columns: 105px 1fr; }
+
+  .signatureWedding--lavande .signatureWedding__details { grid-template-columns: 1fr; }
+  .signatureWedding--lavande .signatureWedding__details article { min-height: auto; padding: 76px 28px; }
+  .signatureWedding--lavande .signatureWedding__rsvp { min-height: 760px; padding: 82px 28px 310px; }
+  .signatureWedding--lavande .signatureWedding__rsvp::after { right: -45%; left: -45%; height: 330px; background-size: auto 100%; }
+  .signatureWedding--lavande .signatureWedding__rsvp h2 { font-size: 58px; }
+}
+
 .signatureWedding--penelope {
   --signature-ink: #5a3f45;
   --signature-muted: #8b6f74;
@@ -542,4 +1309,992 @@
   .signatureWedding__heroAction {
     transition: none;
   }
+}
+
+/* Penelope — watercolor romance */
+.signatureWedding--penelope {
+  --signature-muted: #826d72;
+  --signature-paper: #fbf7f1;
+  --signature-accent: #a7727d;
+  --signature-line: rgba(108, 76, 84, .17);
+  background:
+    radial-gradient(circle at 5% 32%, rgba(224, 188, 191, .16), transparent 28%),
+    var(--signature-paper);
+}
+
+.signatureWedding--penelope .signatureWedding__nav {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  min-height: 78px;
+  padding: 0 clamp(28px, 5vw, 84px);
+  color: var(--signature-ink);
+  background: transparent;
+  backdrop-filter: none;
+}
+
+.signatureWedding--penelope .signatureWedding__brand {
+  position: relative;
+  z-index: 2;
+  font-size: clamp(18px, 1.8vw, 24px);
+  font-style: italic;
+  letter-spacing: .02em;
+}
+
+.signatureWedding--penelope .penelopeHeroNav {
+  align-items: center;
+  gap: clamp(24px, 3vw, 46px);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(15px, 1.18vw, 19px);
+  letter-spacing: .02em;
+  text-transform: none;
+}
+
+.signatureWedding--penelope .penelopeHeroNav__rsvp {
+  min-width: 174px;
+  padding: 13px 26px;
+  border: 1px solid rgba(90, 63, 69, .46);
+  border-radius: 999px;
+  background: rgba(251, 247, 241, .46);
+  text-align: center;
+  transition: color .2s ease, background .2s ease;
+}
+
+.signatureWedding--penelope .penelopeHeroNav__rsvp:hover,
+.signatureWedding--penelope .penelopeHeroNav__rsvp:focus-visible {
+  color: var(--signature-paper);
+  background: var(--signature-ink);
+}
+
+.penelopeHeroMobileNav { display: none; }
+
+.signatureWedding--penelope .signatureWedding__hero {
+  min-height: 100svh;
+  background-color: #fbf6f0;
+  background-image: url('/templates/penelope/redesign/hero-watercolor.webp');
+  background-position: center;
+  background-size: cover;
+}
+
+.signatureWedding--penelope .signatureWedding__heroShade { display: none; }
+
+.signatureWedding--penelope .signatureWedding__heroCopy {
+  position: relative;
+  z-index: 3;
+  width: min(88%, 860px);
+  padding: clamp(116px, 15vh, 154px) 20px 80px;
+  color: var(--signature-ink);
+  text-shadow: none;
+}
+
+.signatureWedding--penelope .signatureWedding__heroCopy > p {
+  margin-bottom: clamp(24px, 3.6vh, 38px);
+  color: var(--signature-accent);
+  font-size: clamp(9px, .82vw, 12px);
+  letter-spacing: .5em;
+}
+
+.signatureWedding--penelope .signatureWedding__heroCopy h1 {
+  display: grid;
+  font-family: var(--signature-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: clamp(78px, 10.5vw, 156px);
+  font-style: italic;
+  letter-spacing: -.055em;
+  line-height: .67;
+}
+
+.signatureWedding--penelope .signatureWedding__heroCopy h1 i {
+  margin: .16em 0 .2em;
+  color: var(--signature-accent);
+  font-family: 'Great Vibes', cursive;
+  font-size: .42em;
+  font-style: normal;
+  line-height: 1;
+}
+
+.signatureWedding--penelope.signatureWedding--font-editorial .signatureWedding__heroCopy h1 {
+  line-height: .78;
+}
+
+.signatureWedding--penelope.signatureWedding--font-editorial .signatureWedding__heroCopy h1 i {
+  margin: .25em 0 .22em;
+  font-size: .36em;
+}
+
+.signatureWedding--penelope .signatureWedding__heroCopy strong {
+  margin-top: clamp(32px, 4.5vh, 48px);
+  font-size: clamp(10px, .9vw, 13px);
+  letter-spacing: .34em;
+}
+
+.penelopeHeroFlourish {
+  display: block;
+  width: 92px;
+  height: 22px;
+  margin-top: 21px;
+  opacity: .72;
+}
+
+.penelopeHeroFlourish::before,
+.penelopeHeroFlourish::after {
+  display: inline-block;
+  width: 38px;
+  height: 1px;
+  margin: 0 4px;
+  background: var(--signature-accent);
+  content: '';
+  transform: rotate(-7deg);
+}
+
+.penelopeHeroFlourish::after { transform: rotate(7deg); }
+
+.signatureWedding--penelope .signatureWedding__heroAction {
+  min-width: min(100%, 260px);
+  min-height: 52px;
+  margin-top: 3px;
+  border-color: rgba(90, 63, 69, .55);
+  background: rgba(251, 247, 241, .38);
+  font-size: 18px;
+}
+
+.signatureWedding--penelope .signatureWedding__heroDown {
+  bottom: 18px;
+  color: var(--signature-accent);
+  font-size: 34px;
+}
+
+.penelopeHeroDecorations,
+.penelopeHeroDecorations__branch {
+  position: absolute;
+  pointer-events: none;
+}
+
+.penelopeHeroDecorations {
+  z-index: 1;
+  inset: 0;
+  overflow: hidden;
+}
+
+.penelopeHeroDecorations__branch {
+  display: block;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  will-change: transform;
+}
+
+.penelopeHeroDecorations__branch--top {
+  top: -8%;
+  right: -7%;
+  width: min(58vw, 930px);
+  aspect-ratio: 1400 / 933;
+  background-image: url('/templates/penelope/redesign/sweet-pea-top.webp');
+  transform-origin: 88% 8%;
+  animation: penelopeBranchTop 7s ease-in-out infinite alternate;
+}
+
+.penelopeHeroDecorations__branch--bottom {
+  bottom: -12%;
+  left: -3%;
+  width: min(34vw, 520px);
+  aspect-ratio: 760 / 643;
+  background-image: url('/templates/penelope/redesign/sweet-pea-bottom.webp');
+  transform-origin: 8% 92%;
+  animation: penelopeBranchBottom 8.4s ease-in-out -2.6s infinite alternate;
+}
+
+.penelopeHeroDecorations__petal {
+  position: absolute;
+  width: clamp(12px, 1.2vw, 19px);
+  height: clamp(8px, .8vw, 13px);
+  border-radius: 80% 0 80% 0;
+  background: rgba(190, 127, 143, .42);
+  filter: blur(.2px);
+  animation: penelopePetalFloat 6.5s ease-in-out infinite alternate;
+}
+
+.penelopeHeroDecorations__petal--one { top: 25%; left: 17%; transform: rotate(18deg); }
+.penelopeHeroDecorations__petal--two { right: 26%; bottom: 24%; transform: rotate(-28deg); animation-delay: -2.2s; }
+.penelopeHeroDecorations__petal--three { top: 42%; right: 17%; transform: rotate(42deg); animation-delay: -4.4s; }
+
+@keyframes penelopeBranchTop {
+  from { transform: rotate(-.9deg) translate3d(0, -2px, 0); }
+  to { transform: rotate(1.2deg) translate3d(-9px, 9px, 0); }
+}
+
+@keyframes penelopeBranchBottom {
+  from { transform: rotate(.8deg) translate3d(-2px, 2px, 0); }
+  to { transform: rotate(-1.1deg) translate3d(9px, -8px, 0); }
+}
+
+@keyframes penelopePetalFloat {
+  from { translate: -3px -3px; opacity: .22; }
+  to { translate: 13px 18px; opacity: .58; }
+}
+
+.signatureWedding--penelope .signatureWedding__welcome {
+  position: relative;
+  width: min(calc(100% - 48px), 940px);
+  padding-top: clamp(92px, 11vw, 142px);
+  padding-bottom: clamp(92px, 11vw, 142px);
+}
+
+.signatureWedding--penelope .signatureWedding__welcome::after {
+  width: 86px;
+  height: 1px;
+  margin-top: 42px;
+  background: var(--signature-accent);
+  content: '';
+  opacity: .46;
+}
+
+.signatureWedding--penelope .signatureWedding__welcome h2 {
+  max-width: 760px;
+  font-size: clamp(42px, 5.3vw, 68px);
+  font-style: italic;
+}
+
+.signatureWedding--penelope .signatureWedding__ornament { display: none; }
+
+.signatureWedding--penelope .signatureWedding__places {
+  width: min(calc(100% - 48px), 1180px);
+  padding: 0 0 clamp(86px, 10vw, 130px);
+  gap: clamp(18px, 3vw, 38px);
+  border: 0;
+}
+
+.signatureWedding--penelope .signatureWedding__places article {
+  min-height: 430px;
+  border: 1px solid var(--signature-line);
+  background: rgba(255, 252, 249, .62);
+  box-shadow: 0 24px 60px rgba(107, 74, 82, .055);
+}
+
+.signatureWedding--penelope .signatureWedding__places article + article { border-left: 1px solid var(--signature-line); }
+.signatureWedding--penelope .signatureWedding__places strong { font-style: italic; }
+.signatureWedding--penelope .signatureWedding__places .signatureWedding__mapAction { border-radius: 999px; }
+
+.signatureWedding--penelope .signatureWedding__story {
+  position: relative;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  padding: clamp(86px, 10vw, 136px) max(24px, calc((100vw - 1120px) / 2));
+  background-color: var(--signature-paper);
+  background-image:
+    linear-gradient(rgba(251, 247, 241, .16), rgba(251, 247, 241, .16)),
+    url('/templates/penelope/redesign/hero-watercolor.webp');
+  background-position: center;
+  background-size: cover;
+}
+
+.signatureWedding--penelope .signatureWedding__story::before,
+.signatureWedding--penelope .signatureWedding__story::after {
+  position: absolute;
+  width: clamp(130px, 16vw, 240px);
+  height: clamp(58px, 7vw, 96px);
+  border-top: 1px solid rgba(167, 114, 125, .35);
+  border-radius: 50%;
+  content: '';
+  pointer-events: none;
+}
+
+.signatureWedding--penelope .signatureWedding__story::before {
+  top: 14%;
+  left: -3%;
+  transform: rotate(8deg);
+}
+
+.signatureWedding--penelope .signatureWedding__story::after {
+  right: -2%;
+  bottom: 10%;
+  transform: rotate(-9deg);
+}
+
+.signatureWedding--penelope .signatureWedding__storyCopy {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(260px, .78fr) minmax(360px, 1.22fr);
+  grid-template-areas:
+    'eyebrow story'
+    'heading story'
+    'flourish story';
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: clamp(34px, 4vw, 58px) 0;
+  align-items: start;
+  column-gap: clamp(58px, 8vw, 120px);
+}
+
+.signatureWedding--penelope .signatureWedding__storyCopy .signatureWedding__eyebrow {
+  grid-area: eyebrow;
+}
+
+.signatureWedding--penelope .signatureWedding__storyCopy h2 {
+  grid-area: heading;
+  margin-bottom: 0;
+  font-size: clamp(58px, 7.4vw, 96px);
+  font-style: italic;
+  line-height: .88;
+}
+
+.signatureWedding--penelope .signatureWedding__storyCopy > p:last-child {
+  position: relative;
+  grid-area: story;
+  margin: 0;
+  padding: 14px 0 14px clamp(42px, 5vw, 72px);
+  border-left: 1px solid rgba(167, 114, 125, .32);
+  font-size: clamp(20px, 2.1vw, 25px);
+  line-height: 1.8;
+}
+
+.signatureWedding--penelope .signatureWedding__storyCopy > p:last-child::before {
+  position: absolute;
+  top: -24px;
+  left: clamp(26px, 3.7vw, 52px);
+  color: var(--signature-accent);
+  content: '“';
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 70px;
+  font-style: italic;
+  line-height: 1;
+  opacity: .22;
+}
+
+.penelopeStoryGarland {
+  position: relative;
+  display: block;
+  grid-area: flourish;
+  width: min(100%, 338px);
+  height: 104px;
+  margin-top: 10px;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.penelopeStoryGarland i {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: url('/templates/penelope/redesign/sweet-pea-top.webp') center / contain no-repeat;
+  opacity: .68;
+  transform: rotate(2deg);
+  transform-origin: center;
+}
+
+.signatureWedding--penelope .signatureWedding__schedule {
+  width: min(calc(100% - 48px), 920px);
+  padding-top: clamp(92px, 11vw, 142px);
+  padding-bottom: clamp(92px, 11vw, 142px);
+}
+
+.signatureWedding--penelope .signatureWedding__timeline {
+  position: relative;
+  width: min(100%, 700px);
+}
+
+.signatureWedding--penelope .signatureWedding__timeline::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 114px;
+  width: 1px;
+  background: linear-gradient(transparent, var(--signature-accent) 12%, var(--signature-accent) 88%, transparent);
+  content: '';
+  opacity: .34;
+}
+
+.signatureWedding--penelope .signatureWedding__timeline article {
+  position: relative;
+  grid-template-columns: 92px 1fr;
+  gap: 46px;
+  padding: 30px 0;
+  border: 0;
+}
+
+.signatureWedding--penelope .signatureWedding__timeline article::before {
+  position: absolute;
+  top: 34px;
+  left: 109px;
+  width: 11px;
+  height: 11px;
+  border: 3px solid var(--signature-paper);
+  border-radius: 50%;
+  background: var(--signature-accent);
+  box-shadow: 0 0 0 1px rgba(167, 114, 125, .28);
+  content: '';
+}
+
+.signatureWedding--penelope .signatureWedding__timeline h3 { font-style: italic; }
+
+.signatureWedding--penelope .signatureWedding__menu {
+  color: #fffaf6;
+  background:
+    radial-gradient(circle at 82% 14%, rgba(236, 199, 204, .16), transparent 28%),
+    #654a52;
+}
+
+.signatureWedding--penelope .signatureWedding__menu .signatureWedding__eyebrow,
+.signatureWedding--penelope .signatureWedding__menuCourse p:first-child { color: #e8cbd0; }
+
+.signatureWedding--penelope .signatureWedding__details { padding-top: clamp(92px, 11vw, 142px); }
+
+.signatureWedding--penelope .signatureWedding__faq {
+  width: min(calc(100% - 48px), 900px);
+  border-top: 1px solid var(--signature-line);
+}
+
+.signatureWedding--penelope .signatureWedding__rsvp {
+  position: relative;
+  background:
+    linear-gradient(rgba(251, 247, 241, .76), rgba(251, 247, 241, .76)),
+    url('/templates/penelope/redesign/hero-watercolor.webp') center / cover;
+}
+
+.signatureWedding--penelope .signatureWedding__rsvp a { border-radius: 999px; }
+
+@media (max-width: 760px) {
+  .signatureWedding--penelope .signatureWedding__nav {
+    min-height: 64px;
+    padding: 0 18px;
+  }
+
+  .signatureWedding--penelope .penelopeHeroNav { display: none; }
+
+  .signatureWedding--penelope .penelopeHeroMobileNav {
+    position: relative;
+    z-index: 4;
+    display: block;
+  }
+
+  .penelopeHeroMobileNav summary {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    padding: 10px;
+    align-content: center;
+    gap: 4px;
+    border: 1px solid rgba(90, 63, 69, .18);
+    border-radius: 50%;
+    background: rgba(251, 247, 241, .72);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .penelopeHeroMobileNav summary::-webkit-details-marker { display: none; }
+  .penelopeHeroMobileNav summary span { display: block; width: 100%; height: 1px; background: var(--signature-ink); }
+
+  .penelopeHeroMobileNav nav {
+    position: absolute;
+    top: 46px;
+    right: 0;
+    display: grid;
+    width: 198px;
+    padding: 18px;
+    gap: 13px;
+    border: 1px solid var(--signature-line);
+    background: rgba(251, 247, 241, .97);
+    box-shadow: 0 18px 42px rgba(87, 57, 65, .14);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 17px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .signatureWedding--penelope .penelopeHeroMobileNav nav a { display: block; }
+
+  .signatureWedding--penelope .signatureWedding__hero { min-height: 740px; }
+
+  .signatureWedding--penelope .signatureWedding__heroCopy {
+    width: min(94%, 520px);
+    padding: 104px 14px 74px;
+  }
+
+  .signatureWedding--penelope .signatureWedding__heroCopy > p {
+    margin-bottom: 32px;
+    font-size: 8px;
+    letter-spacing: .36em;
+  }
+
+  .signatureWedding--penelope .signatureWedding__heroCopy h1 {
+    font-size: clamp(68px, 22vw, 104px);
+    line-height: .7;
+  }
+
+  .signatureWedding--penelope .signatureWedding__heroCopy strong {
+    margin-top: 36px;
+    font-size: 9px;
+    letter-spacing: .24em;
+  }
+
+  .signatureWedding--penelope .signatureWedding__heroAction { min-width: 220px; min-height: 48px; font-size: 16px; }
+
+  .penelopeHeroDecorations__branch--top {
+    top: 0;
+    right: -48%;
+    width: 126vw;
+    opacity: .9;
+  }
+
+  .penelopeHeroDecorations__branch--bottom {
+    bottom: -3%;
+    left: -38%;
+    width: 92vw;
+  }
+
+  .penelopeHeroDecorations__petal--one { top: 22%; left: 12%; }
+  .penelopeHeroDecorations__petal--two { right: 10%; bottom: 24%; }
+  .penelopeHeroDecorations__petal--three { top: 43%; right: 8%; }
+
+  .signatureWedding--penelope .signatureWedding__places { width: min(calc(100% - 36px), 1180px); gap: 16px; }
+  .signatureWedding--penelope .signatureWedding__places article + article { border-left: 1px solid var(--signature-line); }
+
+  .signatureWedding--penelope .signatureWedding__story {
+    padding: 78px 24px 86px;
+  }
+
+  .signatureWedding--penelope .signatureWedding__story::before {
+    top: 8%;
+    left: -17%;
+  }
+
+  .signatureWedding--penelope .signatureWedding__story::after {
+    right: -18%;
+    bottom: 5%;
+  }
+
+  .signatureWedding--penelope .signatureWedding__storyCopy {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'eyebrow'
+      'heading'
+      'flourish'
+      'story';
+    padding: 0;
+    text-align: center;
+  }
+
+  .signatureWedding--penelope .signatureWedding__storyCopy h2 {
+    font-size: clamp(54px, 18vw, 78px);
+  }
+
+  .penelopeStoryGarland {
+    width: min(90vw, 310px);
+    height: 96px;
+    margin: 10px auto 0;
+  }
+
+  .penelopeStoryGarland i {
+    width: 100%;
+    height: 100%;
+  }
+
+  .signatureWedding--penelope .signatureWedding__storyCopy > p:last-child {
+    margin-top: 20px;
+    padding: 34px 4px 0;
+    border-top: 1px solid rgba(167, 114, 125, .3);
+    border-left: 0;
+    font-size: 19px;
+    line-height: 1.75;
+  }
+
+  .signatureWedding--penelope .signatureWedding__storyCopy > p:last-child::before {
+    top: 8px;
+    left: 50%;
+    font-size: 52px;
+    transform: translateX(-50%);
+  }
+
+  .signatureWedding--penelope .signatureWedding__timeline { width: 100%; }
+  .signatureWedding--penelope .signatureWedding__timeline::before { left: 78px; }
+  .signatureWedding--penelope .signatureWedding__timeline article { grid-template-columns: 64px 1fr; gap: 28px; }
+  .signatureWedding--penelope .signatureWedding__timeline article::before { left: 73px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .penelopeHeroDecorations__branch,
+  .penelopeHeroDecorations__petal { animation: none; }
+}
+
+/* Fleurie — airy French meadow */
+.signatureWedding--fleurie {
+  --signature-ink: #6e444b;
+  --signature-muted: #7d6868;
+  --signature-paper: #fbf3ee;
+  --signature-accent: #c69699;
+  --signature-line: rgba(110, 68, 75, .18);
+  color: var(--signature-ink);
+  background: var(--signature-paper);
+}
+
+.signatureWedding--fleurie .signatureWedding__nav {
+  position: absolute;
+  top: 0;
+  z-index: 10;
+  width: 100%;
+  min-height: 76px;
+  padding: 0 clamp(26px, 5vw, 82px);
+  color: var(--signature-ink);
+  background: transparent;
+  backdrop-filter: none;
+}
+
+.signatureWedding--fleurie .signatureWedding__brand {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(21px, 2vw, 28px);
+  font-style: italic;
+  letter-spacing: .01em;
+}
+
+.signatureWedding--fleurie .signatureWedding__nav nav {
+  gap: clamp(18px, 2.8vw, 38px);
+  color: #67565a;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: .18em;
+}
+
+.signatureWedding--fleurie .signatureWedding__hero {
+  min-height: 100svh;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(214, 170, 176, .22), transparent 31%),
+    radial-gradient(circle at 88% 18%, rgba(236, 211, 197, .48), transparent 34%),
+    linear-gradient(145deg, rgba(255, 250, 246, .34), rgba(251, 241, 237, .2) 56%, rgba(248, 236, 232, .28)),
+    url('/templates/fleurie/hero-paper-texture.jpg') center / cover;
+  background-color: #fbf1ed;
+}
+
+.signatureWedding--fleurie .signatureWedding__heroShade { display: none; }
+
+.fleurieHeroMeadow {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: min(53vw, 58vh);
+  background: url('/templates/fleurie/meadow-hero.png') center bottom / 100% auto no-repeat;
+  pointer-events: none;
+}
+
+.signatureWedding--fleurie .signatureWedding__heroCopy {
+  position: relative;
+  z-index: 2;
+  width: min(92%, 1040px);
+  padding: 112px 20px min(38vh, 330px);
+  color: var(--signature-ink);
+  text-shadow: none;
+}
+
+.signatureWedding--fleurie .signatureWedding__heroCopy > p {
+  margin-bottom: clamp(20px, 3vh, 32px);
+  font-size: clamp(9px, .75vw, 11px);
+  letter-spacing: .5em;
+}
+
+.signatureWedding--fleurie .signatureWedding__heroCopy h1 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0 .16em;
+  font-family: 'WindSong', cursive;
+  font-size: clamp(76px, 10vw, 148px);
+  letter-spacing: 0;
+  line-height: .9;
+}
+
+.signatureWedding--fleurie .signatureWedding__heroCopy h1 i {
+  margin: 0 .05em;
+  color: var(--signature-accent);
+  font-family: inherit;
+  font-size: .54em;
+  line-height: 1;
+}
+
+.signatureWedding--fleurie .signatureWedding__heroCopy strong {
+  margin-top: clamp(24px, 3vh, 34px);
+  font-size: 10px;
+  letter-spacing: .38em;
+}
+
+.fleurieHeroFlourish {
+  display: block;
+  width: 76px;
+  height: 1px;
+  margin-top: 24px;
+  background: var(--signature-accent);
+  opacity: .68;
+}
+
+.signatureWedding--fleurie .signatureWedding__heroAction {
+  min-width: 228px;
+  min-height: 50px;
+  margin-top: 22px;
+  border-color: rgba(110, 68, 75, .48);
+  border-radius: 999px;
+  background: rgba(255, 250, 246, .54);
+  font-size: 17px;
+}
+
+.signatureWedding--fleurie .signatureWedding__heroDown {
+  bottom: 18px;
+  color: var(--signature-ink);
+  font-size: 34px;
+}
+
+.signatureWedding--fleurie .signatureWedding__welcome {
+  width: min(calc(100% - 48px), 980px);
+  padding-top: clamp(94px, 11vw, 146px);
+  padding-bottom: clamp(88px, 10vw, 132px);
+}
+
+.signatureWedding--fleurie .signatureWedding__welcome h2 {
+  max-width: 860px;
+  font-size: clamp(45px, 5.8vw, 74px);
+  font-style: italic;
+  line-height: 1.12;
+}
+
+.signatureWedding--fleurie .signatureWedding__ornament {
+  width: min(100%, 270px);
+  height: 90px;
+  margin-top: 28px;
+  overflow: hidden;
+  color: transparent;
+  background: url('/templates/fleurie/floral-divider.png') center / contain no-repeat;
+}
+
+.signatureWedding--fleurie .signatureWedding__places {
+  width: min(calc(100% - 48px), 1120px);
+  padding: 0 0 clamp(90px, 10vw, 134px);
+  gap: 0;
+  border: 0;
+}
+
+.signatureWedding--fleurie .signatureWedding__places article {
+  min-height: 370px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.signatureWedding--fleurie .signatureWedding__places article + article { border-left: 1px solid var(--signature-line); }
+.signatureWedding--fleurie .signatureWedding__places strong { color: var(--signature-accent); font-style: italic; }
+.signatureWedding--fleurie .signatureWedding__mapAction {
+  min-height: auto;
+  padding: 6px 0;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  border-radius: 0;
+}
+
+.signatureWedding--fleurie .signatureWedding__story {
+  display: block;
+  width: 100%;
+  padding: clamp(92px, 11vw, 144px) 24px;
+  text-align: center;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(255,255,255,.72), transparent 28%),
+    linear-gradient(135deg, #f5e3e2, #f9efea 52%, #f2e0df);
+}
+
+.signatureWedding--fleurie .signatureWedding__storyCopy {
+  max-width: 790px;
+  margin: 0 auto;
+}
+
+.signatureWedding--fleurie .signatureWedding__storyCopy h2 {
+  margin-bottom: 8px;
+  font-size: clamp(54px, 7vw, 92px);
+  font-style: italic;
+}
+
+.fleurieStoryGarland {
+  display: block;
+  width: min(86%, 390px);
+  height: 126px;
+  margin: -4px auto 10px;
+  background: url('/templates/fleurie/invitation-bouquet.png') left bottom / contain no-repeat;
+  filter: saturate(.76);
+  opacity: .28;
+}
+
+.signatureWedding--fleurie .signatureWedding__storyCopy > p:last-child {
+  max-width: 680px;
+  margin: 0 auto;
+  font-size: clamp(19px, 2vw, 24px);
+  line-height: 1.8;
+}
+
+.signatureWedding--fleurie .signatureWedding__schedule {
+  width: min(calc(100% - 48px), 1080px);
+  padding-top: clamp(92px, 10vw, 132px);
+  padding-bottom: clamp(96px, 11vw, 144px);
+  text-align: center;
+}
+
+.signatureWedding--fleurie .signatureWedding__schedule > h2 {
+  font-size: clamp(52px, 6.8vw, 88px);
+  font-style: italic;
+}
+
+.signatureWedding--fleurie .signatureWedding__timeline {
+  position: relative;
+  display: block;
+  width: min(100%, 760px);
+  margin: 56px auto 0;
+}
+
+.signatureWedding--fleurie .signatureWedding__timeline::before {
+  position: absolute;
+  top: 12px;
+  bottom: 12px;
+  left: 126px;
+  width: 1px;
+  background: linear-gradient(var(--signature-accent), rgba(135, 148, 123, .55));
+  content: '';
+  opacity: .62;
+}
+
+.signatureWedding--fleurie .signatureWedding__timeline article {
+  position: relative;
+  display: grid;
+  min-height: 0;
+  padding: 30px 0;
+  grid-template-columns: 96px 1fr;
+  gap: 60px;
+  border: 0;
+  border-bottom: 1px solid var(--signature-line);
+  background: transparent;
+  text-align: left;
+}
+
+.signatureWedding--fleurie .signatureWedding__timeline article:last-child { border-bottom: 0; }
+
+.signatureWedding--fleurie .signatureWedding__timeline article::before,
+.signatureWedding--fleurie .signatureWedding__timeline article::after {
+  position: absolute;
+  z-index: 1;
+  top: 33px;
+  left: 121px;
+  width: 11px;
+  height: 11px;
+  border-radius: 70% 30% 70% 30%;
+  background: var(--signature-accent);
+  content: '';
+  transform: rotate(45deg);
+}
+
+.signatureWedding--fleurie .signatureWedding__timeline article::after {
+  background: #87947b;
+  transform: rotate(135deg) translate(4px, 4px);
+  opacity: .8;
+}
+
+.signatureWedding--fleurie .signatureWedding__timeline time {
+  display: block;
+  margin: 2px 0 0;
+  color: var(--signature-accent);
+}
+
+.signatureWedding--fleurie .signatureWedding__timeline h3 { font-style: italic; }
+
+.signatureWedding--fleurie .signatureWedding__menu {
+  color: #fffaf6;
+  background: #747c6b;
+}
+
+.signatureWedding--fleurie .signatureWedding__menu .signatureWedding__eyebrow,
+.signatureWedding--fleurie .signatureWedding__menuCourse p:first-child { color: #f2d9d7; }
+
+.signatureWedding--fleurie .signatureWedding__details {
+  width: 100%;
+  padding-right: max(24px, calc((100vw - 1120px) / 2));
+  padding-left: max(24px, calc((100vw - 1120px) / 2));
+  background: #fffaf6;
+}
+.signatureWedding--fleurie .signatureWedding__faq { background: var(--signature-paper); }
+
+.signatureWedding--fleurie .signatureWedding__rsvp {
+  position: relative;
+  isolation: isolate;
+  padding-bottom: clamp(150px, 18vw, 220px);
+  overflow: hidden;
+  background: linear-gradient(180deg, #fffaf7, #f9ece9);
+}
+
+.signatureWedding--fleurie .signatureWedding__rsvp::after {
+  position: absolute;
+  z-index: -1;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: clamp(130px, 17vw, 210px);
+  background: url('/templates/fleurie/meadow-hero.png') center bottom / 100% auto no-repeat;
+  content: '';
+  opacity: .24;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 46%);
+  mask-image: linear-gradient(to bottom, transparent, #000 46%);
+}
+
+.signatureWedding--fleurie .signatureWedding__rsvp a { border-radius: 999px; }
+
+@media (max-width: 760px) {
+  .signatureWedding--fleurie .signatureWedding__nav {
+    position: relative;
+    min-height: 68px;
+    padding: 0 18px;
+    background: #fffaf7;
+  }
+
+  .signatureWedding--fleurie .signatureWedding__nav nav { gap: 12px; font-size: 8px; }
+  .signatureWedding--fleurie .signatureWedding__nav nav a:first-child { display: none; }
+
+  .signatureWedding--fleurie .signatureWedding__hero { min-height: 700px; }
+
+  .fleurieHeroMeadow {
+    height: 55%;
+    background-size: auto 100%;
+  }
+
+  .signatureWedding--fleurie .signatureWedding__heroCopy {
+    align-self: start;
+    width: 100%;
+    padding: 88px 20px 290px;
+  }
+
+  .signatureWedding--fleurie .signatureWedding__heroCopy h1 {
+    display: grid;
+    gap: 0;
+    font-size: clamp(72px, 23vw, 104px);
+    line-height: .63;
+  }
+
+  .signatureWedding--fleurie .signatureWedding__heroCopy h1 i { margin: .17em 0 .2em; }
+  .signatureWedding--fleurie .signatureWedding__heroCopy strong { margin-top: 30px; }
+  .signatureWedding--fleurie .signatureWedding__heroAction { min-width: 210px; min-height: 46px; font-size: 15px; }
+
+  .signatureWedding--fleurie .signatureWedding__places {
+    width: min(calc(100% - 32px), 560px);
+    gap: 0;
+  }
+
+  .signatureWedding--fleurie .signatureWedding__places article { min-height: 330px; padding: 42px 22px; }
+  .signatureWedding--fleurie .signatureWedding__places article + article { border-top: 1px solid var(--signature-line); border-left: 0; }
+
+  .signatureWedding--fleurie .signatureWedding__timeline {
+    width: 100%;
+  }
+
+  .signatureWedding--fleurie .signatureWedding__timeline::before { left: 82px; }
+  .signatureWedding--fleurie .signatureWedding__timeline article { grid-template-columns: 64px 1fr; gap: 38px; }
+  .signatureWedding--fleurie .signatureWedding__timeline article::before,
+  .signatureWedding--fleurie .signatureWedding__timeline article::after { left: 77px; }
+  .signatureWedding--fleurie .signatureWedding__timeline time { margin-top: 2px; }
+  .signatureWedding--fleurie .signatureWedding__details { padding-right: 24px; padding-left: 24px; }
+  .signatureWedding--fleurie .signatureWedding__rsvp { padding-bottom: 132px; }
+  .signatureWedding--fleurie .signatureWedding__rsvp::after { height: 138px; background-size: auto 138px; opacity: .2; }
 }

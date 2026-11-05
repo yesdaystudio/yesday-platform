@@ -10,7 +10,7 @@ import ClientDashboard from './ClientDashboard'
 import ClientEditor from './ClientEditor'
 import ClientAccommodation from './ClientAccommodation'
 import DemoRsvp from './DemoRsvp'
-import { DEMO_FIELDS, DEMO_DEFAULTS, DEMO_RESPONSES, normalizeDemo, createDemoState, readDemoState } from '../lib/demoWedding'
+import { DEMO_FIELDS, DEMO_DEFAULTS, DEMO_RESPONSES, createDemoState, readDemoState, demoUrlParams, demoFormValues } from '../lib/demoWedding'
 import { DESIGN_CUSTOMIZATION_OPTIONS } from '../lib/designCustomization'
 import styles from './WeddingDemo.module.css'
 
@@ -18,11 +18,11 @@ const subscribeOrigin = () => () => {}
 const readOrigin = () => window.location.origin
 const serverOrigin = () => ''
 
-const TABS = [['web', 'Svadobný web'], ['editor', 'Editor'], ['dashboard', 'Hostia'], ['accommodation', 'Ubytovanie'], ['stationery', 'Pozvánka + QR'], ['rsvp', 'Vyskúšať RSVP']]
-const DESIGNS = [['diana', 'Diana'], ['botanique', 'Botanique'], ['penelope', 'Penelope'], ['chloe', 'Chloe']]
+const TABS = [['web', 'Svadobný web'], ['editor', 'Editor'], ['dashboard', 'Hostia'], ['accommodation', 'Ubytovanie'], ['stationery', 'Tlačoviny'], ['rsvp', 'Vyskúšať RSVP']]
+const DESIGNS = [['diana', 'Diana'], ['botanique', 'Botanique'], ['penelope', 'Penelope'], ['chloe', 'Chloe'], ['fleurie', 'Fleurie'], ['provence', 'Provence'], ['lavande', 'Lavande'], ['veno', 'Veno'], ['riviera', 'Riviera']]
 
 export default function WeddingDemo({ initialValues }) {
-  const [values, setValues] = useState(() => normalizeDemo(initialValues))
+  const [values, setValues] = useState(() => demoFormValues(readDemoState(initialValues)))
   const [tab, setTab] = useState(TABS.some(([key]) => key === initialValues?.tab) ? initialValues.tab : 'web')
   const [demoData, setDemoData] = useState(() => readDemoState(initialValues))
   const [previewQuery, setPreviewQuery] = useState(() => new URLSearchParams({ details: JSON.stringify(readDemoState(initialValues)) }).toString())
@@ -35,6 +35,21 @@ export default function WeddingDemo({ initialValues }) {
   const designName = DESIGNS.find(([key]) => key === project.design_family)?.[1] || 'Diana'
   const designOptions = DESIGN_CUSTOMIZATION_OPTIONS[project.design_family]
   const [websiteUrl, setWebsiteUrl] = useState('')
+
+  useEffect(() => {
+    function syncAddress() {
+      const url = new URL(window.location.href)
+      url.search = demoUrlParams(demoData, tab).toString()
+      if (url.href !== window.location.href) window.history.replaceState(window.history.state, '', url)
+    }
+    // Persist a design switch immediately; batch typing to avoid excessive history updates.
+    if (new URLSearchParams(window.location.search).get('design') !== demoData.project.design_family) {
+      syncAddress()
+      return
+    }
+    const timer = setTimeout(syncAddress, 500)
+    return () => clearTimeout(timer)
+  }, [demoData, tab])
 
   useEffect(() => {
     const timer = setTimeout(() => setPreviewQuery(new URLSearchParams({ details: JSON.stringify(demoData) }).toString()), 450)
@@ -67,7 +82,7 @@ export default function WeddingDemo({ initialValues }) {
   function changeCustomization(field, value) {
     setDemoData(current => ({ ...current, project: { ...current.project, [field]: value } }))
     setValues(current => ({ ...current, [field === 'design_font_variant' ? 'font' : 'ink']: value }))
-    setNotice('Písmo a farba sa premietli do webu, pozvánky aj QR kartičky.')
+    setNotice('Písmo a farba sa premietli do webu, pozvánky aj svadobných kartičiek.')
   }
   function changeQuickField(key, value) {
     const next = { ...values, [key]: value }
@@ -78,8 +93,7 @@ export default function WeddingDemo({ initialValues }) {
   }
   function saveDemo(data) {
     setDemoData(data)
-    const names = String(data.project.couple_display_name).split(/\s+(?:a|&|\+)\s+/i)
-    setValues({ first: names[0] || '', second: names.slice(1).join(' a '), date: data.project.wedding_date || '', time: String(data.project.ceremony_time || '').slice(0, 5), venue: data.project.venue_name, city: data.project.venue_address, reception: data.project.reception_venue_name, welcome: data.content.welcome_text })
+    setValues(demoFormValues(data))
     setNotice('Údaje z editora sa premietli do svadobného webu a tlačovín.')
   }
   function submitRsvp(response) {
@@ -96,8 +110,8 @@ export default function WeddingDemo({ initialValues }) {
     <section className={styles.intro}>
       <p className={styles.eyebrow}>{designName} · interaktívna ukážka</p>
       <h1>Váš deň. Váš príbeh. Jeden krásny celok.</h1>
-      <p>Skúste si zadať svoje mená a detaily svadby. Web, pozvánka aj QR kartička sa prispôsobia vám.</p>
-      <p className={styles.note}>Bez registrácie. Údaje sa neukladajú do klientskych projektov. Obnovením stránky sa vaše úpravy vymažú. QR kód otvorí ukážkový web s vyplnenými údajmi.</p>
+      <p>Skúste si zadať svoje mená a detaily svadby. Web, pozvánka aj svadobné kartičky sa prispôsobia vám.</p>
+      <p className={styles.note}>Bez registrácie. Údaje sa neukladajú do klientskych projektov. Vybraný dizajn a úpravy zostávajú v odkaze na ukážku. QR kód otvorí ukážkový web s vyplnenými údajmi.</p>
     </section>
     <div className={styles.layout}>
       <aside className={styles.editor}>

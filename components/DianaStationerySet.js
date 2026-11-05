@@ -4,11 +4,13 @@ import { useMemo, useRef, useState } from "react"
 import {
   DianaInvitationPrintTemplate,
   DianaQrCardPrintTemplate,
+  DianaReceptionCardPrintTemplate,
 } from "./DianaStationeryPrintTemplates"
 import { getDianaStationeryData } from "../lib/dianaStationeryData"
 import {
   downloadDianaInvitationPdf,
   downloadDianaQrCardPdf,
+  downloadDianaReceptionCardPdf,
 } from "../lib/dianaStationeryPdf"
 
 export default function DianaStationerySet({ project, weddingWebsiteUrl, qrDataUrl, qrError, websiteDisplayUrl }) {
@@ -16,6 +18,7 @@ export default function DianaStationerySet({ project, weddingWebsiteUrl, qrDataU
   const [exportError, setExportError] = useState("")
   const invitationRef = useRef(null)
   const qrCardRef = useRef(null)
+  const receptionCardRef = useRef(null)
   const stationeryData = useMemo(
     () => ({ ...getDianaStationeryData(project, weddingWebsiteUrl), websiteDisplayUrl }),
     [project, weddingWebsiteUrl, websiteDisplayUrl]
@@ -49,19 +52,31 @@ export default function DianaStationerySet({ project, weddingWebsiteUrl, qrDataU
     }
   }
 
+  async function handleReceptionCardExport() {
+    setExportError("")
+    setExporting("reception")
+    try {
+      await downloadDianaReceptionCardPdf(receptionCardRef.current, project)
+    } catch {
+      setExportError("PDF sa nepodarilo pripraviť. Skúste export zopakovať.")
+    } finally {
+      setExporting("")
+    }
+  }
+
   return (
     <section style={stationerySectionStyle}>
       <div style={stationeryIntroStyle}>
         <p style={stationeryEyebrowStyle}>Diana stationery set</p>
-        <h2 style={stationeryTitleStyle}>Pozvánka a QR kartička</h2>
+        <h2 style={stationeryTitleStyle}>Pozvánka a svadobné kartičky</h2>
         <p style={stationeryCopyStyle}>
-          Toto je jednoduchý náhľad. Finálny výstup tvoria samostatné PDF exporty hlavnej pozvánky
-          a QR kartičky.
+          Hlavnú pozvánku, QR kartičku aj kartičku k svadobnému stolu si stiahnete ako samostatné PDF.
         </p>
       </div>
 
       <div style={stationeryStageStyle}>
         <DianaInvitationPrintTemplate ref={invitationRef} data={stationeryData} />
+        <DianaReceptionCardPrintTemplate ref={receptionCardRef} data={stationeryData} />
         <div style={qrPreviewWrapStyle}>
           <DianaQrCardPrintTemplate
             ref={qrCardRef}
@@ -84,6 +99,18 @@ export default function DianaStationerySet({ project, weddingWebsiteUrl, qrDataU
           }}
         >
           {exporting === "invitation" ? "Pripravujem PDF..." : "Stiahnuť pozvánku"}
+        </button>
+
+        <button
+          type="button"
+          onClick={handleReceptionCardExport}
+          disabled={Boolean(exporting)}
+          style={{
+            ...downloadButtonStyle,
+            ...(exporting ? disabledDownloadButtonStyle : {}),
+          }}
+        >
+          {exporting === "reception" ? "Pripravujem PDF..." : "Stiahnuť kartičku k stolu"}
         </button>
 
         <button

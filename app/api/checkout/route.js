@@ -28,6 +28,11 @@ const DESIGN_NAMES = {
   botanique: 'Botanique',
   penelope: 'Penelope',
   chloe: 'Chloe',
+  fleurie: 'Fleurie',
+  provence: 'Provence',
+  lavande: 'Lavande',
+  veno: 'Veno',
+  riviera: 'Riviera',
 }
 
 export async function POST(request) {
@@ -112,7 +117,7 @@ export async function POST(request) {
 
   const cleanSiteUrl = siteUrl.replace(/\/$/, '')
   const priceData = PACKAGE_PRICE_DATA[package_type]
-  const cleanDesignFamily = ['diana', 'botanique', 'penelope', 'chloe'].includes(String(design_family || '').trim().toLowerCase())
+  const cleanDesignFamily = ['diana', 'botanique', 'penelope', 'chloe', 'fleurie', 'provence', 'lavande', 'veno', 'riviera'].includes(String(design_family || '').trim().toLowerCase())
     ? String(design_family).trim().toLowerCase()
     : 'diana'
 

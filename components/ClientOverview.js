@@ -88,7 +88,7 @@ export default function ClientOverview({
     { key: "places", title: "Miesta a časy", detail: "Obrad, oslava a adresy", complete: placesReady, action: onOpenEditor, actionLabel: "Doplniť" },
     { key: "content", title: "Texty a program", detail: "Príbeh, menu a harmonogram", complete: contentReady, action: onOpenEditor, actionLabel: "Doplniť" },
     { key: "rsvp", title: "Skontrolovať RSVP", detail: "Pozrite si formulár očami hosťa", complete: activity.rsvp === true, action: openRsvp, actionLabel: "Otvoriť" },
-    { key: "stationery", title: "Pozvánka a QR", detail: qrReady ? "Tlačové výstupy sú pripravené" : "QR kód sa pripravuje", complete: activity.stationery === true, action: openStationery, actionLabel: "Skontrolovať" },
+    { key: "stationery", title: "Svadobné tlačoviny", detail: qrReady ? "Pozvánka a kartičky sú pripravené" : "QR kód sa pripravuje", complete: activity.stationery === true, action: openStationery, actionLabel: "Skontrolovať" },
     { key: "guest", title: "Web pre hostí", detail: "Skontrolujte celý web mimo editora", complete: activity.guest === true, action: openGuestWebsite, actionLabel: "Zobraziť" },
     { key: "shared", title: "Pripravené na zdieľanie", detail: "Skopírujte odkaz pre hostí", complete: activity.shared === true, action: copyWebsiteLink, actionLabel: "Kopírovať odkaz" },
   ]

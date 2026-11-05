@@ -59,6 +59,26 @@ export const DianaInvitationPrintTemplate = forwardRef(function DianaInvitationP
   )
 })
 
+export const DianaReceptionCardPrintTemplate = forwardRef(function DianaReceptionCardPrintTemplate(
+  { data },
+  ref
+) {
+  return (
+    <article ref={ref} style={receptionCardStyle} aria-label="Diana kartička k svadobnému stolu">
+      <span style={receptionCardFrameStyle} aria-hidden="true" />
+      <OliveBranch />
+      <div style={receptionCardContentStyle}>
+        <DianaMonogram data={data} style={receptionCardMonogramStyle} />
+        <p style={receptionCardEyebrowStyle}>Svadobná hostina</p>
+        <p style={receptionCardTextStyle}>S radosťou Vás pozývame<br />k svadobnému stolu.</p>
+        <span style={receptionCardDividerStyle} aria-hidden="true" />
+        <p style={receptionCardNamesStyle}>{data.firstPartner}{data.secondPartner ? ` & ${data.secondPartner}` : ""}</p>
+        <p style={receptionCardDateStyle}>{data.displayDate}</p>
+      </div>
+    </article>
+  )
+})
+
 export const DianaQrCardPrintTemplate = forwardRef(function DianaQrCardPrintTemplate(
   { data, qrDataUrl, recipient = null },
   ref
@@ -332,6 +352,41 @@ const oliveBranchStyle = {
   bottom: "1px",
   color: "rgba(151, 130, 105, 0.22)",
 }
+
+const receptionCardStyle = {
+  position: "relative",
+  boxSizing: "border-box",
+  width: "min(100%, 320px)",
+  aspectRatio: "320 / 210",
+  overflow: "hidden",
+  padding: "22px 28px",
+  ...cardSurfaceStyle,
+  display: "grid",
+  placeItems: "center",
+  textAlign: "center",
+  fontFamily: dianaSerifFontFamily,
+}
+
+const receptionCardFrameStyle = {
+  position: "absolute",
+  inset: "11px",
+  border: "1px solid rgba(151,130,105,.28)",
+  pointerEvents: "none",
+}
+
+const receptionCardContentStyle = {
+  position: "relative",
+  zIndex: 1,
+  display: "grid",
+  justifyItems: "center",
+}
+
+const receptionCardMonogramStyle = { marginBottom: "10px" }
+const receptionCardEyebrowStyle = { margin: 0, fontSize: "7px", fontWeight: 600, letterSpacing: ".26em", textTransform: "uppercase", color: "rgba(126,108,88,.58)" }
+const receptionCardTextStyle = { margin: "11px 0 9px", fontSize: "22px", fontWeight: 400, lineHeight: 1.12, color: "#8f7b64" }
+const receptionCardDividerStyle = { width: "42px", height: "1px", background: "rgba(151,130,105,.4)" }
+const receptionCardNamesStyle = { margin: "9px 0 0", fontSize: "12px", letterSpacing: ".08em", textTransform: "uppercase", color: "rgba(112,96,78,.72)" }
+const receptionCardDateStyle = { margin: "3px 0 0", fontSize: "9px", letterSpacing: ".05em", color: "rgba(126,108,88,.54)" }
 
 const qrCardStyle = {
   boxSizing: "border-box",

@@ -1,0 +1,14 @@
+.git
+.vercel
+.next
+node_modules
+.env*
+.aws
+.agents
+.codex
+tmp
+output
+artifacts
+design-handoff
+docs
+YESDAY_CONTEXT.md

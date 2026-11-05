@@ -22,6 +22,20 @@ const DESIGNS = {
     name: 'Chloe',
     image: '/templates/chloe/preview.jpg',
   },
+  fleurie: {
+    name: 'Fleurie',
+    image: '/templates/fleurie/meadow-hero.png',
+  },
+  provence: {
+    name: 'Provence',
+    image: '/templates/provence/hero-lavender-garden.jpg',
+  },
+  riviera: { name: 'Riviera', image: '/templates/riviera/sea-oil-painting.webp' },
+  veno: { name: 'Veno', image: '/templates/veno/embroidery.svg' },
+  lavande: {
+    name: 'Lavande',
+    image: '/templates/lavande/hero-rear-watercolor.png',
+  },
 }
 
 const PACKAGES = [

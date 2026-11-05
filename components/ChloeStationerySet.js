@@ -11,6 +11,7 @@ const FLOWER_LEFT = "/templates/chloe/gypsophila.png"
 export default function ChloeStationerySet({ project, weddingWebsiteUrl, qrDataUrl, qrError, websiteDisplayUrl }) {
   const invitationRef = useRef(null)
   const qrRef = useRef(null)
+  const receptionRef = useRef(null)
   const [exporting, setExporting] = useState("")
   const [exportError, setExportError] = useState("")
   const data = useMemo(
@@ -27,9 +28,12 @@ export default function ChloeStationerySet({ project, weddingWebsiteUrl, qrDataU
     }
     setExporting(kind)
     try {
-      await downloadStationeryPdf(kind === "invitation" ? invitationRef.current : qrRef.current, {
-        filename: `chloe-${kind === "invitation" ? "pozvanka" : "qr-karticka"}-${project?.slug || "svadba"}.pdf`,
-        title: `${kind === "invitation" ? "Svadobná pozvánka" : "QR kartička"} Chloe`,
+      const node = kind === "invitation" ? invitationRef.current : kind === "reception" ? receptionRef.current : qrRef.current
+      const filenameKind = kind === "invitation" ? "pozvanka" : kind === "reception" ? "svadobny-stol" : "qr-karticka"
+      const titleKind = kind === "invitation" ? "Svadobná pozvánka" : kind === "reception" ? "Kartička k svadobnému stolu" : "QR kartička"
+      await downloadStationeryPdf(node, {
+        filename: `chloe-${filenameKind}-${project?.slug || "svadba"}.pdf`,
+        title: `${titleKind} Chloe`,
         requireImage: kind === "qr",
         fontEmbedCSS: await getChloePrintFontCSS(),
       })
@@ -44,17 +48,21 @@ export default function ChloeStationerySet({ project, weddingWebsiteUrl, qrDataU
     <section style={sectionStyle}>
       <div style={introStyle}>
         <p style={{ ...eyebrowStyle, color: config.accent }}>Chloe stationery set</p>
-        <h2 style={{ ...titleStyle, color: config.ink, fontFamily: config.fontFamily }}>Pozvánka a QR kartička</h2>
-        <p style={{ ...copyStyle, color: config.ink }}>Vzdušná papierová kompozícia s jemnou gypsomilkou, navrhnutá priamo k svadobnému webu Chloe.</p>
+        <h2 style={{ ...titleStyle, color: config.ink, fontFamily: config.fontFamily }}>Pozvánka a svadobné kartičky</h2>
+        <p style={{ ...copyStyle, color: config.ink }}>Vzdušná papierová kompozícia s jemnou gypsomilkou spája pozvánku, QR kartičku aj kartičku k svadobnému stolu.</p>
       </div>
       <div style={stageStyle}>
         <ChloeInvitationPrintTemplate ref={invitationRef} data={data} config={config} />
+        <ChloeReceptionCardPrintTemplate ref={receptionRef} data={data} config={config} />
         <ChloeQrCardPrintTemplate ref={qrRef} data={data} config={config} qrDataUrl={qrDataUrl} />
       </div>
       {qrError || exportError ? <p role="alert" style={errorStyle}>{qrError || exportError}</p> : null}
       <div style={actionsStyle}>
         <button type="button" disabled={Boolean(exporting)} onClick={() => download("invitation")}>
           {exporting === "invitation" ? "Pripravujem PDF..." : "Stiahnuť pozvánku"}
+        </button>
+        <button type="button" disabled={Boolean(exporting)} onClick={() => download("reception")}>
+          {exporting === "reception" ? "Pripravujem PDF..." : "Stiahnuť kartičku k stolu"}
         </button>
         <button type="button" disabled={Boolean(exporting) || !weddingWebsiteUrl || !qrDataUrl} onClick={() => download("qr")}>
           {exporting === "qr" ? "Pripravujem PDF..." : !qrDataUrl && weddingWebsiteUrl ? "Pripravujem QR kód..." : "Stiahnuť QR kartičku"}
@@ -81,6 +89,23 @@ export const ChloeInvitationPrintTemplate = forwardRef(function ChloeInvitationP
         <p style={dateStyle}>{data.displayDate}</p>
         <p style={detailStyle}>{data.timeLine}<br />{data.ceremonyVenue}<br />{data.ceremonyCity}</p>
         <p style={{ ...closingStyle, color: config.accent }}>Tešíme sa na spoločný deň</p>
+      </div>
+    </article>
+  )
+})
+
+export const ChloeReceptionCardPrintTemplate = forwardRef(function ChloeReceptionCardPrintTemplate({ data, config }, ref) {
+  return (
+    <article ref={ref} style={{ ...receptionCardStyle, color: config.ink, fontFamily: config.fontFamily }} aria-label="Chloe kartička k svadobnému stolu">
+      <div style={qrWashStyle} />
+      <div style={receptionRuleStyle} />
+      <Image src={FLOWER_LEFT} alt="" width={420} height={620} unoptimized data-pdf-overlay-image="true" style={receptionFlowerStyle} />
+      <div style={receptionContentStyle}>
+        <p style={{ ...smallStyle, color: config.accent }}>Svadobná hostina</p>
+        <p style={receptionTextStyle}>S radosťou Vás pozývame<br />k svadobnému stolu.</p>
+        <div style={{ ...receptionDividerStyle, background: config.accent }} />
+        <h3 style={{ ...receptionNamesStyle, fontFamily: config.nameFontFamily }}>{data.firstPartner} <i data-pdf-text-overlay="true" style={{ ...receptionAmpersandStyle, color: config.accent, fontFamily: config.nameFontFamily }}>&amp;</i> {data.secondPartner}</h3>
+        <p style={receptionDateStyle}>{data.displayDate}</p>
       </div>
     </article>
   )
@@ -139,6 +164,15 @@ const dateStyle = { margin: 0, fontSize: "20px", textTransform: "capitalize" }
 const detailStyle = { margin: "17px 0 0", fontSize: "14px", lineHeight: 1.55 }
 const closingStyle = { margin: "29px 0 0", fontFamily: "'Chloe Print Sans',Arial,sans-serif", fontSize: "8px", letterSpacing: ".18em", textTransform: "uppercase" }
 const qrCardStyle = { ...paperBaseStyle, width: "min(300px,100%)", aspectRatio: "300 / 470", display: "grid", alignContent: "center", justifyItems: "center", padding: "32px 30px", textAlign: "center" }
+const receptionCardStyle = { ...paperBaseStyle, width: "min(320px,100%)", aspectRatio: "320 / 210", display: "grid", placeItems: "center", textAlign: "center" }
+const receptionRuleStyle = { position: "absolute", inset: "12px", border: "1px solid #cbd8d1", borderRadius: "105px 3px 3px 3px" }
+const receptionFlowerStyle = { position: "absolute", zIndex: 1, left: "-45px", bottom: "-83px", width: "132px", height: "196px", objectFit: "contain", opacity: .75, transform: "rotate(-9deg)" }
+const receptionContentStyle = { position: "relative", zIndex: 2, display: "grid", justifyItems: "center", padding: "25px 34px" }
+const receptionTextStyle = { margin: "12px 0 0", fontSize: "23px", fontWeight: 400, lineHeight: 1.1 }
+const receptionDividerStyle = { width: "24px", height: "1px", margin: "10px 0 6px", opacity: .62 }
+const receptionNamesStyle = { margin: 0, fontSize: "27px", fontWeight: 400, lineHeight: 1, whiteSpace: "nowrap" }
+const receptionAmpersandStyle = { fontSize: ".82em", fontStyle: "normal", fontWeight: 400 }
+const receptionDateStyle = { margin: "6px 0 0", fontSize: "10px", opacity: .64, textTransform: "capitalize" }
 const qrWashStyle = { position: "absolute", inset: 0, background: "url('/templates/chloe/watercolor.png') center/cover no-repeat", opacity: .45 }
 const qrNamesStyle = { zIndex: 1, display: "flex", justifyContent: "center", alignItems: "baseline", gap: "6px", whiteSpace: "nowrap", margin: "17px 0 10px", fontSize: "39px", fontWeight: 400, lineHeight: 1 }
 const qrAmpersandStyle = { fontSize: ".82em", fontStyle: "normal", fontWeight: 400 }
