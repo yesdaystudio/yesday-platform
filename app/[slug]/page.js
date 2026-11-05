@@ -2,6 +2,7 @@ import supabase from '../../lib/supabase'
 import { getSupabaseAdmin } from '../../lib/supabaseAdmin'
 import { sortScheduleItemsChronologically } from '../../lib/schedule'
 import WeddingWebsite, { WeddingNotFound } from '../../components/WeddingWebsite'
+import { readWeddingGallery } from '../../lib/weddingGallery'
 
 export const dynamic = 'force-dynamic'
 
@@ -35,6 +36,9 @@ export default async function WeddingPage({ params, searchParams }) {
 
   const invitation = await loadInvitationForProject(resolvedSearchParams?.invite, project.id)
   const invitationQuery = invitation ? `?invite=${encodeURIComponent(invitation.token)}` : ''
+  let gallery = null
+  try { gallery = await readWeddingGallery(project) }
+  catch (error) { console.error('Published wedding gallery unavailable:', error.code || error.name || 'unknown') }
 
   return (
     <WeddingWebsite
@@ -44,6 +48,7 @@ export default async function WeddingPage({ params, searchParams }) {
       scheduleError={scheduleError}
       rsvpHref={`/${slug}/rsvp${invitationQuery}`}
       invitationRecipient={invitation}
+      gallery={gallery}
     />
   )
 }

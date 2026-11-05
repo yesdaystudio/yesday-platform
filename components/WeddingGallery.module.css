@@ -1,0 +1,41 @@
+.gallery { max-width: 1140px; margin: 0 auto; padding: 80px 24px; text-align: center; color: var(--signature-ink, #453c33); }
+.gallery h2, .manager h2 { font-family: var(--signature-serif, Georgia, serif); font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 400; line-height: 1.2; margin: 12px 0 22px; }
+.eyebrow { text-transform: uppercase; letter-spacing: .2em; font-size: 11px; }
+.introduction { white-space: pre-line; max-width: 640px; margin: 0 auto 36px; line-height: 1.8; }
+.photoGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 36px; }
+.photoButton { padding: 0; border: 0; background: none; text-align: left; cursor: zoom-in; color: inherit; font: inherit; }
+.photoButton img { display: block; width: 100%; height: auto; aspect-ratio: 4/5; object-fit: cover; }
+.photoButton span { display: block; margin-top: 10px; font-size: 14px; line-height: 1.6; }
+.photoButton:focus-visible, .manager button:focus-visible, .lightbox button:focus-visible { outline: 3px solid #92744c; outline-offset: 5px; }
+.lightbox { position: fixed; inset: 0; width: min(1100px, 96vw); max-width: 96vw; max-height: 94dvh; padding: 54px 28px 20px; border: 0; background: #191715; color: white; }
+.lightbox::backdrop { background: rgba(15, 13, 11, .88); }
+.lightbox figure { margin: 0; }
+.lightbox img { display: block; width: 100%; max-height: 69dvh; object-fit: contain; }
+.lightbox figcaption { display: flex; justify-content: space-between; gap: 16px; padding: 16px 0; font-size: 14px; white-space: pre-line; }
+.lightbox figcaption span { white-space: nowrap; margin-left: auto; }
+.lightbox button { border: 1px solid #6e655c; color: white; background: transparent; cursor: pointer; min-width: 44px; min-height: 44px; font-size: 22px; }
+.close { position: absolute; right: 12px; top: 6px; }
+.navigation { display: flex; justify-content: center; gap: 16px; }
+.manager { line-height: 1.7; }
+.manager h3 { font-weight: 400; font-size: 24px; }
+.manager small { font-size: 14px; margin-left: 12px; }
+.settings { display: grid; gap: 18px; margin: 28px 0; }
+.manager label { display: grid; gap: 6px; font-size: 14px; }
+.manager input:not([type=checkbox]), .manager textarea { width: 100%; box-sizing: border-box; padding: 12px; border: 1px solid #d5c8b8; background: #fffdf9; color: #453c33; font: inherit; border-radius: 0; }
+.manager .checkbox { display: flex; align-items: center; gap: 10px; }
+.checkbox input { width: 20px; height: 20px; flex-shrink: 0; }
+.manager button { border: 1px solid #b9a58c; background: #fffaf3; color: #453c33; padding: 10px 14px; font: inherit; font-size: 13px; cursor: pointer; }
+.manager button:disabled, .fileLabel:has(input:disabled) { opacity: .5; cursor: default; }
+.settings > button { justify-self: start; background: #453c33; color: white; }
+.hint { font-size: 13px; color: #6d5e50; margin: 0; }
+.upload { border-top: 1px solid #dfd3c4; padding: 24px 0; margin-top: 32px; }
+.fileLabel { max-width: 100%; }
+.editGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.editCard { min-width: 0; border: 1px solid #dfd3c4; padding: 12px; }
+.editCard > img { width: 100%; aspect-ratio: 4/3; object-fit: cover; margin-bottom: 12px; }
+.actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+.confirm { border-top: 1px solid #dfd3c4; padding-top: 12px; margin-top: 12px; }
+.confirm button + button { margin-left: 8px; }
+.error { color: #9b2929; background: #fff0ed; padding: 12px; }
+@media (max-width: 640px) { .gallery { padding: 56px 18px; } .photoGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } .editGrid { grid-template-columns: 1fr; } .lightbox { padding: 54px 12px 16px; } }
+@media (prefers-reduced-motion: no-preference) { .photoButton img { transition: opacity .2s; } .photoButton:hover img { opacity: .88; } }

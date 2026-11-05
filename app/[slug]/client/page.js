@@ -6,6 +6,7 @@ import ClientEditor from "../../../components/ClientEditor"
 import ClientOverview from "../../../components/ClientOverview"
 import ClientDashboard from "../../../components/ClientDashboard"
 import ClientAccommodation from "../../../components/ClientAccommodation"
+import ClientGallery from "../../../components/ClientGallery"
 import DianaStationerySet from "../../../components/DianaStationerySet"
 import ChloeStationerySet from "../../../components/ChloeStationerySet"
 import AlternativeStationerySet from "../../../components/AlternativeStationerySet"
@@ -20,6 +21,7 @@ const TABS = {
   DASHBOARD: "Hostia",
   ACCOMMODATION: "Ubytovanie",
   QR_CODE: "Tlačoviny",
+  GALLERY: "Galéria",
 }
 
 function getBaseUrl() {
@@ -206,9 +208,11 @@ export default function ClientZonePage() {
               onClick={() => setActiveTab(TABS.ACCOMMODATION)}
             />
           ) : null}
+          {showAccommodationTab ? <TabButton label={TABS.GALLERY} isActive={activeTab === TABS.GALLERY} onClick={() => setActiveTab(TABS.GALLERY)} /> : null}
         </div>
 
         <section className={styles.content}>
+          {activeTab === TABS.GALLERY && showAccommodationTab ? <ClientGallery slug={slug} /> : null}
           {activeTab === TABS.OVERVIEW && (
             <ClientOverview
               slug={slug}

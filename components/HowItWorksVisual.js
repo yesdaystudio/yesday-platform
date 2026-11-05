@@ -75,7 +75,7 @@ export default function HowItWorksVisual() {
           <div className={styles.qrScale}>
             <DianaQrCardPrintTemplate
               data={DIANA_STATIONERY}
-              qrDataUrl="/yesday-demo-qr.svg"
+              qrDataUrl="/yesday-demo-qr.png"
             />
           </div>
           <div className={styles.scanLine} aria-hidden="true" />

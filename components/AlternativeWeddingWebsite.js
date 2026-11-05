@@ -1,4 +1,5 @@
 import ChloeDecorations from './ChloeDecorations'
+import WeddingGallery from './WeddingGallery'
 import { getDesignCustomization } from '../lib/designCustomization'
 import { buildGoogleCalendarUrl } from '../lib/googleCalendar'
 import { buildGoogleMapsSearchUrl } from '../lib/googleMaps'
@@ -47,6 +48,7 @@ export default function AlternativeWeddingWebsite({
   scheduleError = null,
   rsvpHref,
   invitationRecipient = null,
+  gallery = null,
 }) {
   const theme = THEMES[variant] || THEMES.botanique
   const customization = getDesignCustomization(variant, project)
@@ -338,6 +340,7 @@ export default function AlternativeWeddingWebsite({
           <a href={googleCalendarUrl} target="_blank" rel="noopener noreferrer" className="signatureWedding__calendarAction">Uložiť do kalendára</a>
         </div>
       </section>
+      <WeddingGallery gallery={gallery} />
     </main>
   )
 }

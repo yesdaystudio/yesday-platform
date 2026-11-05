@@ -3,6 +3,7 @@ import { buildGoogleCalendarUrl } from '../lib/googleCalendar'
 import { buildGoogleMapsSearchUrl } from '../lib/googleMaps'
 import DianaStickyHeader from '../app/[slug]/DianaStickyHeader'
 import AlternativeWeddingWebsite from './AlternativeWeddingWebsite'
+import WeddingGallery from './WeddingGallery'
 import { getVisibleMenuSections, serializeMenuSections } from '../lib/menuSections.mjs'
 
 const dianaHeroFontVariant = 'current'
@@ -11,7 +12,7 @@ export function WeddingNotFound() {
   return <main style={emptyStateStyle}><div style={emptyCardStyle}><p style={eyebrowStyle}>Svadobná stránka</p><h1 style={emptyTitleStyle}>Projekt sa nenašiel</h1><p style={emptyTextStyle}>Skontrolujte prosím odkaz alebo skúste stránku otvoriť neskôr.</p></div></main>
 }
 
-export default function WeddingWebsite({ project, websiteContent = {}, scheduleItems = [], scheduleError = null, rsvpHref, invitationRecipient = null }) {
+export default function WeddingWebsite({ project, websiteContent = {}, scheduleItems = [], scheduleError = null, rsvpHref, invitationRecipient = null, gallery = null }) {
   const wc = websiteContent
   const visibleMenuSections = getVisibleMenuSections(wc)
   const dresscodePalette = wc.dresscode_palette_enabled === true
@@ -45,6 +46,7 @@ export default function WeddingWebsite({ project, websiteContent = {}, scheduleI
         scheduleError={scheduleError}
         rsvpHref={rsvpHref}
         invitationRecipient={invitationRecipient}
+        gallery={gallery}
       />
     )
   }
@@ -171,6 +173,7 @@ export default function WeddingWebsite({ project, websiteContent = {}, scheduleI
           </Section>
         </>
       )}
+      <WeddingGallery gallery={gallery} />
     </main>
   )
 }

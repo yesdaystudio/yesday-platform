@@ -167,8 +167,11 @@ export default function HomePage() {
     <main className={sansClassName} style={pageStyle}>
       <Nav />
       <Hero />
-      <Templates />
       <HowItWorks />
+      <Templates />
+      <section style={systemSectionStyle} aria-label="Ukážka klientskej zóny">
+        <div style={systemInnerStyle}><DashboardShowcase /></div>
+      </section>
       <Benefits />
       <PricingSection />
       <Contact />
@@ -198,7 +201,6 @@ function HowItWorks() {
           Viac pokoja, istoty a času tešiť sa na váš deň.
         </p>
 
-        <DashboardShowcase />
       </div>
     </section>
   )
@@ -460,11 +462,12 @@ const navLinkStyle = {
 }
 
 const heroStyle = {
+  minHeight: '86vh',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   textAlign: 'center',
-  padding: 'clamp(36px, 5vw, 64px) 20px 40px',
+  padding: '150px 20px 90px',
   background:
     'radial-gradient(circle at top, rgba(212, 175, 55, 0.10), transparent 35%), linear-gradient(180deg, #fcfaf5 0%, #f7f2e8 100%)',
 }
@@ -475,7 +478,7 @@ const heroInnerStyle = {
 }
 
 const heroBrandStyle = {
-  marginBottom: '20px',
+  marginBottom: '26px',
 }
 
 const heroLogoStyle = {
