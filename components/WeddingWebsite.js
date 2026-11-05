@@ -5,6 +5,7 @@ import DianaStickyHeader from '../app/[slug]/DianaStickyHeader'
 import AlternativeWeddingWebsite from './AlternativeWeddingWebsite'
 import WeddingGallery from './WeddingGallery'
 import { getVisibleMenuSections, serializeMenuSections } from '../lib/menuSections.mjs'
+import { getWeddingHeroFonts } from '../lib/designCustomization'
 
 const dianaHeroFontVariant = 'current'
 
@@ -12,7 +13,7 @@ export function WeddingNotFound() {
   return <main style={emptyStateStyle}><div style={emptyCardStyle}><p style={eyebrowStyle}>Svadobná stránka</p><h1 style={emptyTitleStyle}>Projekt sa nenašiel</h1><p style={emptyTextStyle}>Skontrolujte prosím odkaz alebo skúste stránku otvoriť neskôr.</p></div></main>
 }
 
-export default function WeddingWebsite({ project, websiteContent = {}, scheduleItems = [], scheduleError = null, rsvpHref, invitationRecipient = null, gallery = null, heroOnly = false }) {
+export default function WeddingWebsite({ project, websiteContent = {}, scheduleItems = [], scheduleError = null, rsvpHref, invitationRecipient = null, gallery = null }) {
   const wc = websiteContent
   const visibleMenuSections = getVisibleMenuSections(wc)
   const dresscodePalette = wc.dresscode_palette_enabled === true
@@ -47,7 +48,6 @@ export default function WeddingWebsite({ project, websiteContent = {}, scheduleI
         rsvpHref={rsvpHref}
         invitationRecipient={invitationRecipient}
         gallery={gallery}
-        heroOnly={heroOnly}
       />
     )
   }
@@ -94,7 +94,6 @@ export default function WeddingWebsite({ project, websiteContent = {}, scheduleI
         ) : null}
       </section>
 
-      {!heroOnly ? <>
       {invitationRecipient ? (
         <PersonalizedWelcome recipient={invitationRecipient} />
       ) : null}
@@ -176,7 +175,6 @@ export default function WeddingWebsite({ project, websiteContent = {}, scheduleI
         </>
       )}
       <WeddingGallery gallery={gallery} />
-      </> : null}
     </main>
   )
 }
@@ -840,7 +838,7 @@ const colorThemes = {
 const dianaSerifFont = "'Cormorant Garamond', Georgia, 'Times New Roman', serif"
 const dianaSectionLabelFont = "'Inter', Arial, Helvetica, sans-serif"
 const dianaHeroFontVariants = {
-  current: "'Great Vibes', cursive",
+  current: getWeddingHeroFonts('diana').names,
   brittany: "'Brittany Signature', 'Great Vibes', cursive",
   msmadi: "'Ms Madi', cursive",
 }
@@ -911,7 +909,7 @@ const dianaThemeStyles = {
   heroAmpersand: {
     display: 'block',
     margin: 'min(0.9rem, 2cqw) 0 min(1rem, 2.2cqw)',
-    fontFamily: dianaSerifFont,
+    fontFamily: getWeddingHeroFonts('diana').joiner,
     fontSize: '0.36em',
     fontStyle: 'italic',
     fontWeight: 400,

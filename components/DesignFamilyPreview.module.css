@@ -1,7 +1,0 @@
-.preview { display: block; position: relative; width: 100%; aspect-ratio: 1366 / 900; margin-bottom: 20px; overflow: hidden; background: #f7f2e8; border: 1px solid #e9e9e9; color: #453c33; text-decoration: none; isolation: isolate; }
-.frame { position: absolute; top: 0; left: 0; display: block; border: 0; max-width: none; transform-origin: top left; pointer-events: none; }
-.loading { position: absolute; inset: 0; display: grid; place-items: center; font-family: Georgia, serif; font-size: 26px; }
-.open { position: absolute; right: 10px; bottom: 10px; z-index: 1; padding: 7px 10px; background: rgba(255, 253, 247, .94); color: #453c33; font-size: 10px; letter-spacing: .04em; opacity: 0; }
-.preview:hover .open, .preview:focus-visible .open { opacity: 1; }
-.preview:focus-visible { outline: 3px solid #92744c; outline-offset: 4px; }
-@media (hover: none) { .open { opacity: 1; } }

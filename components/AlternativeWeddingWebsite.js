@@ -1,6 +1,6 @@
 import ChloeDecorations from './ChloeDecorations'
 import WeddingGallery from './WeddingGallery'
-import { getDesignCustomization } from '../lib/designCustomization'
+import { getDesignCustomization, getWeddingHeroFonts } from '../lib/designCustomization'
 import { buildGoogleCalendarUrl } from '../lib/googleCalendar'
 import { buildGoogleMapsSearchUrl } from '../lib/googleMaps'
 import { getVisibleMenuSections } from '../lib/menuSections.mjs'
@@ -49,10 +49,10 @@ export default function AlternativeWeddingWebsite({
   rsvpHref,
   invitationRecipient = null,
   gallery = null,
-  heroOnly = false,
 }) {
   const theme = THEMES[variant] || THEMES.botanique
   const customization = getDesignCustomization(variant, project)
+  const heroFonts = getWeddingHeroFonts(variant, project)
   const [firstPartner, secondPartner] = splitCoupleName(project.couple_display_name)
   const date = formatWeddingDate(project.wedding_date)
   const ceremonyTime = formatTime(project.ceremony_time || scheduleItems[0]?.item_time)
@@ -180,9 +180,9 @@ export default function AlternativeWeddingWebsite({
           {variant === 'provence' ? <p>Náš svadobný deň</p> : null}
           {variant === 'lavande' ? <p>Sous le ciel de Provence</p> : null}
           {variant === 'riviera' ? <p>S vami má leto krajší príbeh</p> : null}
-          <h1>
+          <h1 style={{ fontFamily: heroFonts.names }}>
             <span>{firstPartner}</span>
-            {secondPartner ? <><i>&amp;</i><span>{secondPartner}</span></> : null}
+            {secondPartner ? <><i style={{ fontFamily: heroFonts.joiner }}>&amp;</i><span>{secondPartner}</span></> : null}
           </h1>
           <strong>{date}</strong>
           {variant === 'botanique' ? (
@@ -227,7 +227,6 @@ export default function AlternativeWeddingWebsite({
         {variant === 'botanique' || variant === 'penelope' || variant === 'fleurie' || variant === 'provence' || variant === 'lavande' ? <a className="signatureWedding__heroDown" href={websiteContent.story_text ? '#pribeh' : '#program'} aria-label="Prejsť na ďalšie informácie">⌄</a> : null}
       </section>
 
-      {!heroOnly ? <>
       {invitationRecipient ? (
         <section style={personalizedWelcomeStyle} aria-label="Personalizovaná pozvánka">
           <p style={personalizedWelcomeEyebrowStyle}>S radosťou vás pozývame</p>
@@ -343,7 +342,6 @@ export default function AlternativeWeddingWebsite({
         </div>
       </section>
       <WeddingGallery gallery={gallery} />
-      </> : null}
     </main>
   )
 }
