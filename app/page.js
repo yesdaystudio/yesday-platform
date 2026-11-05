@@ -139,7 +139,7 @@ const TEMPLATES = [
     previewBackgroundSize: 'cover',
     previewCouple: ['Elena', 'Tomáš'],
     previewCoupleStyle: 'provence',
-    previewEyebrow: 'Un jour en Provence',
+    previewEyebrow: 'Náš svadobný deň',
     previewDate: '6. júna 2027',
     href: '/ukazka?design=provence',
   },
