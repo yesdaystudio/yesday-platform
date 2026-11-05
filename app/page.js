@@ -167,9 +167,9 @@ export default function HomePage() {
     <main className={sansClassName} style={pageStyle}>
       <Nav />
       <Hero />
+      <Templates />
       <HowItWorks />
       <Benefits />
-      <Templates />
       <PricingSection />
       <Contact />
       <Footer />
@@ -239,19 +239,18 @@ function Hero() {
         <p style={heroEyebrowStyle}>Digitálne svadobné riešenia na mieru v zladenom štýle</p>
 
         <h1 className={serifClassName} style={heroHeadingStyle}>
-          Celá komunikácia s vašimi svadobnými hosťami na jednom mieste.
+          Váš svadobný web a pozvánky v jednom štýle.
         </h1>
 
         <div style={heroDividerStyle} />
 
         <p style={heroLeadStyle}>
-          Svadobný web, RSVP, jedlá, alergie, ubytovanie, doprava a prehľad hostí
-          v jednom zladenom systéme.
+          Vyberte si dizajn pre váš deň. Pozvánky, web aj odpovede hostí budú krásne ladiť.
         </p>
 
         <div style={heroActionsStyle}>
           <Link href="#portfolio" style={heroPrimaryButtonStyle}>
-            Pozrieť šablóny
+            Vybrať svadobný dizajn ↓
           </Link>
           <Link href="/ukazka" style={heroSecondaryButtonStyle}>
             Vyskúšať s vlastnými údajmi
@@ -295,11 +294,10 @@ function Templates() {
   return (
     <section id="portfolio" style={sectionStyle}>
       <h2 className={serifClassName} style={sectionHeadingStyle}>
-        Templates / Design families
+        Nájdite štýl vášho svadobného dňa
       </h2>
       <p style={sectionIntroStyle}>
-        Vyberte si dizajnovú rodinu, ktorá určí atmosféru vášho svadobného webu.
-        Každú z nich doladíme na váš príbeh, štýl komunikácie a svadobný deň.
+        Deväť dizajnových rodín. V každej zladený svadobný web, pozvánky a QR kartičky.
       </p>
 
       <div style={templatesGridStyle}>
@@ -462,12 +460,11 @@ const navLinkStyle = {
 }
 
 const heroStyle = {
-  minHeight: '86vh',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   textAlign: 'center',
-  padding: '150px 20px 90px',
+  padding: 'clamp(36px, 5vw, 64px) 20px 40px',
   background:
     'radial-gradient(circle at top, rgba(212, 175, 55, 0.10), transparent 35%), linear-gradient(180deg, #fcfaf5 0%, #f7f2e8 100%)',
 }
@@ -478,7 +475,7 @@ const heroInnerStyle = {
 }
 
 const heroBrandStyle = {
-  marginBottom: '26px',
+  marginBottom: '20px',
 }
 
 const heroLogoStyle = {
