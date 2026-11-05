@@ -1,5 +1,6 @@
 import { getSupabaseAdmin } from '../../../../lib/supabaseAdmin'
 import { normalizeInvitationToken, normalizePersonalizedRsvp } from '../../../../lib/personalizedInvitations.mjs'
+import { isPublicWedding } from '../../../../lib/publicWedding.mjs'
 
 export const runtime = 'nodejs'
 
@@ -85,7 +86,7 @@ async function loadInvitation(token) {
     .maybeSingle()
 
   const packageType = String(project?.package_type || '').toLowerCase()
-  if (projectError || !project || !['signature', 'atelier'].includes(packageType)) return null
+  if (projectError || !isPublicWedding(project) || !['signature', 'atelier'].includes(packageType)) return null
   return { ...invitation, project }
 }
 

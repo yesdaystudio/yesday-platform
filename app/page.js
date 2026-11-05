@@ -850,6 +850,7 @@ const templateAmpersandStyles = {
   veno: { fontFamily: '"Cormorant Garamond", Georgia, serif', fontSize: '.4em', margin: '.3em 0', lineHeight: 1 },
   diana: {
     margin: '0.32em 0 0.58em',
+    transform: 'translateX(0.9em)',
     fontFamily: '"Playfair Display", Georgia, serif',
     fontSize: '0.3em',
     lineHeight: 1,

@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'next/navigation'
-import supabase from '../../../lib/supabase'
 
 export default function RSVPPage() {
   const params = useParams()
@@ -38,11 +37,13 @@ export default function RSVPPage() {
 
   useEffect(() => {
     async function loadProject() {
-      const { data, error } = await supabase
-        .from('projects')
-        .select('id, slug, package_type')
-        .eq('slug', slug)
-        .single()
+      let data, error
+      try {
+        const response = await fetch(`/api/weddings/${encodeURIComponent(slug)}`, { cache: 'no-store' })
+        const body = await response.json()
+        if (!response.ok) throw new Error('Wedding unavailable')
+        data = body.project
+      } catch (loadError) { error = loadError }
 
       if (error || !data) {
         console.error(error)

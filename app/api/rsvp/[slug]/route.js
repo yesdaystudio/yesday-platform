@@ -23,6 +23,8 @@ export async function POST(request, { params }) {
     .from('projects')
     .select('id, package_type')
     .eq('slug', slug)
+    .eq('payment_status', 'paid')
+    .eq('project_status', 'active')
     .maybeSingle()
 
   if (projectError || !project) {
