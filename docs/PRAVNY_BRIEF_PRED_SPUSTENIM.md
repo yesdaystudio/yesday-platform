@@ -12,6 +12,7 @@ Pracovný podklad k 5. 11. 2026. Toto nie sú zverejniteľné VOP; chýbajú pot
 - Signature a Atelier obsahujú navyše ubytovanie a jeho komunikáciu, personalizované QR pozvánky a fotogalériu. Galéria má limit 100 webových fotiek, najviac 2 MB po spracovaní na fotografiu. Nie je archívom originálov.
 - Údaje a konkrétny vzhľad si pár upravuje v editore. Atelier zahŕňa individuálnu tvorbu; presný rozsah, termín a schvaľovanie treba zachytiť v individuálnej objednávke.
 - Online platby sú momentálne zatvorené. Záujem cez e-mail nie je automatická platená objednávka.
+- Essential a Signature zahŕňajú editor na vlastné úpravy a pomoc s jeho používaním (potvrdené používateľkou). Pomoc zahŕňa prihlásenie, ovládanie editora, používanie PDF/QR/galérie a riešenie funkčných chýb. Osobné písanie textov, grafické úpravy na objednávku a príprava svadobného obsahu pracovníkom YesDay nie sú zahrnuté; individuálna tvorba sa dohodne v Atelieri. Tým nie sú dotknuté zákonné práva pri vadách služby.
 
 ## Rozhodnutia, ktoré ešte treba uzavrieť
 
@@ -21,7 +22,7 @@ Pracovný podklad k 5. 11. 2026. Toto nie sú zverejniteľné VOP; chýbajú pot
 | Začiatok služby | Od ktorého momentu beží dodanie: zaplatenie, doručenie prístupu, dokončenie úprav? Koľko času pred svadbou môže zákazník kúpiť službu? |
 | Koniec služby | Upozornenie pred uplynutím 12 mesiacov, lehota na export, možnosť predĺženia, osud údajov a záloh. Automatizácia zatiaľ nie je hotová. |
 | Zmena termínu | Ako prepočítať koniec služby pri presunutí svadby, či existuje maximálne trvanie od nákupu a prípadný doplatok. |
-| Podpora | Kanál, pracovné dni, reálna lehota odpovede, rozsah pomoci a platených úprav. Nesľubovať pohotovosť bez prevádzkového zabezpečenia. |
+| Podpora | Rozsah je potvrdený: editor a pomoc s jeho používaním. Ešte určiť kanál, pracovné dni a reálnu lehotu odpovede. Nesľubovať pohotovosť bez prevádzkového zabezpečenia. |
 | Výstupy | Rozmery PDF a rozsah licencie, počet dizajnových zmien, kto kontroluje mená/dátumy pred tlačou, ktoré úpravy robí pár a ktoré YesDay. |
 | Zrušenie svadby | Obchodný postup mimo zákonného odstúpenia a reklamácie; tieto situácie treba odlišovať. |
 | Verejnosť webu | Web je dostupný návštevníkom s odkazom. Nie je zabezpečený PIN-om. Zakúpenie neznamená, že obsah vidia len menovite pozvaní hostia. |

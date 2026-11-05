@@ -47,6 +47,7 @@ const PACKAGES = [
     description:
       'Pre páry, ktoré chcú krásny a funkčný svadobný web s praktickým RSVP základom.',
     items: [
+      'Editor na vlastné úpravy a pomoc s jeho používaním',
       'Svadobný web s kľúčovými informáciami',
       'RSVP s menami hostí, počtom dospelých a detí',
       'Menu možnosti: mäsové, vegetariánske, vegánske, detské',
@@ -321,8 +322,9 @@ export default function PricingSection() {
         <div style={pricingInnerStyle}>
           <h2 style={sectionHeadingStyle}>Ponuka služieb</h2>
           <p style={sectionIntroStyle}>
-            Vyberte si úroveň digitálneho svadobného riešenia podľa toho, či
-            chcete elegantný základ alebo plne personalizovaný systém.
+            V balíkoch Essential a Signature si mená, texty a detaily svadby
+            upravíte sami v editore. S jeho používaním vám pomôžeme.
+            Individuálnu tvorbu a úpravy od nás si dohodnete v balíku Atelier.
           </p>
           {!checkoutAvailable ? (
             <p style={prelaunchNoticeStyle}>
