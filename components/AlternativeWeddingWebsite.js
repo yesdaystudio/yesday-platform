@@ -182,7 +182,7 @@ export default function AlternativeWeddingWebsite({
           {variant === 'riviera' ? <p>S vami má leto krajší príbeh</p> : null}
           <h1 style={{ fontFamily: heroFonts.names }}>
             <span>{firstPartner}</span>
-            {secondPartner ? <><i style={{ fontFamily: heroFonts.joiner }}>&amp;</i><span>{secondPartner}</span></> : null}
+            {secondPartner ? <><i style={{ fontFamily: heroFonts.joiner, fontStyle: heroFonts.joinerStyle }}>&amp;</i><span>{secondPartner}</span></> : null}
           </h1>
           <strong>{date}</strong>
           {variant === 'botanique' ? (

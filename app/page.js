@@ -347,7 +347,7 @@ function Templates() {
                   {template.previewEyebrow ? <small style={templatePreviewEyebrowStyle}>{template.previewEyebrow}</small> : null}
                   <span style={{ ...templateCoupleNamesStyle, ...templateCoupleNameStyles[template.previewCoupleStyle], fontFamily: getWeddingHeroFonts(template.previewCoupleStyle).names }}>
                     <span>{template.previewCouple[0]}</span>
-                    <i style={{ ...templateCoupleAmpersandStyle, ...templateAmpersandStyles[template.previewCoupleStyle], fontFamily: getWeddingHeroFonts(template.previewCoupleStyle).joiner }}>{template.previewJoiner || '&'}</i>
+                    <i style={{ ...templateCoupleAmpersandStyle, ...templateAmpersandStyles[template.previewCoupleStyle], fontFamily: getWeddingHeroFonts(template.previewCoupleStyle).joiner, fontStyle: getWeddingHeroFonts(template.previewCoupleStyle).joinerStyle }}>{template.previewJoiner || '&'}</i>
                     <span>{template.previewCouple[1]}</span>
                   </span>
                   {template.previewDate ? <strong style={templatePreviewDateStyle}>{template.previewDate}</strong> : null}
