@@ -49,6 +49,7 @@ export default function AlternativeWeddingWebsite({
   rsvpHref,
   invitationRecipient = null,
   gallery = null,
+  heroOnly = false,
 }) {
   const theme = THEMES[variant] || THEMES.botanique
   const customization = getDesignCustomization(variant, project)
@@ -176,7 +177,7 @@ export default function AlternativeWeddingWebsite({
         <div className="signatureWedding__heroCopy">
           {variant === 'botanique' || variant === 'fleurie' ? <p>Budeme sa brať</p> : null}
           {variant === 'penelope' || variant === 'veno' ? <p>S radosťou vás pozývame</p> : null}
-          {variant === 'provence' ? <p>Un jour en Provence</p> : null}
+          {variant === 'provence' ? <p>Náš svadobný deň</p> : null}
           {variant === 'lavande' ? <p>Sous le ciel de Provence</p> : null}
           {variant === 'riviera' ? <p>S vami má leto krajší príbeh</p> : null}
           <h1>
@@ -207,7 +208,7 @@ export default function AlternativeWeddingWebsite({
             </>
           ) : variant === 'provence' ? (
             <>
-              <span className="provenceHeroFlourish" aria-hidden="true">notre journée</span>
+              <span className="provenceHeroFlourish" aria-hidden="true">náš príbeh</span>
               <a className="signatureWedding__heroAction" href={websiteContent.story_text ? '#pribeh' : '#detaily'}>
                 Objaviť náš deň
               </a>
@@ -226,6 +227,7 @@ export default function AlternativeWeddingWebsite({
         {variant === 'botanique' || variant === 'penelope' || variant === 'fleurie' || variant === 'provence' || variant === 'lavande' ? <a className="signatureWedding__heroDown" href={websiteContent.story_text ? '#pribeh' : '#program'} aria-label="Prejsť na ďalšie informácie">⌄</a> : null}
       </section>
 
+      {!heroOnly ? <>
       {invitationRecipient ? (
         <section style={personalizedWelcomeStyle} aria-label="Personalizovaná pozvánka">
           <p style={personalizedWelcomeEyebrowStyle}>S radosťou vás pozývame</p>
@@ -341,6 +343,7 @@ export default function AlternativeWeddingWebsite({
         </div>
       </section>
       <WeddingGallery gallery={gallery} />
+      </> : null}
     </main>
   )
 }

@@ -12,7 +12,7 @@ export function WeddingNotFound() {
   return <main style={emptyStateStyle}><div style={emptyCardStyle}><p style={eyebrowStyle}>Svadobná stránka</p><h1 style={emptyTitleStyle}>Projekt sa nenašiel</h1><p style={emptyTextStyle}>Skontrolujte prosím odkaz alebo skúste stránku otvoriť neskôr.</p></div></main>
 }
 
-export default function WeddingWebsite({ project, websiteContent = {}, scheduleItems = [], scheduleError = null, rsvpHref, invitationRecipient = null, gallery = null }) {
+export default function WeddingWebsite({ project, websiteContent = {}, scheduleItems = [], scheduleError = null, rsvpHref, invitationRecipient = null, gallery = null, heroOnly = false }) {
   const wc = websiteContent
   const visibleMenuSections = getVisibleMenuSections(wc)
   const dresscodePalette = wc.dresscode_palette_enabled === true
@@ -47,6 +47,7 @@ export default function WeddingWebsite({ project, websiteContent = {}, scheduleI
         rsvpHref={rsvpHref}
         invitationRecipient={invitationRecipient}
         gallery={gallery}
+        heroOnly={heroOnly}
       />
     )
   }
@@ -93,6 +94,7 @@ export default function WeddingWebsite({ project, websiteContent = {}, scheduleI
         ) : null}
       </section>
 
+      {!heroOnly ? <>
       {invitationRecipient ? (
         <PersonalizedWelcome recipient={invitationRecipient} />
       ) : null}
@@ -174,6 +176,7 @@ export default function WeddingWebsite({ project, websiteContent = {}, scheduleI
         </>
       )}
       <WeddingGallery gallery={gallery} />
+      </> : null}
     </main>
   )
 }
