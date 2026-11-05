@@ -333,7 +333,9 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
       setRows((current) => current.map((row) => (
         row.id === draft.responseId ? { ...row, emailSentAt: result.sent_at } : row
       )))
-      setStatus('E-mail s informáciami o ubytovaní bol odoslaný.')
+      setStatus(result.status_saved === false
+        ? 'E-mail bol odoslaný, ale jeho stav sa nepodarilo uložiť. Zatiaľ ho neposielajte znova.'
+        : 'E-mail s informáciami o ubytovaní bol odoslaný.')
       setEmailDraft(null)
     } catch (error) {
       setStatus(error instanceof Error ? error.message : 'E-mail sa nepodarilo odoslať.')

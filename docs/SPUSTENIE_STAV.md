@@ -31,6 +31,8 @@ Oprava uzatvára súčasný prístup; nedokazuje, že v minulosti nikto údaje n
 
 ## Nasledujúce kroky
 
+Dokončený ďalší technický krok: ubytovací e-mail serverovo overuje vlastníka, aktívne zaplatené Signature/Atelier, potvrdenú účasť, požiadavku na ubytovanie a uložený kontakt. Cudzí klient nedostáva informáciu, či má hosť e-mail. Príjemcu ani reply-to nemožno prepísať cez payload. Overenie a odosielanie majú samostatné chybové stavy. Ak poskytovateľ e-mail prijal, ale zlyhá uloženie stavu, výsledok zostáva úspešný a UI odporučí neposielať znova. Testy používajú náhradu odosielateľa, reálne e-maily sa neposielali. Celkom 50 automatických testov prešlo. Pracovný právny podklad je v `PRAVNY_BRIEF_PRED_SPUSTENIM.md`.
+
 1. **Predajný rozsah a dokumenty:** doplniť predajcu po založení s. r. o., podporu a rozsah úprav, zmenu termínu, ukončenie po 12 mesiacoch; pripraviť podklady pre VOP, reklamácie, odstúpenie a ochranu údajov. Zdravotné údaje v RSVP vyžadujú osobitné riešenie. Nepublikovať neúplné právne dokumenty ako hotové.
 2. **Fakturácia a checkout:** účtovník potvrdí daňový režim, doklady a zahraničných dodávateľov; doplniť príslušné údaje, informovanie, potvrdenia a evidenciu pri nákupe. Následne vyskúšať celý platobný/onboardingový proces, zlyhania a refundáciu.
 3. **Ďalšie API a ochrana formulárov:** preveriť balíky a stav pri odosielaní ubytovacích e-mailov, limity/spam, zrušenie prístupov a obnovu pozvánok. Krok 1 nie je úplný bezpečnostný audit všetkých funkcií.
