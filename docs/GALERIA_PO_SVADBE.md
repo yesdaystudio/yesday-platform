@@ -19,8 +19,9 @@ Pri rušení celého projektu treba najprv odstrániť jeho objekty z `wedding-g
 
 - 40 automatických testov prešlo vrátane autorizácie API, balíkov, stavu projektu, neplatných uploadov, kompenzačného mazania a poradia.
 - Deväť reálnych DB kontrol prešlo: súkromný bucket, priame oprávnenia, predvolené skrytie, limit 101. fotky a atómové poradie vrátane odmietnutia cudzích/duplicitných ID. Syntetické dáta boli v transakcii ukončenej rollbackom.
-- API testy používajú náhradu Supabase klienta. Nepredstavujú celý test nahratia a podpísania fotografie cez prihlásený produkčný účet.
+- Automatické API testy používajú náhradu Supabase klienta; samostatne prešiel aj nižšie uvedený živý integračný test.
 - V Safari bola vizuálne overená mriežka na lokálnych ukážkových obrázkoch, otvorenie modálneho náhľadu, prechod na ďalšiu fotografiu a Escape s návratom fokusu.
-- Automatické schvaľovanie zamietlo získanie tajného Supabase API kľúča pre tento integračný test. Kľúč nebol získaný a nebol použitý obchádzajúci postup. Celý autentifikovaný upload zostáva na akceptačné overenie v klientskom účte.
+- Po výslovnom súhlase používateľky prešiel živý integračný test na produkčnej doméne: 20 kontrol s dvoma dočasnými prihlásenými účtami a samostatnými skúšobnými projektmi. Overil dva reálne JPEG uploady, podpísané doručovanie fotiek, odmietnutie priameho verejného storage prístupu, anonymnej správy, cudzieho vlastníka a Essential balíka, popisy s diakritikou, uložené poradie, zverejnenie a skrytie v skutočnej odpovedi svadobného webu a odstránenie fotky.
+- Servisný kľúč bol použitý iba v pamäti procesu, bez vypísania či uloženia. Skúšobné účty vznikli potvrdené bez odoslania e-mailov; neprebehli platby. Všetky vytvorené skúšobné účty, projekty a storage objekty boli po teste odstránené; odstránenie projektov bolo overené.
 
 Pôvodný audit pred prvým predajom je historický stav pred doplnením galérie. Implementácia galérie odstraňuje medzeru v kóde; nemení jeho ostatné bezpečnostné a právne zistenia.
