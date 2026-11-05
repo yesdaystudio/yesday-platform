@@ -2,11 +2,13 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'next/navigation'
+import FormHoneypot from '../../../components/FormHoneypot'
 
 export default function RSVPPage() {
   const params = useParams()
   const slug = params.slug
 
+  const [companyWebsite, setCompanyWebsite] = useState('')
   const [project, setProject] = useState(null)
   const [invitation, setInvitation] = useState(null)
   const [invitationToken, setInvitationToken] = useState('')
@@ -142,6 +144,7 @@ export default function RSVPPage() {
 
     const responsePayload = {
       project_id: project.id,
+      company_website: companyWebsite,
       guest_name: firstGuestName,
       attending,
       adults_count: attending === 'yes' ? adults : 0,
@@ -238,6 +241,7 @@ export default function RSVPPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="rsvp-form">
+          <FormHoneypot value={companyWebsite} onChange={setCompanyWebsite} />
           <div className="attendance-field">
             <label htmlFor="attendance">Zúčastníte sa?</label>
             <select id="attendance" value={attending} onChange={(e) => setAttending(e.target.value)}>

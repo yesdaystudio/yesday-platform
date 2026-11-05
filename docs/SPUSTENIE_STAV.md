@@ -33,6 +33,8 @@ Oprava uzatvára súčasný prístup; nedokazuje, že v minulosti nikto údaje n
 
 ## Nasledujúce kroky
 
+Ochrana formulárov je doplnená: zdieľané atómové limity, ohraničené JSON požiadavky, pole proti jednoduchým botom, ochrana súbežných/obnovených checkoutov a e-mailov, atómové personalizované RSVP a denné čistenie pomocných metadát. Podrobnosti, limity a hranice ochrany sú v `OCHRANA_FORMULAROV.md`. Verejný predaj tým nebol otvorený.
+
 Dokončený ďalší technický krok: ubytovací e-mail serverovo overuje vlastníka, aktívne zaplatené Signature/Atelier, potvrdenú účasť, požiadavku na ubytovanie a uložený kontakt. Cudzí klient nedostáva informáciu, či má hosť e-mail. Príjemcu ani reply-to nemožno prepísať cez payload. Overenie a odosielanie majú samostatné chybové stavy. Ak poskytovateľ e-mail prijal, ale zlyhá uloženie stavu, výsledok zostáva úspešný a UI odporučí neposielať znova. Testy používajú náhradu odosielateľa, reálne e-maily sa neposielali. Celkom 50 automatických testov prešlo. Pracovný právny podklad je v `PRAVNY_BRIEF_PRED_SPUSTENIM.md`.
 
 1. **Predajný rozsah a dokumenty:** doplniť predajcu po založení s. r. o., podporu a rozsah úprav, zmenu termínu, ukončenie po 12 mesiacoch; pripraviť podklady pre VOP, reklamácie, odstúpenie a ochranu údajov. Zdravotné údaje v RSVP vyžadujú osobitné riešenie. Nepublikovať neúplné právne dokumenty ako hotové.

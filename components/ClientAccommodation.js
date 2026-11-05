@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import supabase from '../lib/supabase'
 import {
@@ -27,6 +27,7 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
   const [savingReminderSetting, setSavingReminderSetting] = useState(false)
   const [confirmingDateChange, setConfirmingDateChange] = useState(false)
   const [status, setStatus] = useState('')
+  const emailSendLock = useRef(false)
   const [emailDraft, setEmailDraft] = useState(null)
   const [reminderPreview, setReminderPreview] = useState(null)
 
@@ -261,6 +262,7 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
     const saved = await saveRow(row)
     if (!saved) return
 
+    if (emailSendLock.current) return
     setEmailDraft(buildAccommodationEmailDraft(
       row,
       project,
@@ -302,18 +304,16 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
   }
 
   async function sendAccommodationEmail(draft) {
+    if (emailSendLock.current) return
+    emailSendLock.current = true
     setStatus('')
     setSendingEmail(true)
 
-    const { data: sessionData } = await supabase.auth.getSession()
-    const accessToken = sessionData.session?.access_token
-    if (!accessToken) {
-      setStatus('Prihlásenie vypršalo. Prihláste sa, prosím, znova.')
-      setSendingEmail(false)
-      return
-    }
-
     try {
+      const { data: sessionData } = await supabase.auth.getSession()
+      const accessToken = sessionData.session?.access_token
+      if (!accessToken) throw new Error('Prihlásenie vypršalo. Prihláste sa, prosím, znova.')
+
       const response = await fetch('/api/accommodation-email', {
         method: 'POST',
         headers: {
@@ -322,6 +322,7 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
         },
         body: JSON.stringify({
           response_id: draft.responseId,
+          request_key: draft.requestKey,
           subject: draft.subject,
           body: draft.body,
         }),
@@ -340,6 +341,7 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
     } catch (error) {
       setStatus(error instanceof Error ? error.message : 'E-mail sa nepodarilo odoslať.')
     } finally {
+      emailSendLock.current = false
       setSendingEmail(false)
     }
   }
@@ -566,7 +568,7 @@ export default function ClientAccommodation({ slug: slugProp, demoProject, demoR
           draft={emailDraft}
           isDemo={Boolean(demoProject)}
           sending={sendingEmail}
-          onChange={setEmailDraft}
+          onChange={(draft) => setEmailDraft({ ...draft, requestKey: crypto.randomUUID() })}
           onClose={() => setEmailDraft(null)}
           onSend={sendAccommodationEmail}
         />
@@ -786,7 +788,7 @@ function buildAccommodationEmailDraft(row, project, accommodation) {
     coupleName || 'Nevesta a ženích',
   ].filter((line, index, lines) => line || lines[index - 1] !== '').join('\n')
 
-  return { responseId: row.id, email, subject, body }
+  return { responseId: row.id, email, subject, body, requestKey: crypto.randomUUID() }
 }
 
 function buildAccommodationEmailHref(draft) {
@@ -818,7 +820,7 @@ function EmailComposer({ draft, isDemo, sending, onChange, onClose, onSend }) {
           <p style={composerEyebrowStyle}>Pripravený e-mail</p>
           <h3 style={composerTitleStyle}>Informácie o ubytovaní pre hosťa</h3>
         </div>
-        <button type="button" onClick={onClose} style={closeButtonStyle}>Zavrieť</button>
+        <button type="button" onClick={onClose} disabled={sending} style={closeButtonStyle}>Zavrieť</button>
       </div>
 
       <label style={labelStyle}>
@@ -830,6 +832,7 @@ function EmailComposer({ draft, isDemo, sending, onChange, onClose, onSend }) {
         <span style={labelTextStyle}>Predmet</span>
         <input
           value={draft.subject}
+          disabled={sending}
           onChange={(event) => onChange({ ...draft, subject: event.target.value })}
           style={inputStyle}
         />
@@ -839,6 +842,7 @@ function EmailComposer({ draft, isDemo, sending, onChange, onClose, onSend }) {
         <span style={labelTextStyle}>Text e-mailu</span>
         <textarea
           value={draft.body}
+          disabled={sending}
           onChange={(event) => onChange({ ...draft, body: event.target.value })}
           rows={16}
           style={emailBodyStyle}
@@ -853,9 +857,9 @@ function EmailComposer({ draft, isDemo, sending, onChange, onClose, onSend }) {
             <button type="button" onClick={() => onSend(draft)} disabled={sending} style={saveButtonStyle}>
               {sending ? 'Odosielam...' : 'Odoslať hosťovi cez YesDay'}
             </button>
-            <a href={buildAccommodationEmailHref(draft)} style={emailButtonStyle}>
+            {!sending ? <a href={buildAccommodationEmailHref(draft)} style={emailButtonStyle}>
               Otvoriť v mojej e-mailovej aplikácii
-            </a>
+            </a> : null}
           </>
         )}
         <span style={composerHelpStyle}>Pred odoslaním môžete predmet aj text upraviť.</span>
@@ -872,7 +876,7 @@ function ReminderPreview({ preview, onClose }) {
           <p style={composerEyebrowStyle}>Náhľad bez odoslania</p>
           <h3 style={composerTitleStyle}>Pripomienka ubytovania</h3>
         </div>
-        <button type="button" onClick={onClose} style={closeButtonStyle}>Zavrieť</button>
+        <button type="button" onClick={onClose} disabled={sending} style={closeButtonStyle}>Zavrieť</button>
       </div>
       <div style={reminderPreviewBodyStyle}>
         <p style={reminderPreviewParagraphStyle}>{preview.greeting}</p>

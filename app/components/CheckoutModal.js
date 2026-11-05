@@ -1,6 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import FormHoneypot from '../../components/FormHoneypot'
+import { getFormRequestKey } from '../../lib/formRequestKey.mjs'
 import Image from 'next/image'
 
 const DESIGNS = {
@@ -16,6 +18,8 @@ const DESIGNS = {
 }
 
 export default function CheckoutModal({ packageName, packageType, packagePrice, selectedDesign = 'diana', checkoutTestToken = '', onClose }) {
+  const submitLock = useRef(false)
+  const [companyWebsite, setCompanyWebsite] = useState('')
   const [email, setEmail] = useState('')
   const [coupleName, setCoupleName] = useState('')
   const [slug, setSlug] = useState('')
@@ -25,6 +29,7 @@ export default function CheckoutModal({ packageName, packageType, packagePrice, 
 
   async function handleSubmit(e) {
     e.preventDefault()
+    if (submitLock.current) return
     setError('')
 
     if (!email || !email.includes('@')) {
@@ -36,19 +41,18 @@ export default function CheckoutModal({ packageName, packageType, packagePrice, 
       return
     }
 
+    submitLock.current = true
     setLoading(true)
     try {
+      const payload = {
+        package_type: packageType, couple_display_name: coupleName.trim(), slug: slug.trim() || undefined,
+        customer_email: email.trim().toLowerCase(), design_family: DESIGNS[selectedDesign] ? selectedDesign : 'diana',
+        test_access_token: checkoutTestToken || undefined, company_website: companyWebsite,
+      }
+      const requestKey = await getFormRequestKey('checkout', { ...payload, packagePrice })
       const res = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          package_type: packageType,
-          couple_display_name: coupleName.trim(),
-          slug: slug.trim() || undefined,
-          customer_email: email.trim(),
-          design_family: DESIGNS[selectedDesign] ? selectedDesign : 'diana',
-          test_access_token: checkoutTestToken || undefined,
-        }),
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...payload, request_key: requestKey }),
       })
 
       const data = await res.json()
@@ -62,14 +66,15 @@ export default function CheckoutModal({ packageName, packageType, packagePrice, 
     } catch {
       setError('Nastala chyba. Skúste prosím znova.')
     } finally {
+      submitLock.current = false
       setLoading(false)
     }
   }
 
   return (
-    <div style={overlayStyle} onClick={onClose}>
+    <div style={overlayStyle} onClick={() => { if (!submitLock.current) onClose() }}>
       <div style={modalStyle} onClick={(e) => e.stopPropagation()}>
-        <button style={closeButtonStyle} onClick={onClose} aria-label="Zavrieť">
+        <button style={closeButtonStyle} onClick={onClose} disabled={loading} aria-label="Zavrieť">
           &#x2715;
         </button>
 
@@ -84,11 +89,14 @@ export default function CheckoutModal({ packageName, packageType, packagePrice, 
         <div style={modalDividerStyle} />
 
         <form onSubmit={handleSubmit} noValidate>
+          <FormHoneypot value={companyWebsite} onChange={setCompanyWebsite} />
           <div style={fieldGroupStyle}>
             <label style={labelStyle} htmlFor="yd-email">
               Váš e-mail
             </label>
             <input
+              disabled={loading}
+              maxLength={254}
               id="yd-email"
               type="email"
               required
@@ -105,6 +113,8 @@ export default function CheckoutModal({ packageName, packageType, packagePrice, 
               Mená páru
             </label>
             <input
+              disabled={loading}
+              maxLength={160}
               id="yd-couple"
               type="text"
               required
@@ -121,6 +131,8 @@ export default function CheckoutModal({ packageName, packageType, packagePrice, 
               <span style={optionalStyle}>(voliteľné)</span>
             </label>
             <input
+              disabled={loading}
+              maxLength={80}
               id="yd-slug"
               type="text"
               placeholder="napr. maria-tomas"

@@ -1,9 +1,10 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { createAccommodationEmailHandler } from '../lib/accommodationEmailApi.mjs'
+import { RequestProtectionError } from '../lib/requestProtection.mjs'
 
 const ID = '123e4567-e89b-42d3-a456-426614174000'
-function setup({ projectPatch = {}, guestPatch = {}, user = { id: 'owner-a', email: 'owner@example.invalid' }, storageError = null, senderError = null, statusError = null } = {}) {
+function setup({ projectPatch = {}, guestPatch = {}, user = { id: 'owner-a', email: 'owner@example.invalid' }, storageError = null, senderError = null, statusError = null, protectionError = null } = {}) {
   const deliveries = [], updates = []
   const project = { id: 'project-a', owner_user_id: 'owner-a', package_type: 'signature', payment_status: 'paid', project_status: 'active', client_email: 'reply@example.invalid', couple_display_name: 'Skúšobný pár', ...projectPatch }
   const guest = { id: ID, project_id: 'project-a', contact_email: 'guest@example.invalid', attending: 'yes', needs_accommodation: true, ...guestPatch }
@@ -27,13 +28,14 @@ function setup({ projectPatch = {}, guestPatch = {}, user = { id: 'owner-a', ema
   }
   const handler = createAccommodationEmailHandler({
     getSupabaseAdmin: () => db,
+    getProtection: () => ({ check: async () => { if (protectionError) throw protectionError }, limit: async () => {}, run: async (_intent, work) => work('test-email-idempotency') }),
     createAccommodationEmail: ({ subject, body }) => ({ subject, text: body, html: '<p>Test</p>' }),
     sendTransactionalEmail: async message => { if (senderError) throw senderError; deliveries.push(message); return { id: 'email-test' } },
   })
   function call(payload = {}, token = 'test') {
     return handler(new Request('https://example.invalid/api/accommodation-email', {
       method: 'POST', headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
-      body: JSON.stringify({ response_id: ID, subject: 'Ubytovanie', body: 'Informácie o pobyte.', ...payload }),
+      body: JSON.stringify({ response_id: ID, request_key: ID, subject: 'Ubytovanie', body: 'Informácie o pobyte.', ...payload }),
     }))
   }
   return { call, deliveries, updates }
@@ -80,9 +82,19 @@ test('eligible premium owner sends only to the stored guest address', async () =
     assert.equal(response.headers.get('Cache-Control'), 'no-store')
     assert.equal(deliveries[0].to, 'guest@example.invalid')
     assert.equal(deliveries[0].replyTo, 'reply@example.invalid')
+    assert.equal(deliveries[0].idempotencyKey, 'test-email-idempotency')
     assert.equal(updates.length, 1)
     assert.ok(updates[0].accommodation_email_sent_at)
   }
+})
+
+test('rate-limited email returns a wait time and never calls the sender', async () => {
+  const { call, deliveries, updates } = setup({ protectionError: new RequestProtectionError('Wait', 429, 30) })
+  const response = await call()
+  assert.equal(response.status, 429)
+  assert.equal(response.headers.get('Retry-After'), '30')
+  assert.equal(deliveries.length, 0)
+  assert.equal(updates.length, 0)
 })
 
 test('failed access verification never calls the sender', async () => {

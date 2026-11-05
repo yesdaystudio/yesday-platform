@@ -1,5 +1,7 @@
+import { getRequestProtection } from '../../../../lib/serverRequestProtection'
+import { createPersonalizedRsvpHandler } from '../../../../lib/rsvpApi.mjs'
 import { getSupabaseAdmin } from '../../../../lib/supabaseAdmin'
-import { normalizeInvitationToken, normalizePersonalizedRsvp } from '../../../../lib/personalizedInvitations.mjs'
+import { normalizeInvitationToken } from '../../../../lib/personalizedInvitations.mjs'
 import { isPublicWedding } from '../../../../lib/publicWedding.mjs'
 
 export const runtime = 'nodejs'
@@ -27,47 +29,7 @@ export async function GET(_request, { params }) {
   })
 }
 
-export async function POST(request, { params }) {
-  const token = normalizeInvitationToken((await params)?.token)
-  if (!token) return Response.json({ error: 'Neplatný odkaz na pozvánku.' }, { status: 400 })
-
-  let body
-  try {
-    body = await request.json()
-  } catch {
-    return Response.json({ error: 'Neplatné údaje RSVP.' }, { status: 400 })
-  }
-
-  const invitation = await loadInvitation(token)
-  if (!invitation) return Response.json({ error: 'Pozvánka sa nenašla.' }, { status: 404 })
-
-  const validation = normalizePersonalizedRsvp(body)
-  if (validation.error) return Response.json({ error: validation.error }, { status: 400 })
-
-  const supabaseAdmin = getSupabaseAdmin()
-  const payload = {
-    ...validation.value,
-    project_id: invitation.project_id,
-    invitation_recipient_id: invitation.id,
-  }
-  const { data: existing } = await supabaseAdmin
-    .from('rsvp_responses')
-    .select('id')
-    .eq('invitation_recipient_id', invitation.id)
-    .maybeSingle()
-
-  const query = existing?.id
-    ? supabaseAdmin.from('rsvp_responses').update(payload).eq('id', existing.id)
-    : supabaseAdmin.from('rsvp_responses').insert(payload)
-  const { error } = await query
-
-  if (error) {
-    console.error('[personalized-rsvp] Save failed', error)
-    return Response.json({ error: 'Odpoveď sa nepodarilo uložiť.' }, { status: 500 })
-  }
-
-  return Response.json({ saved: true, updated: Boolean(existing?.id) })
-}
+export const POST = createPersonalizedRsvpHandler({ getSupabaseAdmin, getProtection: getRequestProtection, loadInvitation })
 
 async function loadInvitation(token) {
   const supabaseAdmin = getSupabaseAdmin()

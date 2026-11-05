@@ -1,4 +1,5 @@
 import { runAccommodationReminders } from '../../../../lib/accommodation/reminders'
+import { getSupabaseAdmin } from '../../../../lib/supabaseAdmin'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -12,6 +13,8 @@ export async function GET(request) {
   }
 
   try {
+    const { error: cleanupError } = await getSupabaseAdmin().rpc('cleanup_request_protection')
+    if (cleanupError) console.error('[request-protection] Scheduled cleanup failed', cleanupError.code || 'unknown')
     const result = await runAccommodationReminders({
       now: new Date(),
       siteUrl: process.env.NEXT_PUBLIC_SITE_URL,
