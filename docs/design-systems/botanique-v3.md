@@ -32,3 +32,11 @@ Use case: stylized-concept. Asset type: transparent watercolor wash overlay for 
 Finálna korekcia podľa ďalšej pripomienky: jemnejšia mierka listov (hero 42/51 vw, tlačoviny 52/65 %), približne 70–74 % krytie listov a iba 16–23 % krytie akvarelu. Viac bieleho priestoru. Dekoratívne vrstvy tlačovín sú v izolovanom pozadí, aby neprekrývali text ani biele ochranné okolie QR.
 
 Posledná pripomienka: odstránený rozpíjaný akvarelový podklad označený ako lišajník zo všetkých použití (hero, tlačoviny, homepage náhľad). Zostávajú zjemnené celé listové vetvičky na bielom. Generovaný súbor zostáva historický, produkt ho nepoužíva.
+
+## Oprava interpretácie pripomienky
+
+Používateľka označením „lišajník“ myslela jemné rozkonárené výplňové vetvičky medzi listami vľavo hore, nie akvarelový podklad. Podklad sa vracia s rovnakým jemným krytím ako v schválenej zjemnenej verzii. Horná ilustrácia sa čistí vstavaným imagegen do nového `foliage-top-clean-v5.png`; široké olivové a okrúhle eukalyptové listy zostávajú. Dolný pravý prvok sa nemení.
+
+Edit prompt:
+
+Edit this existing transparent watercolor foliage asset precisely. Remove ALL pale feathery fern/lichen/moss-like filler sprigs, the tiny intricate branched fronds interspersed between the leaves. Keep ONLY the broad pointed olive leaves and round eucalyptus leaves with their connecting stems and sparse pigment dots. Preserve the exact overall upper-left cascading silhouette, placement, scale, watercolor rendering, sage/olive palette and all main leaves as closely as possible. Replace removed filler with clean transparency, do not add anything, no flowers, no new foliage, no background. Maintain actual transparent alpha background and original portrait canvas. This is a cleanup of lichen-like filler, not a redesign.

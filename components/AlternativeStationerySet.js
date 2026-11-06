@@ -11,7 +11,7 @@ import { getDesignCustomization } from "../lib/designCustomization"
 export const ALTERNATIVE_STATIONERY_CONFIG = {
   riviera: { name: "Riviera", ink: "#254f78", accent: "#b59843", paper: "#faf7ee", ornament: "/templates/riviera/lemon-branch.png" },
   veno: { name: "Veno", ink: "#71343f", accent: "#927950", paper: "#f5f0e6", ornament: "/templates/veno/embroidery.svg" },
-  botanique: { name: "Botanique", ink: "#26362b", accent: "#75836b", paper: "#ffffff", ornament: "/templates/botanique/foliage-top-v3.png" },
+  botanique: { name: "Botanique", ink: "#26362b", accent: "#75836b", paper: "#ffffff", ornament: "/templates/botanique/foliage-top-clean-v5.png" },
   penelope: { name: "Penelope", ink: "#5a3f45", accent: "#b7868f", paper: "#fbf3f1", ornament: "/templates/penelope/redesign/sweet-pea-top.webp" },
   fleurie: { name: "Fleurie", ink: "#6e444b", accent: "#c69699", paper: "#fbf3ee", ornament: "/templates/fleurie/floral-divider.png" },
   provence: { name: "Provence", ink: "#68546c", accent: "#a79bb7", paper: "#f3eee4", ornament: "/templates/provence/lavender-olive-stems.png" },
@@ -707,7 +707,8 @@ const provenceQrTextStyle = { maxWidth: "178px", marginTop: "14px", fontSize: "1
 function BotaniqueFoliage({ compact = false }) {
   const common = { position: "absolute", pointerEvents: "none", objectFit: "contain", zIndex: -1, opacity: .74 }
   return <>
-    <Image src="/templates/botanique/foliage-top-v3.png" alt="" width={1024} height={1536} unoptimized data-pdf-overlay-image="true" style={{ ...common, top: "2%", left: "2%", width: compact ? "42%" : "52%", height: compact ? "63%" : "70%", objectPosition: "left top" }} />
+    <Image src="/templates/botanique/watercolor-wash-v4.png" alt="" width={1024} height={1536} unoptimized data-pdf-overlay-image="true" style={{ ...common, inset: "3%", width: "94%", height: "94%", opacity: .23 }} />
+    <Image src="/templates/botanique/foliage-top-clean-v5.png" alt="" width={1024} height={1536} unoptimized data-pdf-overlay-image="true" style={{ ...common, top: "2%", left: "2%", width: compact ? "42%" : "52%", height: compact ? "63%" : "70%", objectPosition: "left top" }} />
     <Image src="/templates/botanique/foliage-bottom-v3.png" alt="" width={1296} height={1184} unoptimized data-pdf-overlay-image="true" style={{ ...common, right: "2%", bottom: "2%", width: compact ? "53%" : "65%", height: compact ? "63%" : "60%", objectPosition: "right bottom" }} />
   </>
 }

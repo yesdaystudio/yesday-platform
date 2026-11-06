@@ -2340,7 +2340,7 @@
   top: 2%; left: 1%; width: min(42vw, 660px);
   height: 80%; aspect-ratio: auto;
   opacity: .7;
-  background-image: url('/templates/botanique/foliage-top-v3.png');
+  background-image: url('/templates/botanique/foliage-top-clean-v5.png');
   background-position: left top;
   animation: none;
 }
@@ -2360,4 +2360,19 @@
   .signatureWedding--botanique .signatureWedding__heroCopy > p { font-size: 8px; letter-spacing: .23em; }
   .botaniqueHeroDecorations__branch--top { width: 57vw; height: 62%; left: 1%; top: 2%; }
   .botaniqueHeroDecorations__branch--bottom { width: 72vw; height: 56%; right: 1%; bottom: 2%; }
+}
+
+.botaniqueHeroDecorations__wash {
+  position: absolute;
+  width: min(74vw, 1100px);
+  height: 110%;
+  background: url('/templates/botanique/watercolor-wash-v4.png') center / contain no-repeat;
+  opacity: .23;
+}
+.botaniqueHeroDecorations__wash--top { top: -4%; left: -7%; }
+.botaniqueHeroDecorations__wash--bottom { bottom: -8%; right: -6%; transform: rotate(180deg); opacity: .16; }
+@media (max-width: 700px) {
+  .botaniqueHeroDecorations__wash { width: 110vw; height: 90%; }
+  .botaniqueHeroDecorations__wash--top { left: -18%; top: -2%; }
+  .botaniqueHeroDecorations__wash--bottom { right: -20%; bottom: -3%; }
 }
