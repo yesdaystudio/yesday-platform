@@ -2298,3 +2298,64 @@
   .signatureWedding--fleurie .signatureWedding__rsvp { padding-bottom: 132px; }
   .signatureWedding--fleurie .signatureWedding__rsvp::after { height: 138px; background-size: auto 138px; opacity: .2; }
 }
+
+/* Botanique: shared watercolor foliage with the printed invitation. */
+.signatureWedding--botanique .signatureWedding__hero {
+  background: #fff;
+  min-height: max(760px, 100svh);
+}
+.signatureWedding--botanique .signatureWedding__heroCopy {
+  position: relative;
+  top: auto;
+  left: auto;
+  transform: none;
+  width: min(64%, 700px);
+  padding: 120px 20px 100px;
+}
+.signatureWedding--botanique .signatureWedding__heroCopy h1 {
+  display: grid;
+  gap: 12px;
+  font-size: clamp(48px, 6.5vw, 100px);
+  line-height: 1.08;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
+.signatureWedding--botanique .signatureWedding__heroCopy h1 i {
+  font-size: .47em;
+  text-transform: none;
+  font-style: normal;
+}
+.signatureWedding--botanique .signatureWedding__heroCopy > p {
+  font-size: 10px;
+  letter-spacing: .3em;
+}
+.signatureWedding--botanique .signatureWedding__heroCopy strong {
+  font-size: 11px;
+  letter-spacing: .2em;
+  line-height: 1.8;
+}
+.signatureWedding--botanique .signatureWedding__heroSprig { display: none; }
+.botaniqueHeroDecorations__branch--top {
+  top: -10%; left: -11%; width: min(49vw, 740px);
+  height: 110%; aspect-ratio: auto;
+  background-image: url('/templates/botanique/foliage-top-v3.png');
+  background-position: left top;
+  animation: none;
+}
+.botaniqueHeroDecorations__branch--bottom {
+  right: -8%; bottom: -13%; width: min(51vw, 760px);
+  height: 90%; aspect-ratio: auto;
+  background-image: url('/templates/botanique/foliage-bottom-v3.png');
+  background-position: right bottom;
+  animation: none;
+}
+.botaniqueHeroDecorations__petal { display: none; }
+@media (max-width: 700px) {
+  .signatureWedding--botanique .signatureWedding__hero { min-height: max(740px, 100svh); }
+  .signatureWedding--botanique .signatureWedding__heroCopy { width: 78%; padding: 145px 10px 130px; }
+  .signatureWedding--botanique .signatureWedding__heroCopy h1 { font-size: clamp(36px, 11vw, 66px); gap: 14px; }
+  .signatureWedding--botanique .signatureWedding__heroCopy > p { font-size: 8px; letter-spacing: .23em; }
+  .botaniqueHeroDecorations__branch--top { width: 75vw; height: 70%; left: -35%; top: -8%; }
+  .botaniqueHeroDecorations__branch--bottom { width: 83vw; height: 62%; right: -32%; bottom: -8%; }
+}

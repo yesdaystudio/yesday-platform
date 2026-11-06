@@ -11,7 +11,7 @@ import { getDesignCustomization } from "../lib/designCustomization"
 export const ALTERNATIVE_STATIONERY_CONFIG = {
   riviera: { name: "Riviera", ink: "#254f78", accent: "#b59843", paper: "#faf7ee", ornament: "/templates/riviera/lemon-branch.png" },
   veno: { name: "Veno", ink: "#71343f", accent: "#927950", paper: "#f5f0e6", ornament: "/templates/veno/embroidery.svg" },
-  botanique: { name: "Botanique", ink: "#26362b", accent: "#75836b", paper: "#f2efe5", ornament: "/templates/botanique/olive-sprig.png" },
+  botanique: { name: "Botanique", ink: "#26362b", accent: "#75836b", paper: "#ffffff", ornament: "/templates/botanique/foliage-top-v3.png" },
   penelope: { name: "Penelope", ink: "#5a3f45", accent: "#b7868f", paper: "#fbf3f1", ornament: "/templates/penelope/redesign/sweet-pea-top.webp" },
   fleurie: { name: "Fleurie", ink: "#6e444b", accent: "#c69699", paper: "#fbf3ee", ornament: "/templates/fleurie/floral-divider.png" },
   provence: { name: "Provence", ink: "#68546c", accent: "#a79bb7", paper: "#f3eee4", ornament: "/templates/provence/lavender-olive-stems.png" },
@@ -264,6 +264,26 @@ const Invitation = forwardRef(function Invitation({ data, config, variant, invit
     )
   }
 
+  if (variant === "botanique") {
+    return (
+      <article ref={ref} style={{ ...cardStyle, background: "#fff", color: config.ink, fontFamily: config.fontFamily }} aria-label="Botanique pozvánka">
+        <BotaniqueFoliage />
+        <div style={botaniqueInvitationContentStyle}>
+          <p style={{ ...smallStyle, maxWidth: "180px", lineHeight: 1.9, color: config.accent }}>S radosťou vás pozývame<br />na našu svadbu</p>
+          <h3 style={{ ...botaniqueInvitationNamesStyle, fontFamily: config.fontFamily }}>
+            <span>{data.firstPartner}</span>
+            <i data-pdf-text-overlay="true" style={botaniqueInvitationJoinerStyle}>a</i>
+            <span>{data.secondPartner}</span>
+          </h3>
+          <p style={botaniqueInvitationDateStyle}>{data.displayDate}</p>
+          <span style={botaniqueFineRuleStyle} aria-hidden="true" />
+          <p style={botaniqueInvitationDetailsStyle}>{data.timeLine}<br />{data.ceremonyVenue}<br />{data.ceremonyCity}</p>
+          <p style={{ ...smallStyle, marginTop: "30px", maxWidth: "190px", lineHeight: 1.8, fontSize: "7px", color: config.accent }}>Tešíme sa, že náš deň<br />oslávite s nami</p>
+        </div>
+      </article>
+    )
+  }
+
   return (
     <article ref={ref} style={{ ...cardStyle, color: config.ink, background: config.paper, fontFamily: config.fontFamily }} aria-label={`${config.name} pozvánka`}>
       <div style={{ ...frameStyle, borderColor: config.accent }} />
@@ -344,8 +364,7 @@ export const AlternativeReceptionCardPrintTemplate = forwardRef(function Alterna
 
   return (
     <article ref={ref} style={{ ...receptionCardStyle, color: config.ink, background: config.paper, fontFamily: config.fontFamily }} aria-label="Botanique kartička k svadobnému stolu">
-      <span style={{ ...receptionFrameStyle, borderColor: config.accent }} aria-hidden="true" />
-      <Image src={config.ornament} alt="" width={180} height={180} unoptimized data-pdf-overlay-image="true" style={botaniqueReceptionOrnamentStyle} />
+      <BotaniqueFoliage compact />
       <div style={receptionContentStyle}>
         <p style={{ ...smallStyle, color: config.accent }}>Svadobná hostina</p>
         <p style={botaniqueReceptionTextStyle}>S radosťou Vás pozývame<br />k svadobnému stolu.</p>
@@ -453,9 +472,9 @@ export const AlternativeQrCardPrintTemplate = forwardRef(function AlternativeQrC
 
   return (
     <article ref={ref} style={{ ...qrCardStyle, color: config.ink, background: config.paper, fontFamily: config.fontFamily }} aria-label={`${config.name} QR kartička`}>
-      <Image src={config.ornament} alt="" width={90} height={90} unoptimized data-pdf-overlay-image="true" style={{ ...qrOrnamentStyle, ...(variant === "penelope" ? qrPenelopeOrnamentStyle : qrBotaniqueOrnamentStyle) }} />
+      <BotaniqueFoliage compact />
       <p style={{ ...smallStyle, color: config.accent }}>Všetko o našej svadbe</p>
-      <div style={{ ...qrNamePlateStyle, color: config.paper, background: config.ink }}><h3 style={qrNamesStyle}>{data.firstPartner} <i data-pdf-text-overlay="true" style={{ ...ampersandStyle, fontFamily: config.fontFamily }}>&amp;</i> {data.secondPartner}</h3></div>
+      <div style={{ ...qrNamePlateStyle, position: "relative", zIndex: 2, color: config.ink, background: "transparent" }}><h3 style={qrNamesStyle}>{data.firstPartner} <i data-pdf-text-overlay="true" style={{ ...ampersandStyle, fontFamily: config.fontFamily }}>&amp;</i> {data.secondPartner}</h3></div>
       {qrDataUrl ? <Image src={qrDataUrl} alt="QR kód svadobného webu" width={126} height={126} unoptimized data-pdf-required-image="true" style={qrImageStyle} /> : <div style={qrPlaceholderStyle}>QR</div>}
       <p style={{ ...qrTextStyle, ...(recipient ? personalizedQrTextStyle : {}) }}>
         {recipient ? <>{recipient.salutation || recipient.recipient_label},<br />všetky informácie o svadbe nájdete po naskenovaní QR kódu.</> : <>Naskenujte QR kód<br />a potvrďte svoju účasť.</>}
@@ -510,7 +529,7 @@ const ampersandStyle = { fontStyle: "italic", fontWeight: 400 }
 const invitationAmpersandStyle = { margin: "8px 0 9px", fontSize: ".56em", lineHeight: 1 }
 const dateStyle = { margin: 0, fontSize: "21px", textTransform: "capitalize" }
 const detailStyle = { margin: "16px 0 0", fontSize: "14px", lineHeight: 1.55 }
-const qrCardStyle = { ...cardStyle, width: "min(300px, 100%)", aspectRatio: "300 / 420", display: "grid", alignContent: "center", justifyItems: "center", padding: "28px", textAlign: "center" }
+const qrCardStyle = { ...cardStyle, isolation: "isolate", width: "min(300px, 100%)", aspectRatio: "300 / 420", display: "grid", alignContent: "center", justifyItems: "center", padding: "28px", textAlign: "center" }
 const qrOrnamentStyle = { position: "absolute", zIndex: 1, objectFit: "contain", pointerEvents: "none", opacity: .64 }
 const qrBotaniqueOrnamentStyle = { top: "10px", right: "12px", width: "74px", height: "50px" }
 const qrPenelopeOrnamentStyle = { top: "8px", right: "16px", width: "46px", height: "68px", transform: "rotate(8deg)" }
@@ -684,3 +703,17 @@ const provenceQrAmpersandStyle = { padding: "0 4px", fontFamily: "'Ms Madi',curs
 const provenceQrDividerStyle = { display: "block", width: "38px", height: "1px", margin: "13px 0 16px", opacity: .65 }
 const provenceQrImageFrameStyle = { padding: "7px", border: "1px solid rgba(104,84,108,.16)", background: "rgba(255,255,255,.94)", boxShadow: "0 10px 26px rgba(63,57,56,.06)" }
 const provenceQrTextStyle = { maxWidth: "178px", marginTop: "14px", fontSize: "12px", lineHeight: 1.4, textAlign: "left" }
+
+function BotaniqueFoliage({ compact = false }) {
+  const common = { position: "absolute", pointerEvents: "none", objectFit: "contain", zIndex: 0 }
+  return <>
+    <Image src="/templates/botanique/foliage-top-v3.png" alt="" width={1024} height={1536} unoptimized data-pdf-overlay-image="true" style={{ ...common, top: compact ? "-12%" : "-6%", left: compact ? "-21%" : "-20%", width: compact ? "56%" : "70%", height: compact ? "85%" : "82%", objectPosition: "left top" }} />
+    <Image src="/templates/botanique/foliage-bottom-v3.png" alt="" width={1024} height={1024} unoptimized data-pdf-overlay-image="true" style={{ ...common, right: "-8%", bottom: "-5%", width: compact ? "64%" : "83%", height: compact ? "75%" : "73%", objectPosition: "right bottom" }} />
+  </>
+}
+const botaniqueInvitationContentStyle = { position: "relative", zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "100%", padding: "65px 65px 50px", textAlign: "center" }
+const botaniqueInvitationNamesStyle = { display: "grid", justifyItems: "center", width: "100%", gap: "10px", margin: "35px 0 27px", fontSize: "clamp(25px, 4vw, 38px)", fontWeight: 400, lineHeight: 1.12, textTransform: "uppercase", overflowWrap: "anywhere" }
+const botaniqueInvitationJoinerStyle = { fontFamily: "'Great Vibes', cursive", fontSize: "29px", fontWeight: 400, fontStyle: "normal", textTransform: "none", lineHeight: 1.2 }
+const botaniqueInvitationDateStyle = { margin: 0, fontSize: "17px", letterSpacing: ".05em", lineHeight: 1.5 }
+const botaniqueFineRuleStyle = { width: "1px", height: "26px", background: "#a8b29d", margin: "17px 0" }
+const botaniqueInvitationDetailsStyle = { margin: 0, maxWidth: "210px", fontSize: "12px", lineHeight: 1.9, overflowWrap: "anywhere" }
