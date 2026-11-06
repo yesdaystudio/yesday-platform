@@ -2337,15 +2337,17 @@
 }
 .signatureWedding--botanique .signatureWedding__heroSprig { display: none; }
 .botaniqueHeroDecorations__branch--top {
-  top: -10%; left: -11%; width: min(49vw, 740px);
-  height: 110%; aspect-ratio: auto;
+  top: 2%; left: 1%; width: min(42vw, 660px);
+  height: 80%; aspect-ratio: auto;
+  opacity: .7;
   background-image: url('/templates/botanique/foliage-top-v3.png');
   background-position: left top;
   animation: none;
 }
 .botaniqueHeroDecorations__branch--bottom {
-  right: -8%; bottom: -13%; width: min(51vw, 760px);
-  height: 90%; aspect-ratio: auto;
+  right: 1%; bottom: 2%; width: min(51vw, 790px);
+  height: 79%; aspect-ratio: auto;
+  opacity: .7;
   background-image: url('/templates/botanique/foliage-bottom-v3.png');
   background-position: right bottom;
   animation: none;
@@ -2356,6 +2358,21 @@
   .signatureWedding--botanique .signatureWedding__heroCopy { width: 78%; padding: 145px 10px 130px; }
   .signatureWedding--botanique .signatureWedding__heroCopy h1 { font-size: clamp(36px, 11vw, 66px); gap: 14px; }
   .signatureWedding--botanique .signatureWedding__heroCopy > p { font-size: 8px; letter-spacing: .23em; }
-  .botaniqueHeroDecorations__branch--top { width: 75vw; height: 70%; left: -35%; top: -8%; }
-  .botaniqueHeroDecorations__branch--bottom { width: 83vw; height: 62%; right: -32%; bottom: -8%; }
+  .botaniqueHeroDecorations__branch--top { width: 57vw; height: 62%; left: 1%; top: 2%; }
+  .botaniqueHeroDecorations__branch--bottom { width: 72vw; height: 56%; right: 1%; bottom: 2%; }
+}
+
+.botaniqueHeroDecorations__wash {
+  position: absolute;
+  width: min(74vw, 1100px);
+  height: 110%;
+  background: url('/templates/botanique/watercolor-wash-v4.png') center / contain no-repeat;
+  opacity: .23;
+}
+.botaniqueHeroDecorations__wash--top { top: -4%; left: -7%; }
+.botaniqueHeroDecorations__wash--bottom { bottom: -8%; right: -6%; transform: rotate(180deg); opacity: .16; }
+@media (max-width: 700px) {
+  .botaniqueHeroDecorations__wash { width: 110vw; height: 90%; }
+  .botaniqueHeroDecorations__wash--top { left: -18%; top: -2%; }
+  .botaniqueHeroDecorations__wash--bottom { right: -20%; bottom: -3%; }
 }

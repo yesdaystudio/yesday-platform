@@ -266,7 +266,7 @@ const Invitation = forwardRef(function Invitation({ data, config, variant, invit
 
   if (variant === "botanique") {
     return (
-      <article ref={ref} style={{ ...cardStyle, background: "#fff", color: config.ink, fontFamily: config.fontFamily }} aria-label="Botanique pozvánka">
+      <article ref={ref} style={{ ...cardStyle, isolation: "isolate", background: "#fff", color: config.ink, fontFamily: config.fontFamily }} aria-label="Botanique pozvánka">
         <BotaniqueFoliage />
         <div style={botaniqueInvitationContentStyle}>
           <p style={{ ...smallStyle, maxWidth: "180px", lineHeight: 1.9, color: config.accent }}>S radosťou vás pozývame<br />na našu svadbu</p>
@@ -278,7 +278,7 @@ const Invitation = forwardRef(function Invitation({ data, config, variant, invit
           <p style={botaniqueInvitationDateStyle}>{data.displayDate}</p>
           <span style={botaniqueFineRuleStyle} aria-hidden="true" />
           <p style={botaniqueInvitationDetailsStyle}>{data.timeLine}<br />{data.ceremonyVenue}<br />{data.ceremonyCity}</p>
-          <p style={{ ...smallStyle, marginTop: "30px", maxWidth: "190px", lineHeight: 1.8, fontSize: "7px", color: config.accent }}>Tešíme sa, že náš deň<br />oslávite s nami</p>
+          <p style={{ ...smallStyle, marginTop: "18px", maxWidth: "190px", lineHeight: 1.8, fontSize: "7px", color: config.accent }}>Tešíme sa, že náš deň<br />oslávite s nami</p>
         </div>
       </article>
     )
@@ -363,7 +363,7 @@ export const AlternativeReceptionCardPrintTemplate = forwardRef(function Alterna
   }
 
   return (
-    <article ref={ref} style={{ ...receptionCardStyle, color: config.ink, background: config.paper, fontFamily: config.fontFamily }} aria-label="Botanique kartička k svadobnému stolu">
+    <article ref={ref} style={{ ...receptionCardStyle, isolation: "isolate", color: config.ink, background: config.paper, fontFamily: config.fontFamily }} aria-label="Botanique kartička k svadobnému stolu">
       <BotaniqueFoliage compact />
       <div style={receptionContentStyle}>
         <p style={{ ...smallStyle, color: config.accent }}>Svadobná hostina</p>
@@ -705,14 +705,15 @@ const provenceQrImageFrameStyle = { padding: "7px", border: "1px solid rgba(104,
 const provenceQrTextStyle = { maxWidth: "178px", marginTop: "14px", fontSize: "12px", lineHeight: 1.4, textAlign: "left" }
 
 function BotaniqueFoliage({ compact = false }) {
-  const common = { position: "absolute", pointerEvents: "none", objectFit: "contain", zIndex: 0 }
+  const common = { position: "absolute", pointerEvents: "none", objectFit: "contain", zIndex: -1, opacity: .74 }
   return <>
-    <Image src="/templates/botanique/foliage-top-v3.png" alt="" width={1024} height={1536} unoptimized data-pdf-overlay-image="true" style={{ ...common, top: compact ? "-12%" : "-6%", left: compact ? "-21%" : "-20%", width: compact ? "56%" : "70%", height: compact ? "85%" : "82%", objectPosition: "left top" }} />
-    <Image src="/templates/botanique/foliage-bottom-v3.png" alt="" width={1024} height={1024} unoptimized data-pdf-overlay-image="true" style={{ ...common, right: "-8%", bottom: "-5%", width: compact ? "64%" : "83%", height: compact ? "75%" : "73%", objectPosition: "right bottom" }} />
+    <Image src="/templates/botanique/watercolor-wash-v4.png" alt="" width={1024} height={1536} unoptimized data-pdf-overlay-image="true" style={{ ...common, inset: "3%", width: "94%", height: "94%", opacity: .23 }} />
+    <Image src="/templates/botanique/foliage-top-v3.png" alt="" width={1024} height={1536} unoptimized data-pdf-overlay-image="true" style={{ ...common, top: "2%", left: "2%", width: compact ? "42%" : "52%", height: compact ? "63%" : "70%", objectPosition: "left top" }} />
+    <Image src="/templates/botanique/foliage-bottom-v3.png" alt="" width={1296} height={1184} unoptimized data-pdf-overlay-image="true" style={{ ...common, right: "2%", bottom: "2%", width: compact ? "53%" : "65%", height: compact ? "63%" : "60%", objectPosition: "right bottom" }} />
   </>
 }
-const botaniqueInvitationContentStyle = { position: "relative", zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "100%", padding: "65px 65px 50px", textAlign: "center" }
-const botaniqueInvitationNamesStyle = { display: "grid", justifyItems: "center", width: "100%", gap: "10px", margin: "35px 0 27px", fontSize: "clamp(25px, 4vw, 38px)", fontWeight: 400, lineHeight: 1.12, textTransform: "uppercase", overflowWrap: "anywhere" }
+const botaniqueInvitationContentStyle = { position: "relative", zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "100%", padding: "102px 65px 78px", textAlign: "center" }
+const botaniqueInvitationNamesStyle = { display: "grid", justifyItems: "center", width: "100%", gap: "8px", margin: "24px 0 20px", fontSize: "clamp(25px, 4vw, 38px)", fontWeight: 400, lineHeight: 1.12, textTransform: "uppercase", overflowWrap: "anywhere" }
 const botaniqueInvitationJoinerStyle = { fontFamily: "'Great Vibes', cursive", fontSize: "29px", fontWeight: 400, fontStyle: "normal", textTransform: "none", lineHeight: 1.2 }
 const botaniqueInvitationDateStyle = { margin: 0, fontSize: "17px", letterSpacing: ".05em", lineHeight: 1.5 }
 const botaniqueFineRuleStyle = { width: "1px", height: "26px", background: "#a8b29d", margin: "17px 0" }

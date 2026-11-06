@@ -20,3 +20,13 @@ Production watercolor botanical corner illustration asset on transparent backgro
 ## Overenie
 
 Produkčný build. Lokálna vizuálna kontrola Safari: hero a zostava pozvánka/kartička/QR; texty aj motívy sa vykreslili. Fyzická tlač a finálna kontrola exportovaného PDF týmto nie sú potvrdené.
+
+## Revízia v4: celé listy a rozpité pozadie
+
+Na pripomienku používateľky zmenené umiestnenie ilustrácií na kladné vnútorné odsadenie s object-fit contain, bez záporného orezania. Výraznejšie listy na pozvánke, kartičke k stolu, QR aj hero a náhľade. Nový priesvitný akvarelový podklad `public/templates/botanique/watercolor-wash-v4.png`, vstavaný imagegen, spoločný pre tlačoviny a web. Pigmentové škvrny môžu pokračovať do okraja hero, listové vetvy sú celé v kompozícii.
+
+Prompt:
+
+Use case: stylized-concept. Asset type: transparent watercolor wash overlay for elegant botanical wedding stationery and matching website. Paint a large irregular pale sage green and soft olive watercolor wash, pigment dissolving in water into paper with feathery cauliflower blooms, wet-on-wet granulation, softly pooled edges, several tiny scattered olive pigment droplets outside. Asymmetric organic vertical composition, richly textured translucent pale green, more pigment toward upper left and lower right, almost clear central area for text. Actual transparent background with smoothly fading pigment alpha, no solid background, no rectangular edges, no leaves, no flowers, no text, no mockup, no shadows, not a digital smooth gradient. Delicate authentic scanned watercolor on white-friendly palette, wash must be visible yet pale enough behind dark text. All marks and splashes comfortably inside canvas with transparent margin on every side.
+
+Finálna korekcia podľa ďalšej pripomienky: jemnejšia mierka listov (hero 42/51 vw, tlačoviny 52/65 %), približne 70–74 % krytie listov a iba 16–23 % krytie akvarelu. Viac bieleho priestoru. Dekoratívne vrstvy tlačovín sú v izolovanom pozadí, aby neprekrývali text ani biele ochranné okolie QR.

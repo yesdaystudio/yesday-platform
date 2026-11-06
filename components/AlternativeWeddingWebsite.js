@@ -349,6 +349,8 @@ export default function AlternativeWeddingWebsite({
 function BotaniqueHeroDecorations() {
   return (
     <div className="botaniqueHeroDecorations" aria-hidden="true">
+      <span className="botaniqueHeroDecorations__wash botaniqueHeroDecorations__wash--top" />
+      <span className="botaniqueHeroDecorations__wash botaniqueHeroDecorations__wash--bottom" />
       <span className="botaniqueHeroDecorations__branch botaniqueHeroDecorations__branch--top" />
       <span className="botaniqueHeroDecorations__branch botaniqueHeroDecorations__branch--bottom" />
       <i className="botaniqueHeroDecorations__petal botaniqueHeroDecorations__petal--one" />
