@@ -707,7 +707,6 @@ const provenceQrTextStyle = { maxWidth: "178px", marginTop: "14px", fontSize: "1
 function BotaniqueFoliage({ compact = false }) {
   const common = { position: "absolute", pointerEvents: "none", objectFit: "contain", zIndex: -1, opacity: .74 }
   return <>
-    <Image src="/templates/botanique/watercolor-wash-v4.png" alt="" width={1024} height={1536} unoptimized data-pdf-overlay-image="true" style={{ ...common, inset: "3%", width: "94%", height: "94%", opacity: .23 }} />
     <Image src="/templates/botanique/foliage-top-v3.png" alt="" width={1024} height={1536} unoptimized data-pdf-overlay-image="true" style={{ ...common, top: "2%", left: "2%", width: compact ? "42%" : "52%", height: compact ? "63%" : "70%", objectPosition: "left top" }} />
     <Image src="/templates/botanique/foliage-bottom-v3.png" alt="" width={1296} height={1184} unoptimized data-pdf-overlay-image="true" style={{ ...common, right: "2%", bottom: "2%", width: compact ? "53%" : "65%", height: compact ? "63%" : "60%", objectPosition: "right bottom" }} />
   </>

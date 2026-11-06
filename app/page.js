@@ -157,7 +157,6 @@ const TEMPLATES = [
     previewEyebrow: 'Budeme sa brať',
     previewDate: '18. septembra 2027',
     previewDecorations: [
-      { image: '/templates/botanique/watercolor-wash-v4.png', placement: 'botaniqueWash' },
       { image: '/templates/botanique/foliage-bottom-v3.png', placement: 'botaniqueBottom' },
     ],
     href: '/ukazka?design=botanique',
@@ -925,7 +924,6 @@ const templateDecorationPlacements = {
   penelopeTop: { top: '-25%', right: '-14%', width: '68%', aspectRatio: '1400 / 933' },
   penelopeBottom: { bottom: '-22%', left: '-4%', width: '42%', aspectRatio: '760 / 643' },
   botaniqueTop: { top: '-8%', left: '-8%', width: '66%', aspectRatio: '860 / 620' },
-  botaniqueWash: { inset: '3%', opacity: .23, backgroundSize: '100% 100%' },
   botaniqueBottom: { right: '2%', bottom: '2%', opacity: .74, width: '58%', aspectRatio: '1296 / 1184' },
   chloeLeft: { bottom: '-22%', left: '-8%', width: '37%', aspectRatio: '450 / 600', backgroundPosition: 'bottom left' },
   chloeRight: { right: '-5%', bottom: '-20%', width: '36%', aspectRatio: '450 / 600', backgroundPosition: 'bottom right' },
