@@ -182,8 +182,8 @@ function HowItWorks() {
         <HowItWorksVisual />
 
         <p className={serifClassName} style={systemClosingStyle}>
-          Miesto ďalšej správy „Kde to je a o koľkej?“ pošlete jeden odkaz.
-          A čas pred svadbou zostane aj vám.
+          Hosťom pošlete pozvánku s QR kartičkou. Naskenujú kód a všetky dôležité
+          informácie si nájdu sami na vašom svadobnom webe.
         </p>
 
       </div>
