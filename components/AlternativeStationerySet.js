@@ -364,7 +364,7 @@ export const AlternativeReceptionCardPrintTemplate = forwardRef(function Alterna
 
   return (
     <article ref={ref} style={{ ...receptionCardStyle, isolation: "isolate", color: config.ink, background: config.paper, fontFamily: config.fontFamily }} aria-label="Botanique kartička k svadobnému stolu">
-      <BotaniqueFoliage compact />
+      <BotaniqueFoliage compact decoration="bottom" />
       <div style={receptionContentStyle}>
         <p style={{ ...smallStyle, color: config.accent }}>Svadobná hostina</p>
         <p style={botaniqueReceptionTextStyle}>S radosťou Vás pozývame<br />k svadobnému stolu.</p>
@@ -472,7 +472,7 @@ export const AlternativeQrCardPrintTemplate = forwardRef(function AlternativeQrC
 
   return (
     <article ref={ref} style={{ ...qrCardStyle, color: config.ink, background: config.paper, fontFamily: config.fontFamily }} aria-label={`${config.name} QR kartička`}>
-      <BotaniqueFoliage compact />
+      <BotaniqueFoliage compact decoration="flower" />
       <p style={{ ...smallStyle, color: config.accent }}>Všetko o našej svadbe</p>
       <div style={{ ...qrNamePlateStyle, position: "relative", zIndex: 2, color: config.ink, background: "transparent" }}><h3 style={qrNamesStyle}>{data.firstPartner} <i data-pdf-text-overlay="true" style={{ ...ampersandStyle, fontFamily: config.fontFamily }}>&amp;</i> {data.secondPartner}</h3></div>
       {qrDataUrl ? <Image src={qrDataUrl} alt="QR kód svadobného webu" width={126} height={126} unoptimized data-pdf-required-image="true" style={qrImageStyle} /> : <div style={qrPlaceholderStyle}>QR</div>}
@@ -704,12 +704,13 @@ const provenceQrDividerStyle = { display: "block", width: "38px", height: "1px",
 const provenceQrImageFrameStyle = { padding: "7px", border: "1px solid rgba(104,84,108,.16)", background: "rgba(255,255,255,.94)", boxShadow: "0 10px 26px rgba(63,57,56,.06)" }
 const provenceQrTextStyle = { maxWidth: "178px", marginTop: "14px", fontSize: "12px", lineHeight: 1.4, textAlign: "left" }
 
-function BotaniqueFoliage({ compact = false }) {
+function BotaniqueFoliage({ compact = false, decoration = "both" }) {
   const common = { position: "absolute", pointerEvents: "none", objectFit: "contain", zIndex: -1, opacity: .74 }
   return <>
     <Image src="/templates/botanique/watercolor-wash-v4.png" alt="" width={1024} height={1536} unoptimized data-pdf-overlay-image="true" style={{ ...common, inset: "3%", width: "94%", height: "94%", opacity: .23 }} />
-    <Image src="/templates/botanique/foliage-top-clean-v5.png" alt="" width={1024} height={1536} unoptimized data-pdf-overlay-image="true" style={{ ...common, top: "2%", left: "2%", width: compact ? "42%" : "52%", height: compact ? "63%" : "70%", objectPosition: "left top" }} />
-    <Image src="/templates/botanique/foliage-bottom-v3.png" alt="" width={1296} height={1184} unoptimized data-pdf-overlay-image="true" style={{ ...common, right: "2%", bottom: "2%", width: compact ? "53%" : "65%", height: compact ? "63%" : "60%", objectPosition: "right bottom" }} />
+    {decoration === "both" ? <Image src="/templates/botanique/foliage-top-clean-v5.png" alt="" width={1024} height={1536} unoptimized data-pdf-overlay-image="true" style={{ ...common, top: "2%", left: "2%", width: compact ? "42%" : "52%", height: compact ? "63%" : "70%", objectPosition: "left top" }} /> : null}
+    {decoration !== "flower" ? <Image src="/templates/botanique/foliage-bottom-v3.png" alt="" width={1296} height={1184} unoptimized data-pdf-overlay-image="true" style={{ ...common, right: "2%", bottom: "2%", width: compact ? "53%" : "65%", height: compact ? "63%" : "60%", objectPosition: "right bottom" }} /> : null}
+    {decoration === "flower" ? <Image src="/templates/botanique/green-flower-v6.png" alt="" width={1024} height={1024} unoptimized data-pdf-overlay-image="true" style={{ ...common, top: "12px", left: "10px", width: "70px", height: "85px", opacity: .9 }} /> : null}
   </>
 }
 const botaniqueInvitationContentStyle = { position: "relative", zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "100%", padding: "102px 65px 78px", textAlign: "center" }

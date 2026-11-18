@@ -40,3 +40,11 @@ Používateľka označením „lišajník“ myslela jemné rozkonárené výpl�
 Edit prompt:
 
 Edit this existing transparent watercolor foliage asset precisely. Remove ALL pale feathery fern/lichen/moss-like filler sprigs, the tiny intricate branched fronds interspersed between the leaves. Keep ONLY the broad pointed olive leaves and round eucalyptus leaves with their connecting stems and sparse pigment dots. Preserve the exact overall upper-left cascading silhouette, placement, scale, watercolor rendering, sage/olive palette and all main leaves as closely as possible. Replace removed filler with clean transparency, do not add anything, no flowers, no new foliage, no background. Maintain actual transparent alpha background and original portrait canvas. This is a cleanup of lichen-like filler, not a redesign.
+
+## Kartičky — 18. 11. 2026
+
+Pozvánka a hero bez zmeny. Kartička k stolu má iba pravú dolnú vetvičku. QR kartička má namiesto oboch vetiev jeden malý zelený akvarelový kvet vľavo hore. Podklad, poloha, rozmery a krytie akvarelu sú nezmenené. Nový asset `public/templates/botanique/green-flower-v6.png`, vytvorený vstavaným imagegen s transparentným pozadím.
+
+Prompt:
+
+A single delicate sage-green hellebore flower, elegant hand-painted botanical watercolor for a minimalist wedding QR card. One open softly cupped flower with five pale green petals and tiny muted olive stamens, short fine curved stem and only one small leaf. Sophisticated natural botanical art, translucent watercolor pigment with paper-like granulation, gentle sage and olive tones matching watercolor eucalyptus wedding stationery. Compact balanced composition, flower facing slightly upward, all parts fully visible with generous transparent margin. Actual transparent background. No bouquet, no surrounding branches, no fern, no lichen, no moss, no wash background, no text, no border, no shadow, no cartoon, no photography.
