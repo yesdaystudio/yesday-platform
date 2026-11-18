@@ -48,3 +48,5 @@ Pozvánka a hero bez zmeny. Kartička k stolu má iba pravú dolnú vetvičku. Q
 Prompt:
 
 A single delicate sage-green hellebore flower, elegant hand-painted botanical watercolor for a minimalist wedding QR card. One open softly cupped flower with five pale green petals and tiny muted olive stamens, short fine curved stem and only one small leaf. Sophisticated natural botanical art, translucent watercolor pigment with paper-like granulation, gentle sage and olive tones matching watercolor eucalyptus wedding stationery. Compact balanced composition, flower facing slightly upward, all parts fully visible with generous transparent margin. Actual transparent background. No bouquet, no surrounding branches, no fern, no lichen, no moss, no wash background, no text, no border, no shadow, no cartoon, no photography.
+
+Následná pripomienka 18. 11. 2026: z QR kartičky odstránený aj zelený kvietok. Zostáva iba pôvodný akvarelový podklad, text a QR kód. Kartička k stolu a pozvánka bez ďalšej zmeny.

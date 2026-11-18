@@ -472,7 +472,7 @@ export const AlternativeQrCardPrintTemplate = forwardRef(function AlternativeQrC
 
   return (
     <article ref={ref} style={{ ...qrCardStyle, color: config.ink, background: config.paper, fontFamily: config.fontFamily }} aria-label={`${config.name} QR kartička`}>
-      <BotaniqueFoliage compact decoration="flower" />
+      <BotaniqueFoliage compact decoration="none" />
       <p style={{ ...smallStyle, color: config.accent }}>Všetko o našej svadbe</p>
       <div style={{ ...qrNamePlateStyle, position: "relative", zIndex: 2, color: config.ink, background: "transparent" }}><h3 style={qrNamesStyle}>{data.firstPartner} <i data-pdf-text-overlay="true" style={{ ...ampersandStyle, fontFamily: config.fontFamily }}>&amp;</i> {data.secondPartner}</h3></div>
       {qrDataUrl ? <Image src={qrDataUrl} alt="QR kód svadobného webu" width={126} height={126} unoptimized data-pdf-required-image="true" style={qrImageStyle} /> : <div style={qrPlaceholderStyle}>QR</div>}
@@ -709,8 +709,7 @@ function BotaniqueFoliage({ compact = false, decoration = "both" }) {
   return <>
     <Image src="/templates/botanique/watercolor-wash-v4.png" alt="" width={1024} height={1536} unoptimized data-pdf-overlay-image="true" style={{ ...common, inset: "3%", width: "94%", height: "94%", opacity: .23 }} />
     {decoration === "both" ? <Image src="/templates/botanique/foliage-top-clean-v5.png" alt="" width={1024} height={1536} unoptimized data-pdf-overlay-image="true" style={{ ...common, top: "2%", left: "2%", width: compact ? "42%" : "52%", height: compact ? "63%" : "70%", objectPosition: "left top" }} /> : null}
-    {decoration !== "flower" ? <Image src="/templates/botanique/foliage-bottom-v3.png" alt="" width={1296} height={1184} unoptimized data-pdf-overlay-image="true" style={{ ...common, right: "2%", bottom: "2%", width: compact ? "53%" : "65%", height: compact ? "63%" : "60%", objectPosition: "right bottom" }} /> : null}
-    {decoration === "flower" ? <Image src="/templates/botanique/green-flower-v6.png" alt="" width={1024} height={1024} unoptimized data-pdf-overlay-image="true" style={{ ...common, top: "12px", left: "10px", width: "70px", height: "85px", opacity: .9 }} /> : null}
+    {decoration === "both" || decoration === "bottom" ? <Image src="/templates/botanique/foliage-bottom-v3.png" alt="" width={1296} height={1184} unoptimized data-pdf-overlay-image="true" style={{ ...common, right: "2%", bottom: "2%", width: compact ? "53%" : "65%", height: compact ? "63%" : "60%", objectPosition: "right bottom" }} /> : null}
   </>
 }
 const botaniqueInvitationContentStyle = { position: "relative", zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "100%", padding: "102px 65px 78px", textAlign: "center" }
