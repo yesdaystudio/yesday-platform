@@ -2,39 +2,19 @@ import Link from 'next/link'
 import PricingSection from './components/PricingSection'
 import HowItWorksVisual from '../components/HowItWorksVisual'
 import DashboardShowcase from '../components/DashboardShowcase'
+import HomeNavigation from '../components/HomeNavigation'
+import TemplateGallery from '../components/TemplateGallery'
+import styles from '../components/HomeMarketing.module.css'
 import { getWeddingHeroFonts } from '../lib/designCustomization'
 
 const serifClassName = 'font-playfair-display'
 const sansClassName = 'font-montserrat'
 
-const BENEFITS = [
-  {
-    title: 'Všetko spolu ladí',
-    description:
-      'Svadobný web, pozvánka aj QR kartička vzniknú v jednom štýle, prispôsobenom vašej svadbe.',
-  },
-  {
-    title: 'Hostia majú jasno',
-    description:
-      'Program, miesta, mapy, ubytovanie aj RSVP nájdu jednoducho na vašom svadobnom webe.',
-  },
-  {
-    title: 'Bez ručného prepisovania',
-    description:
-      'Účasť, deti, jedlá, alergie, doprava a ubytovanie sa z RSVP automaticky uložia do prehľadu.',
-  },
-  {
-    title: 'Ubytovanie vyriešite ľahko',
-    description:
-      'Priradíte hotel a izbu a hosťovi jedným klikom odošlete pripravený e-mail so všetkými informáciami.',
-  },
-]
-
 const TEMPLATES = [
   {
     name: 'Diana',
     description:
-      'Luxury editorial, old money Italy, black tie elegance and timeless villa atmosphere.',
+      'Nadčasová elegancia s atmosférou talianskej vily a slávnostnej svadby.',
     previewImage: '/templates/diana/diana-hero-bg.png',
     previewCouple: ['Diana', 'Anton'],
     previewCoupleStyle: 'diana',
@@ -44,7 +24,7 @@ const TEMPLATES = [
   {
     name: 'Lavande',
     description:
-      'Maľovaná levanduľová šablóna s olivovníkom, jemným pohybom vo vetre a vzdušnou francúzskou romantikou.',
+      'Levanduľa, olivy a vzdušná francúzska romantika.',
     preview: '#fbf8f1',
     previewImage: '/templates/lavande/hero-rear-watercolor.png',
     previewBackgroundPosition: 'center bottom',
@@ -60,7 +40,7 @@ const TEMPLATES = [
   },
   {
     name: 'Riviera',
-    description: 'Modrobiele more maľované olejom, slnečné citróny a ručne pôsobiaca prímorská keramika.',
+    description: 'Maľované more a citróny pre svadbu s letnou ľahkosťou.',
     preview: '#f8f5eb',
     previewImage: '/templates/riviera/sea-oil-painting.webp',
     previewBackgroundPosition: 'center',
@@ -74,7 +54,7 @@ const TEMPLATES = [
   {
     name: 'Chloe',
     description:
-      'Jemný akvarelový dizajn s gypsomilkou, papierovou textúrou a vzdušnou zelenomodrou paletou.',
+      'Jemná gypsomilka a akvarel v zelenomodrých tónoch.',
     previewImage: '/templates/chloe/watercolor.png',
     previewCouple: ['Nina', 'Matej'],
     previewCoupleStyle: 'chloe',
@@ -88,7 +68,7 @@ const TEMPLATES = [
   {
     name: 'Fleurie',
     description:
-      'Romantická lúčna šablóna s ručne maľovanými kvetmi, francúzskou ľahkosťou a teplou púdrovou paletou.',
+      'Lúčne kvety a teplé púdrové tóny pre romantický deň.',
     preview: '#fbf3ee',
     previewImage: '/templates/fleurie/hero-paper-texture.jpg',
     previewBackgroundPosition: 'center',
@@ -104,7 +84,7 @@ const TEMPLATES = [
   },
   {
     name: 'Veno',
-    description: 'Súčasná ľudová romantika s autorskou výšivkou, jemnou čipkou a teplým ľanovým podkladom.',
+    description: 'Ľudová romantika s výšivkou, čipkou a jemným ľanom.',
     preview: '#f5f0e6',
     previewImage: '/templates/veno/embroidery.svg',
     previewBackgroundPosition: 'right -35px center',
@@ -118,7 +98,7 @@ const TEMPLATES = [
   {
     name: 'Penelope',
     description:
-      'Romantic floral design family inspired by softness, femininity and fairytale wedding atmosphere.',
+      'Romantické kvety, jemný akvarel a atmosféra rozprávkovej svadby.',
     previewImage: '/templates/penelope/redesign/hero-watercolor.webp',
     previewCouple: ['Sofia', 'Samuel'],
     previewCoupleStyle: 'penelope',
@@ -133,7 +113,7 @@ const TEMPLATES = [
   {
     name: 'Provence',
     description:
-      'Pokojná provensálska šablóna s levanduľou, prírodným ľanom, kameňom a francúzskym editorial rukopisom.',
+      'Levanduľová záhrada a prírodný ľan v pokojnom francúzskom štýle.',
     preview: '#f3eee4',
     previewImage: '/templates/provence/hero-lavender-garden.jpg',
     previewBackgroundPosition: '72% center',
@@ -147,7 +127,7 @@ const TEMPLATES = [
   {
     name: 'Botanique',
     description:
-      'Vzdušná biela pozvánka a web s akvarelovými listami v šalviových a olivových odtieňoch.',
+      'Jemná zeleň a akvarelové detaily s atmosférou romantickej záhrady.',
     preview: '#ffffff',
     previewImage: '/templates/botanique/foliage-top-clean-v5.png',
     previewBackgroundSize: 'auto 78%',
@@ -168,16 +148,18 @@ const TEMPLATES = [
 
 export default function HomePage() {
   return (
-    <main className={sansClassName} style={pageStyle}>
-      <Nav />
+    <main className={`${sansClassName} ${styles.page}`} style={pageStyle}>
+      <HomeNavigation />
       <Hero />
       <HowItWorks />
       <Templates />
       <section style={systemSectionStyle} aria-label="Ukážka klientskej zóny">
         <div style={systemInnerStyle}><DashboardShowcase /></div>
       </section>
-      <Benefits />
       <PricingSection />
+      <PersonalPanel />
+      <Questions />
+      <FinalInvitation />
       <Contact />
       <Footer />
     </main>
@@ -193,16 +175,15 @@ function HowItWorks() {
           Od pozvánky až po odpovede hostí
         </h2>
         <p style={systemIntroStyle}>
-          Hostia naskenujú QR kód na pozvánke, otvoria si váš svadobný web a
-          potvrdia účasť. Vy máte odpovede, stravu, dopravu aj ubytovanie
-          prehľadne na jednom mieste.
+          Pozvánka pozve. YesDay pomáha aj potom: hosťom vysvetlí kde a kedy,
+          zozbiera potvrdenia účasti a vám ukáže, kto príde a aké jedlo si vybral.
         </p>
 
         <HowItWorksVisual />
 
         <p className={serifClassName} style={systemClosingStyle}>
-          Menej zisťovania, prepisovania a odpovedania na rovnaké otázky.
-          Viac pokoja, istoty a času tešiť sa na váš deň.
+          Miesto ďalšej správy „Kde to je a o koľkej?“ pošlete jeden odkaz.
+          A čas pred svadbou zostane aj vám.
         </p>
 
       </div>
@@ -210,30 +191,9 @@ function HowItWorks() {
   )
 }
 
-function Nav() {
-  return (
-    <header style={navStyle}>
-      <nav style={navInnerStyle}>
-        <Link href="#portfolio" style={navLinkStyle}>
-          Šablóny
-        </Link>
-        <Link href="#cennik" style={navLinkStyle}>
-          Ponuka
-        </Link>
-        <Link href="#kontakt" style={navLinkStyle}>
-          Kontakty
-        </Link>
-        <Link href="/login" style={navLinkStyle}>
-          Klientska zóna
-        </Link>
-      </nav>
-    </header>
-  )
-}
-
 function Hero() {
   return (
-    <section style={heroStyle}>
+    <section className={styles.hero} style={heroStyle}>
       <div style={heroInnerStyle}>
         <div style={heroBrandStyle}>
           <p className={serifClassName} style={heroLogoStyle}>
@@ -242,55 +202,32 @@ function Hero() {
           <p style={heroSubBrandStyle}>STUDIO</p>
         </div>
 
-        <p style={heroEyebrowStyle}>Digitálne svadobné riešenia na mieru v zladenom štýle</p>
+        <p style={heroEyebrowStyle}>Váš digitálny svadobný pomocník</p>
 
         <h1 className={serifClassName} style={heroHeadingStyle}>
-          Váš svadobný web a pozvánky v jednom štýle.
+          Menej správ hosťom. Viac pokoja pred svadbou.
         </h1>
 
         <div style={heroDividerStyle} />
 
         <p style={heroLeadStyle}>
-          Vyberte si dizajn pre váš deň. Pozvánky, web aj odpovede hostí budú krásne ladiť.
+          Pozvánky, potvrdenia účasti aj všetky informácie pre hostí na jednom mieste. Bez nekonečných správ a tabuliek.
         </p>
 
-        <div style={heroActionsStyle}>
+        <div className={styles.heroActions} style={heroActionsStyle}>
           <Link href="#portfolio" style={heroPrimaryButtonStyle}>
-            Vybrať svadobný dizajn ↓
+            Vybrať náš svadobný štýl ↓
           </Link>
           <Link href="/ukazka" style={heroSecondaryButtonStyle}>
-            Vyskúšať s vlastnými údajmi
+            Vyskúšať YesDay zadarmo
           </Link>
         </div>
-      </div>
-    </section>
-  )
-}
-
-function Benefits() {
-  return (
-    <section style={sectionStyle}>
-      <div style={sectionHeadingBlockStyle}>
-        <p style={sectionLabelStyle}>Prečo YesDay</p>
-        <h2 className={serifClassName} style={benefitsHeadingStyle}>
-          Krásny zážitok pre hostí. Menej starostí pre vás.
-        </h2>
-        <p style={sectionIntroStyle}>
-          Získate zladený svadobný web, pozvánku a QR kartičku spolu s RSVP,
-          prehľadom hostí a ubytovaním. Jeden systém, ktorý dobre vyzerá a zároveň
-          vám reálne šetrí čas.
-        </p>
-      </div>
-
-      <div style={benefitsGridStyle}>
-        {BENEFITS.map((benefit) => (
-          <article key={benefit.title} style={benefitCardStyle}>
-            <h3 className={serifClassName} style={benefitTitleStyle}>
-              {benefit.title}
-            </h3>
-            <p style={benefitDescriptionStyle}>{benefit.description}</p>
-          </article>
-        ))}
+        <p className={styles.trustLine}><span>Ukážka bez registrácie a bez platby</span><span>Balíky od 129 €</span></p>
+        <div className={styles.heroProof} aria-label="Čo YesDay vyrieši">
+          <div><strong>Hostia majú jasno</strong><span>Miesta, program a informácie na jednom odkaze.</span></div>
+          <div><strong>Vy máte odpovede</strong><span>Účasť a výber jedla bez prepisovania.</span></div>
+          <div><strong>Všetko spolu ladí</strong><span>Pozvánka, web aj QR kartička vo vašom štýle.</span></div>
+        </div>
       </div>
     </section>
   )
@@ -306,7 +243,7 @@ function Templates() {
         Deväť dizajnových rodín. V každej zladený svadobný web, pozvánky a QR kartičky.
       </p>
 
-      <div style={templatesGridStyle}>
+      <TemplateGallery count={TEMPLATES.length}>
         {TEMPLATES.map((template) => (
           <article key={template.name} style={templateCardStyle}>
             <div
@@ -360,20 +297,21 @@ function Templates() {
             <h3 className={serifClassName} style={templateNameStyle}>
               {template.name}
             </h3>
-            <p style={templateToneStyle}>{template.description}</p>
+            <p className={styles.templateDescription} style={templateToneStyle}>{template.description}</p>
 
             <div style={templateActionStyle}>
               {template.href ? (
                 <Link href={getTemplateDemoHref(template)} style={templateLinkStyle}>
-                  Vyskúšať web, pozvánku aj dashboard
+                  Vyskúšať šablónu zadarmo
                 </Link>
               ) : (
                 <span style={templateComingSoonStyle}>Pripravujeme</span>
               )}
+              <p className={styles.templateNote}>Web, pozvánka aj klientska zóna.<br />Bez registrácie a bez platby.</p>
             </div>
           </article>
         ))}
-      </div>
+      </TemplateGallery>
     </section>
   )
 }
@@ -388,6 +326,43 @@ function getTemplateDemoHref(template) {
   return `${path}?${params}`
 }
 
+
+function PersonalPanel() {
+  return <section id="o-yesday" className={`${styles.section} ${styles.personal}`}>
+    <div className={styles.personalQuote}>
+      <p className={styles.eyebrow}>Za YesDay stojí skutočný svadobný príbeh</p>
+      <blockquote>„Vydávala som sa ako mama dvoch detí. Viem, aké náročné je popri prípravách odpisovať na desiatky správ.“</blockquote>
+      <p className={styles.copy}><strong>Som Diana, autorka YesDay.</strong> Vytvorila som ho, aby ďalším párom zostalo viac času na svadobné prípravy, rodinu a na seba. Menej hľadania v správach, viac pokoja pred vaším dňom.</p>
+      <a href="mailto:info.yesdaystudio@gmail.com">Napíšte mi →</a>
+    </div>
+    <div>
+      <p className={styles.eyebrow}>Čo dostanete a kto vám pomôže</p>
+      <h2 className={styles.heading}>Krásny výsledok.<br />Aj pomoc, keď ju potrebujete.</h2>
+      <ol className={styles.steps}>
+        <li><div><strong>Prístup do vašej klientskej zóny</strong>Po potvrdení platby dostanete e-mail s prístupom k vlastnému projektu a zvolenému dizajnu.</div></li>
+        <li><div><strong>Váš obsah, vaše svadobné detaily</strong>V editore doplníte mená, miesta, program a texty. Získate web, pozvánku a QR kartičku na stiahnutie. Tlač si zabezpečíte podľa seba.</div></li>
+        <li><div><strong>Odpovede hostí na jednom mieste</strong>Zdieľate web alebo QR kód. Potvrdenia účasti a výber jedla sa zobrazia v prehľade; Signature a Atelier pridajú aj ubytovanie a dopravu.</div></li>
+      </ol>
+      <p className={styles.copy}>Neviete sa prihlásiť alebo si poradiť s editorom? Napíšte na <a href="mailto:info.yesdaystudio@gmail.com">info.yesdaystudio@gmail.com</a>. Pomoc s používaním je v Essential aj Signature. Ak chcete osobnú tvorbu textov a dizajnu, dohodneme ju v Atelieri.</p>
+    </div>
+  </section>
+}
+
+function Questions() {
+  const questions = [
+    ['Čím sa YesDay líši od digitálnej pozvánky?', 'Pozvánka oznámi dátum a miesto. YesDay navyše zhromaždí informácie pre hostí, zozbiera potvrdenia účasti a výber jedla a zobrazí ich vo vašej klientskej zóne. Signature a Atelier pomôžu aj s ubytovaním a dopravou.'],
+    ['Potrebujeme vedieť robiť web?', 'Nie. Vyberiete si pripravený dizajn a v editore upravíte mená, texty a detaily svadby. Pred rozhodnutím si môžete všetko vyskúšať bez registrácie. Ak sa pri používaní zaseknete, napíšte nám.'],
+    ['Dostaneme aj vytlačené pozvánky?', 'Balík obsahuje digitálne tlačoviny na stiahnutie. Fyzická tlač ani doručenie nie sú zahrnuté. Pozvánku a kartičky si môžete dať vytlačiť vo vybranej tlačiarni.'],
+    ['Musia sa hostia registrovať?', 'Nie. Otvoria svadobný web cez odkaz alebo QR kód a vyplnia odpoveď. Klientsky účet používate vy, aby ste mali svoje svadobné údaje a odpovede prehľadne spolu.'],
+    ['Čo ak niekto nepoužíva QR kódy?', 'Na svadobný web sa dostane aj cez bežný odkaz. QR kód je len jednoduchá cesta z papierovej kartičky do mobilu.'],
+    ['Ktorý balík si vybrať?', 'Essential je základ so zladeným webom, pozvánkou, QR kartičkou a prehľadom účasti. Signature zvoľte, ak riešite aj ubytovanie, dopravu, osobné QR pozvánky a galériu. Atelier je na individuálnu tvorbu podľa dohody.'],
+  ]
+  return <section id="otazky" className={styles.section}><div className={styles.faq}><p className={styles.eyebrow}>Ešte pred výberom</p><h2 className={styles.heading}>Možno vám práve napadlo…</h2>{questions.map(([question, answer]) => <details key={question}><summary>{question}</summary><p>{answer}</p></details>)}</div></section>
+}
+
+function FinalInvitation() {
+  return <section className={styles.finalCta}><p className={styles.eyebrow}>Predstavte si vašu svadbu s YesDay</p><h2 className={styles.heading}>Vyberte si štýl.<br />Vyskúšajte, čo vám uľahčí.</h2><p className={styles.copy}>Bez registrácie a bez platby. Najprv si ho pokojne prezrite.</p><Link href="#portfolio" className={styles.linkButton}>Nájsť náš svadobný štýl</Link></section>
+}
 
 function Contact() {
   return (
@@ -448,31 +423,8 @@ const pageStyle = {
   lineHeight: 1.6,
 }
 
-const navStyle = {
-  background: 'rgba(255, 255, 255, 0.96)',
-  padding: '18px 20px',
-  position: 'sticky',
-  top: 0,
-  zIndex: 1000,
-  boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
-  backdropFilter: 'blur(8px)',
-}
 
-const navInnerStyle = {
-  display: 'flex',
-  justifyContent: 'center',
-  gap: '28px',
-  flexWrap: 'wrap',
-}
 
-const navLinkStyle = {
-  textDecoration: 'none',
-  color: COLOR_DARK,
-  fontSize: '12px',
-  letterSpacing: '2px',
-  textTransform: 'uppercase',
-  fontWeight: 500,
-}
 
 const heroStyle = {
   minHeight: '86vh',
@@ -590,7 +542,7 @@ const sectionStyle = {
 }
 
 const systemSectionStyle = {
-  padding: '95px 20px',
+  padding: '70px 20px',
   background: COLOR_WHITE,
 }
 
@@ -644,14 +596,6 @@ const sectionHeadingStyle = {
   marginBottom: '18px',
 }
 
-const benefitsHeadingStyle = {
-  maxWidth: '820px',
-  margin: '0 auto 18px',
-  fontSize: 'clamp(2rem, 4vw, 3rem)',
-  fontWeight: 400,
-  lineHeight: 1.18,
-  textWrap: 'balance',
-}
 
 const sectionIntroStyle = {
   maxWidth: '760px',
@@ -660,38 +604,10 @@ const sectionIntroStyle = {
   fontSize: '0.98rem',
 }
 
-const benefitsGridStyle = {
-  maxWidth: '960px',
-  margin: '50px auto 0',
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 420px), 1fr))',
-  gap: '24px',
-}
 
-const benefitCardStyle = {
-  background: COLOR_WHITE,
-  border: `1px solid ${COLOR_BORDER}`,
-  padding: '36px 34px',
-  textAlign: 'left',
-}
 
-const benefitTitleStyle = {
-  fontSize: '1.5rem',
-  margin: '0 0 12px',
-  color: COLOR_DARK,
-}
 
-const benefitDescriptionStyle = {
-  color: '#5f5a52',
-  lineHeight: 1.8,
-  margin: 0,
-}
 
-const templatesGridStyle = {
-  display: 'grid',
-  gap: '28px',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-}
 
 const templateCardStyle = {
   background: COLOR_WHITE,

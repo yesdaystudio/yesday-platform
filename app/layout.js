@@ -11,15 +11,15 @@ import "./veno.css";
 import "./riviera.css";
 
 export const metadata = {
-  title: "YesDay Studio — Svadobné weby s charakterom",
+  title: "YesDay Studio — Váš digitálny svadobný pomocník",
   description:
-    "Elegantný digitálny priestor pre váš svadobný web, hostí a organizáciu. Prepojte svadobné pozvánky s výhodami moderného svadobného webu.",
+    "Menej správ hosťom, viac pokoja pred svadbou. Svadobný web, pozvánky, potvrdenia účasti a prehľad hostí na jednom mieste. Vyskúšajte YesDay bez registrácie.",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html
-      lang="en"
+      lang="sk"
       className="h-full antialiased"
     >
       <body className="min-h-full flex flex-col">{children}</body>

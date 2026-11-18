@@ -45,14 +45,14 @@ const PACKAGES = [
     price: '129 €',
     label: 'Elegantný digitálny základ',
     description:
-      'Pre páry, ktoré chcú krásny a funkčný svadobný web s praktickým RSVP základom.',
+      'Zladený web a pozvánky. Potvrdenia účasti a výber jedla prehľadne spolu.',
     items: [
       'Editor na vlastné úpravy a pomoc s jeho používaním',
       'Svadobný web s kľúčovými informáciami',
       'RSVP s menami hostí, počtom dospelých a detí',
       'Menu možnosti: mäsové, vegetariánske, vegánske, detské',
       'Alergie a stravovacie obmedzenia',
-      'Prehľad odpovedí hostí v dashboarde',
+      'Prehľad odpovedí hostí v klientskej zóne',
       'Zladená pozvánka a QR kartička na stiahnutie',
       'QR kód prepojený so svadobným webom',
     ],
@@ -62,9 +62,9 @@ const PACKAGES = [
     name: 'Signature',
     packageType: 'signature',
     price: '249 €',
-    label: 'Najobľúbenejšia voľba',
+    label: 'Pre svadby s ubytovaním',
     description:
-      'Pre páry, ktoré okrem dizajnu chcú rozšírené RSVP možnosti a viac personalizácie.',
+      'Keď hosťom riešite aj ubytovanie a dopravu. Viac organizácie na jednom mieste.',
     items: [
       'Všetko z balíka Essential',
       'Rozšírené RSVP s požiadavkami na ubytovanie a dopravu',
@@ -82,11 +82,11 @@ const PACKAGES = [
     customQuote: true,
     label: 'Kompletné riešenie na mieru',
     description:
-      'Bespoke varianta pre výnimočné svadby s plnou tvorbou na mieru.',
+      'Individuálny návrh a tvorba od nás. Rozsah aj termín si dohodneme podľa vašej predstavy.',
     items: [
       'Všetko z balíka Signature',
-      'Bespoke plná personalizácia webu',
-      'Individuálne navrhnutý obsah a flow',
+      'Individuálna tvorba a prispôsobenie webu',
+      'Obsah a priebeh prípravy podľa dohody',
     ],
     featured: false,
   },
@@ -204,7 +204,7 @@ const changeDesignLinkStyle = {
 const pricingGridStyle = {
   display: 'grid',
   gap: '28px',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 290px), 1fr))',
   alignItems: 'stretch',
 }
 

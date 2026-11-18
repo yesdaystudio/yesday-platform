@@ -761,7 +761,7 @@ function buildDemoAccommodationOptions(rows) {
   return options
 }
 
-function buildAccommodationEmailDraft(row, project, accommodation) {
+export function buildAccommodationEmailDraft(row, project, accommodation) {
   const email = String(row.contact_email || '').trim()
   const coupleName = String(project?.couple_display_name || '').trim()
   const guestName = String(row.guest_name || '').trim()

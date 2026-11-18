@@ -1,0 +1,65 @@
+.header { position: sticky; top: 0; z-index: 1000; background: rgba(255,255,255,.97); border-bottom: 1px solid #e8e0d4; }
+.navigation { min-height: 76px; max-width: 1180px; padding: 12px 24px; margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.brand { color: #27231f; font: 400 23px/1.2 'Playfair Display',Georgia,serif; text-decoration: none; white-space: nowrap; letter-spacing: .06em; }
+.brand span { display: block; font: 500 8px/1.5 Montserrat,Arial,sans-serif; letter-spacing: .36em; text-align: center; }
+.desktopLinks { display: flex; gap: 25px; align-items: center; }
+.desktopLinks a,.mobileLinks a { color: #41382f; font: 500 10px/1.5 Montserrat,Arial,sans-serif; letter-spacing: .12em; text-decoration: none; text-transform: uppercase; }
+.desktopLinks a { padding: 12px 0; }
+.menuToggle,.mobileLinks { display: none; }
+.galleryShell { position: relative; }
+.gallery { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 28px; }
+.galleryControls,.swipeHint { display: none; }
+.section { max-width: 1140px; margin: 0 auto; padding: 76px 20px; scroll-margin-top: 90px; }
+.eyebrow { color: #846b48; text-transform: uppercase; letter-spacing: .22em; font: 600 10px/1.7 Montserrat,Arial,sans-serif; margin: 0 0 16px; }
+.heading { font: 400 clamp(30px,4.2vw,48px)/1.2 'Playfair Display',Georgia,serif; margin: 0 0 22px; color: #28231e; }
+.copy { color: #665c52; line-height: 1.85; font-size: 14px; margin: 0 0 22px; }
+.trustLine { display: flex; justify-content: center; gap: 12px 26px; flex-wrap: wrap; margin: 22px auto 0; font: 500 11px/1.7 Montserrat,Arial,sans-serif; color: #706352; }
+.heroProof { display: grid; grid-template-columns: repeat(3,1fr); max-width: 690px; gap: 18px; margin: 32px auto 0; padding-top: 25px; border-top: 1px solid #ded2bf; }
+.heroProof div { display: grid; gap: 6px; color: #766c61; font: 400 11px/1.6 Montserrat,Arial,sans-serif; }
+.heroProof strong { color: #3d352c; font-weight: 600; font-size: 12px; }
+.templateNote { font-size: 10px; line-height: 1.7; color: #776e63; margin: 12px 0 0; }
+.personal { display: grid; grid-template-columns: .8fr 1.2fr; gap: 65px; align-items: start; }
+.personalQuote { background: #e9e3d8; padding: 44px 34px; border: 1px solid #ded3c4; }
+.personalQuote blockquote { margin: 12px 0 26px; font: 400 clamp(27px,3vw,37px)/1.45 'Playfair Display',Georgia,serif; color: #514637; }
+.personalQuote a { font: 500 12px/1.7 Montserrat,Arial,sans-serif; color: #544637; overflow-wrap: anywhere; }
+.steps { list-style: none; padding: 0; margin: 26px 0; display: grid; gap: 20px; counter-reset: delivery; }
+.steps li { display: grid; grid-template-columns: 30px 1fr; gap: 14px; color: #70665b; font-size: 13px; line-height: 1.8; counter-increment: delivery; }
+.steps li:before { content: '0' counter(delivery); color: #987d52; border-bottom: 1px solid #d9cbb5; padding-top: 2px; height: 31px; font-size: 11px; }
+.steps strong { display: block; color: #3c342d; font-weight: 600; margin-bottom: 3px; }
+.faq { max-width: 800px; margin: auto; }
+.faq details { padding: 21px 0; border-bottom: 1px solid #ded5c7; }
+.faq summary { cursor: pointer; color: #443a30; font: 400 19px/1.5 'Playfair Display',Georgia,serif; }
+.faq details p { color: #70665b; line-height: 1.85; font-size: 13px; max-width: 720px; }
+.finalCta { text-align: center; background: #eae2d4; padding: 70px 24px; }
+.linkButton { display: inline-flex; min-height: 48px; padding: 14px 24px; background: #3e3227; color: #fff; text-decoration: none; align-items: center; justify-content: center; font: 500 10px/1.6 Montserrat,Arial,sans-serif; letter-spacing: .12em; text-transform: uppercase; }
+.page :is(a,button,summary,input,select):focus-visible { outline: 2px solid #886a3e; outline-offset: 4px; }
+@media(max-width:760px) {
+ .header { position: relative; }
+ .navigation { min-height: 64px; padding: 10px 20px; }
+ .brand { font-size: 19px; }
+ .desktopLinks { display: none; }
+ .menuToggle { display: flex; align-items: center; gap: 12px; min-width: 74px; min-height: 44px; border: 0; background: none; color: #483a2d; cursor: pointer; font: 500 11px Montserrat,Arial,sans-serif; }
+ .menuToggle span:last-child { font-size: 23px; }
+ .mobileLinks { display: grid; position: absolute; inset: 64px 0 auto; padding: 14px 20px 22px; gap: 0; background: #fffdf8; border-bottom: 1px solid #ded5c7; box-shadow: 0 15px 22px #3a2a1912; }
+ .mobileLinks a { min-height: 46px; display: flex; align-items: center; }
+ .gallery { position: relative; grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 87%; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: thin; gap: 15px; padding: 3px 0 14px; }
+ .gallery > article { scroll-snap-align: start; min-width: 0; padding: 24px 20px !important; }
+ .galleryControls { display: flex; gap: 24px; align-items: center; justify-content: center; margin-top: 16px; font-size: 11px; color: #72624e; }
+ .galleryControls button { width: 46px; height: 44px; background: transparent; border: 1px solid #b8a88f; color: #544432; cursor: pointer; font-size: 20px; }
+ .galleryControls button:disabled { opacity: .3; cursor: default; }
+ .swipeHint { display: block; margin: 20px 0 14px; color: #7a6d5e; font-size: 11px; }
+ .section { padding: 54px 20px; }
+ .personal { grid-template-columns: 1fr; gap: 30px; }
+ .personalQuote { padding: 30px 26px; }
+ .hero { min-height: calc(100svh - 64px) !important; padding: 58px 20px 52px !important; }
+ .hero h1 { font-size: clamp(34px,8.8vw,56px) !important; line-height: 1.18 !important; }
+ .heroProof { gap: 10px; margin-top: 25px; padding-top: 20px; }
+ .heroProof div { font-size: 10px; }
+ .heroProof strong { font-size: 10px; }
+ .trustLine { font-size: 10px; gap: 7px 16px; }
+ .heroActions { display: grid !important; }
+ .heroActions a { min-width: 0 !important; }
+ .templateNote { font-size: 10px; }
+ .page > section { scroll-margin-top: 20px; }
+}
+.templateDescription { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
