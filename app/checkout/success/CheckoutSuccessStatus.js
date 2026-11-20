@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
 export default function CheckoutSuccessStatus({ sessionId }) {
+  const [checkAgain, setCheckAgain] = useState(0)
   const [state, setState] = useState({ status: sessionId ? 'loading' : 'error' })
 
   useEffect(() => {
@@ -23,8 +24,10 @@ export default function CheckoutSuccessStatus({ sessionId }) {
 
         if (response.ok && data.ready) {
           setState({ status: 'ready', ...data })
+        } else if (response.status === 410 && data.expired) {
+          setState({ status: 'expired' })
         } else if (response.status === 202) {
-          setState({ status: 'pending' })
+          setState({ status: 'pending', processing: Boolean(data.processing), polling: attempt < 9 })
           if (attempt < 9) {
             retryTimer = window.setTimeout(() => completeCheckout(attempt + 1), 1500)
           }
@@ -41,14 +44,23 @@ export default function CheckoutSuccessStatus({ sessionId }) {
       active = false
       window.clearTimeout(retryTimer)
     }
-  }, [sessionId])
+  }, [sessionId, checkAgain])
+
+  function retry() { setState({ status: 'loading' }); setCheckAgain(value => value + 1) }
 
   if (state.status === 'loading') {
     return <p style={bodyStyle}>Platbu overujeme a pripravujeme vašu klientsku zónu…</p>
   }
 
   if (state.status === 'pending') {
-    return <p style={bodyStyle}>Platba ešte čaká na potvrdenie. Neopakujte ju, stav sa môže aktualizovať o chvíľu.</p>
+    return <>
+      <p role="status" style={bodyStyle}>{state.processing ? 'Platba je potvrdená. Dokončujeme prípravu vašej klientskej zóny.' : 'Platba ešte čaká na potvrdenie.'} Platbu neopakujte.</p>
+      {!state.polling ? <><button type="button" onClick={retry} style={buttonStyle}>Znovu overiť objednávku</button><p style={{ ...bodyStyle, marginTop: '18px' }}>Ak príprava trvá dlhšie, <a href="mailto:info.yesdaystudio@gmail.com">napíšte podpore</a>. Novú objednávku nepotrebujete.</p></> : null}
+    </>
+  }
+
+  if (state.status === 'expired') {
+    return <><p style={bodyStyle}>Platobný odkaz vypršal. Ak vám platba nebola strhnutá, môžete sa vrátiť k výberu balíka. Ak bola strhnutá, platbu neopakujte a napíšte podpore.</p><Link href="/#cennik" style={secondaryButtonStyle}>Späť na balíky</Link></>
   }
 
   if (state.status === 'ready') {
@@ -76,6 +88,7 @@ export default function CheckoutSuccessStatus({ sessionId }) {
 
   return <>
     <p style={errorStyle}>Objednávku sa nepodarilo automaticky dokončiť. Platbu prosím neopakujte.</p>
+    <button type="button" onClick={retry} style={buttonStyle}>Znovu overiť objednávku</button>{' '}
     <a href="mailto:info.yesdaystudio@gmail.com?subject=Probl%C3%A9m%20s%20objedn%C3%A1vkou%20YesDay" style={secondaryButtonStyle}>Napísať podpore</a>
   </>
 }
