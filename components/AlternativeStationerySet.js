@@ -5,6 +5,7 @@ import Image from "next/image"
 import { CathedralInvitation, CathedralReceptionCard, CathedralQrCard, getCathedralPrintFontCSS } from "./CathedralStationeryPrintTemplates"
 import { RivieraInvitation, RivieraReceptionCard, RivieraQrCard, getRivieraPrintFontCSS } from "./RivieraStationeryPrintTemplates"
 import { VenoInvitation, VenoReceptionCard, VenoQrCard } from "./VenoStationeryPrintTemplates"
+import { getReceptionStationeryDetails } from "../lib/receptionStationery.mjs"
 import { getDianaStationeryData } from "../lib/dianaStationeryData"
 import { downloadStationeryPdf } from "../lib/dianaStationeryPdf"
 import { getDesignCustomization } from "../lib/designCustomization"
@@ -40,7 +41,7 @@ export default function AlternativeStationerySet({ variant, project, weddingWebs
   const [exporting, setExporting] = useState("")
   const [exportError, setExportError] = useState("")
   const [fleurieInvitationVariant, setFleurieInvitationVariant] = useState("asymmetric")
-  const data = useMemo(() => ({ ...getDianaStationeryData(project, weddingWebsiteUrl), websiteDisplayUrl }), [project, weddingWebsiteUrl, websiteDisplayUrl])
+  const data = useMemo(() => ({ ...getDianaStationeryData(project, weddingWebsiteUrl), reception: getReceptionStationeryDetails(project), websiteDisplayUrl }), [project, weddingWebsiteUrl, websiteDisplayUrl])
 
   async function download(kind) {
     setExportError("")

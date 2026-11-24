@@ -3,8 +3,8 @@ import { forwardRef } from "react"
 import Image from "next/image"
 
 function Background({ kind = "invitation" }) {
-  const src = kind === "invitation" ? "/templates/cathedral/invitation-frame.webp" : `/templates/cathedral/${kind}-frame.svg?v=2`
-  return <Image src={src} alt="" width={kind === "reception" ? 400 : kind === "qr" ? 300 : 1024} height={kind === "reception" ? 280 : kind === "qr" ? 580 : 1536} unoptimized {...(kind === "invitation" ? { 'data-pdf-background-image': 'true' } : { 'data-pdf-overlay-image': 'true' })} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }} />
+  const sources = { invitation: "/templates/cathedral/invitation-frame.webp", reception: "/templates/cathedral/reception-bottom-v4.webp", qr: "/templates/cathedral/qr-top-v4.webp" }
+  return <Image src={sources[kind]} alt="" width={kind === "reception" ? 1536 : 1024} height={kind === "reception" ? 1024 : 1536} unoptimized data-pdf-background-image="true" style={{ position: "absolute", inset: 0, height: "100%", width: "100%", pointerEvents: "none" }} />
 }
 function Names({ data, config, small = false }) {
   const longest = Math.max(data.firstPartner.length, data.secondPartner.length, 1)
@@ -23,24 +23,27 @@ export const CathedralInvitation = forwardRef(function CathedralInvitation({ dat
   </article>
 })
 export const CathedralReceptionCard = forwardRef(function CathedralReceptionCard({ data, config }, ref) {
-  return <article ref={ref} aria-label="Cathedral kartička k svadobnému stolu" style={{ ...paper, width: "min(360px,100%)", aspectRatio: "10 / 7", color: config.ink, fontFamily: "'Cathedral Print Serif',Georgia,serif" }}>
+  const reception = data.reception || {}
+  return <article ref={ref} aria-label="Cathedral kartička k svadobnému stolu" style={{ ...paper, width: "min(392px,100%)", color: config.ink, fontFamily: "'Cathedral Print Serif',Georgia,serif" }}>
     <Background kind="reception" />
-    <div style={{ ...block, top: "27%", left: "15%", right: "15%" }}>
-      <p style={{ margin: "0 0 4cqw", fontFamily: config.fontVariant === "editorial" ? "'Cathedral Print Modern',cursive" : "'Cathedral Print Script',cursive", fontSize: "8.5cqw" }}>Pri svadobnom stole</p>
-      <p style={{ margin: 0, fontSize: "4.4cqw", lineHeight: 1.4 }}>S radosťou Vás pozývame<br />k svadobnému stolu.</p>
-      <p style={{ margin: "3cqw 0 0", fontSize: "3.4cqw", lineHeight: 1.35 }}>{data.receptionVenue}</p>
+    <div style={{ position: "relative", zIndex: 1, padding: "9cqw 14cqw 28cqw", textAlign: "center" }}>
+      <p style={{ margin: "0 0 2.5cqw", fontFamily: config.fontVariant === "editorial" ? "'Cathedral Print Modern',cursive" : "'Cathedral Print Script',cursive", fontSize: "8.5cqw", lineHeight: 1.1 }}>Svadobná hostina</p>
+      <p style={{ margin: "0 0 3.5cqw", fontSize: "3.5cqw", lineHeight: 1.4, fontStyle: "italic" }}>S radosťou Vás pozývame<br />k svadobnému stolu.</p>
+      {reception.name ? <p style={{ margin: 0, fontSize: reception.name.length > 45 ? "4cqw" : "4.8cqw", lineHeight: 1.2, overflowWrap: "anywhere" }}>{reception.name}</p> : null}
+      {reception.address ? <p style={{ margin: "1.3cqw 0 0", fontSize: "3.2cqw", lineHeight: 1.3, overflowWrap: "anywhere" }}>{reception.address}</p> : null}
+      {reception.date || reception.time ? <p style={{ margin: "2.5cqw 0 0", fontSize: "3.1cqw", letterSpacing: ".035em" }}>{[reception.date, reception.time ? `o ${reception.time}` : ''].filter(Boolean).join(' · ')}</p> : null}
     </div>
   </article>
 })
 export const CathedralQrCard = forwardRef(function CathedralQrCard({ data, config, qrDataUrl, recipient }, ref) {
-  return <article ref={ref} aria-label="Cathedral QR kartička" style={{ ...paper, width: "min(300px,100%)", minHeight: 580, color: config.ink, fontFamily: "'Cathedral Print Serif',Georgia,serif" }}>
+  const combinedLength = data.firstPartner.length + data.secondPartner.length + 3
+  return <article ref={ref} aria-label="Cathedral QR kartička" style={{ ...paper, width: "min(320px,100%)", aspectRatio: recipient ? "2 / 3.2" : "2 / 3", color: config.ink, fontFamily: "'Cathedral Print Serif',Georgia,serif" }}>
     <Background kind="qr" />
-    <div style={{ position: "relative", zIndex: 1, padding: "150px 45px 62px", textAlign: "center" }}>
-      <Names data={data} config={config} small />
-      <div style={{ padding: 9, width: 172, maxWidth: "100%", background: "#fff", margin: "24px auto 17px" }}>{qrDataUrl ? <Image src={qrDataUrl} alt="QR kód svadobného webu" width={154} height={154} unoptimized data-pdf-required-image="true" style={{ display: "block", width: "100%", height: "auto" }} /> : <div style={{ width: "100%", aspectRatio: 1, display: "grid", placeItems: "center" }}>QR</div>}</div>
-      <p style={{ fontSize: 13, lineHeight: 1.45, margin: "0 0 10px", fontStyle: "italic" }}>{recipient ? <>{recipient.salutation || recipient.recipient_label},<br />všetky informácie o svadbe a potvrdenie účasti nájdete po naskenovaní QR kódu.</> : <>Všetko o našej svadbe<br />a potvrdenie účasti nájdete<br />po naskenovaní QR kódu.</>}</p>
-      <p style={{ margin: 0, fontFamily: "Inter,Arial,sans-serif", fontSize: 8, overflowWrap: "anywhere" }}>{data.websiteDisplayUrl}</p>
-    </div>
+    <p style={{ ...block, top: "30%", left: "19%", right: "19%", fontSize: "3.6cqw", fontStyle: "italic", letterSpacing: ".05em" }}>Svadobný web</p>
+    <h3 style={{ ...block, top: "34.5%", left: "17%", right: "17%", fontFamily: config.fontVariant === "editorial" ? "'Cathedral Print Modern',cursive" : "'Cathedral Print Script',cursive", fontWeight: 400, fontSize: `${Math.max(4, Math.min(9,130 / combinedLength))}cqw`, lineHeight: 1.25, overflowWrap: "anywhere" }}>{data.firstPartner}{data.secondPartner ? <> <i data-pdf-text-overlay="true" style={{ display: "inline-block", fontFamily: "'Cathedral Print Serif',Georgia,serif", fontStyle: "italic", fontSize: ".65em", fontWeight: 400 }}>&amp;</i> {data.secondPartner}</> : null}</h3>
+    <div style={{ position: "absolute", zIndex: 1, top: "45%", left: "50%", transform: "translateX(-50%)", padding: "2.5cqw", width: "52cqw", background: "#fff" }}>{qrDataUrl ? <Image src={qrDataUrl} alt="QR kód svadobného webu" width={166} height={166} unoptimized data-pdf-required-image="true" style={{ display: "block", width: "100%", height: "auto" }} /> : <div style={{ width: "100%", aspectRatio: 1, display: "grid", placeItems: "center" }}>QR</div>}</div>
+    <p style={{ ...block, top: recipient ? "81%" : "82.8%", left: "19%", right: "19%", fontSize: recipient ? "3.3cqw" : "3.6cqw", lineHeight: 1.35, fontStyle: "italic", overflowWrap: "anywhere" }}>{recipient ? <>{recipient.recipient_label || recipient.salutation}<br />Naskenujte kód a potvrďte účasť.</> : <>Informácie o svadbe a potvrdenie účasti<br />nájdete po naskenovaní kódu.</>}</p>
+    <p style={{ ...block, top: "94%", left: "12%", right: "12%", fontSize: "2.5cqw", lineHeight: 1.1, overflowWrap: "anywhere" }}>{data.websiteDisplayUrl}</p>
   </article>
 })
 const paper = { position: "relative", containerType: "inline-size", overflow: "hidden", backgroundColor: "#faf7f0", boxShadow: "0 15px 42px #42658a18" }
