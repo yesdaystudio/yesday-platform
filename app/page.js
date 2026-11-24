@@ -15,13 +15,12 @@ const TEMPLATES = [
     name: 'Cathedral',
     description: 'Gotické oblúky, jemné modré ornamenty a svetlo vitráží.',
     preview: '#faf7f0',
-    previewImage: '/templates/cathedral/invitation-frame.webp',
-    previewBackgroundPosition: 'left 7% center',
-    previewBackgroundSize: '42% 90%',
-    previewDecorations: [{ image: '/templates/cathedral/stained-glass.webp', placement: 'cathedralWindow' }],
+    previewImage: '/templates/cathedral/hero-architecture-v2.webp',
+    previewBackgroundPosition: 'center',
+    previewBackgroundSize: 'cover',
     previewCouple: ['Tamara', 'Samuel'],
     previewCoupleStyle: 'cathedral',
-    previewEyebrow: 'Spoločne s našimi rodinami',
+    previewEyebrow: 'Náš svadobný deň',
     previewDate: '18. septembra 2027',
     href: '/ukazka?design=cathedral&first=Tamara&second=Samuel&date=2027-09-18&venue=D%C3%B3m%20sv.%20Martina&city=Bratislava',
   },
@@ -299,7 +298,7 @@ function Templates() {
                     ...templatePreviewStyles[template.previewCoupleStyle],
                   }}
                 >
-                  {template.previewEyebrow ? <small style={{ ...templatePreviewEyebrowStyle, ...(template.previewCoupleStyle === 'cathedral' ? { fontFamily: "'Cormorant Garamond',Georgia,serif", fontSize: 'clamp(5px,.65vw,8px)', letterSpacing: '.03em', fontStyle: 'italic', textTransform: 'none' } : {}) }}>{template.previewEyebrow}</small> : null}
+                  {template.previewEyebrow ? <small style={{ ...templatePreviewEyebrowStyle, ...(template.previewCoupleStyle === 'cathedral' ? { fontFamily: "'Cormorant Garamond',Georgia,serif", fontSize: 'clamp(5px,.65vw,8px)', letterSpacing: '.1em', fontStyle: 'normal', textTransform: 'uppercase' } : {}) }}>{template.previewEyebrow}</small> : null}
                   <span style={{ ...templateCoupleNamesStyle, ...templateCoupleNameStyles[template.previewCoupleStyle], fontFamily: getWeddingHeroFonts(template.previewCoupleStyle).names }}>
                     <span>{template.previewCouple[0]}</span>
                     <i style={{ ...templateCoupleAmpersandStyle, ...templateAmpersandStyles[template.previewCoupleStyle], fontFamily: getWeddingHeroFonts(template.previewCoupleStyle).joiner, fontStyle: getWeddingHeroFonts(template.previewCoupleStyle).joinerStyle }}>{template.previewJoiner || '&'}</i>
@@ -707,7 +706,7 @@ const lavandePreviewCoupleStyle = {
 }
 
 const templatePreviewStyles = {
-  cathedral: { color: '#42658a', background: 'transparent', inset: '12% 50% 8% 4%', paddingTop: '10%' },
+  cathedral: { color: '#42658a', background: 'transparent' },
   riviera: { color: '#fffdf4', background: 'linear-gradient(180deg,#163a6533,transparent)', textShadow: '0 2px 14px #14375999' },
   diana: dianaPreviewCoupleStyle,
   penelope: penelopePreviewCoupleStyle,
@@ -720,7 +719,7 @@ const templatePreviewStyles = {
 }
 
 const templateCoupleNameStyles = {
-  cathedral: { fontSize: 'clamp(1.2rem, 2.2vw, 2rem)', fontWeight: 400, letterSpacing: '0', lineHeight: .95 },
+  cathedral: { fontSize: 'clamp(2rem, 3.5vw, 3.3rem)', fontWeight: 400, letterSpacing: '0', lineHeight: .95 },
   riviera: { fontFamily: '"Cormorant Garamond", Georgia, serif', fontSize: 'clamp(2rem, 3.6vw, 3.5rem)', fontStyle: 'italic', fontWeight: 400, lineHeight: .9 },
   veno: { fontFamily: '"Cormorant Garamond", Georgia, serif', fontSize: 'clamp(1.9rem, 3.4vw, 3.4rem)', fontWeight: 400, lineHeight: .95 },
   diana: {

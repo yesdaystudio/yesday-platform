@@ -168,7 +168,6 @@ export default function AlternativeWeddingWebsite({
 
       <section id="top" className="signatureWedding__hero" style={{ '--signature-hero': theme.hero ? `url("${theme.hero}")` : 'none' }}>
         <div className="signatureWedding__heroShade" />
-        {variant === 'cathedral' ? <div className="cathedralHeroWindow" aria-hidden="true" /> : null}
         {variant === 'botanique' ? <BotaniqueHeroDecorations /> : null}
         {variant === 'penelope' ? <PenelopeHeroDecorations /> : null}
         {variant === 'chloe' ? <ChloeDecorations /> : null}
@@ -182,8 +181,8 @@ export default function AlternativeWeddingWebsite({
           {variant === 'provence' ? <p>Náš svadobný deň</p> : null}
           {variant === 'lavande' ? <p>Sous le ciel de Provence</p> : null}
           {variant === 'riviera' ? <p>S vami má leto krajší príbeh</p> : null}
-          {variant === 'cathedral' ? <p>Spoločne s našimi rodinami</p> : null}
-          <h1 style={{ fontFamily: heroFonts.names, ...(variant === 'cathedral' ? { '--cathedral-name-size': `${Math.min(82, Math.max(42, 620 / Math.max(firstPartner.length, secondPartner.length, 1)))}px` } : {}) }}>
+          {variant === 'cathedral' ? <p>Náš svadobný deň</p> : null}
+          <h1 style={{ fontFamily: heroFonts.names, ...(variant === 'cathedral' ? { '--cathedral-name-size': `${Math.min(112, Math.max(44, 850 / Math.max(firstPartner.length, secondPartner.length, 1)))}px` } : {}) }}>
             <span>{firstPartner}</span>
             {secondPartner ? <><i style={{ fontFamily: heroFonts.joiner, fontStyle: heroFonts.joinerStyle }}>&amp;</i><span>{secondPartner}</span></> : null}
           </h1>
@@ -218,7 +217,9 @@ export default function AlternativeWeddingWebsite({
             </>
           ) : variant === 'riviera' ? (
             <a className="signatureWedding__heroAction" href={websiteContent.story_text ? '#pribeh' : '#detaily'}>Náš svadobný deň <span aria-hidden="true">↓</span></a>
-          ) : variant === 'lavande' || variant === 'veno' || variant === 'cathedral' ? (
+          ) : variant === 'cathedral' ? (
+            <a className="signatureWedding__heroAction" href="#detaily">Detaily našej svadby</a>
+          ) : variant === 'lavande' || variant === 'veno' ? (
             <>
               <span className="lavandeHeroFlourish" aria-hidden="true" />
               <a className="signatureWedding__heroAction" href={websiteContent.story_text ? '#pribeh' : '#detaily'}>
