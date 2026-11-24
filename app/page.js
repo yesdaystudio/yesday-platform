@@ -20,7 +20,6 @@ const TEMPLATES = [
     previewBackgroundSize: 'cover',
     previewCouple: ['Tamara', 'Samuel'],
     previewCoupleStyle: 'cathedral',
-    previewEyebrow: 'Náš svadobný deň',
     previewDate: '18. septembra 2027',
     href: '/ukazka?design=cathedral&first=Tamara&second=Samuel&date=2027-09-18&venue=D%C3%B3m%20sv.%20Martina&city=Bratislava',
   },
