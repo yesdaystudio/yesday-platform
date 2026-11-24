@@ -247,7 +247,7 @@ export default function ClientZonePage() {
                   qrDataUrl={qrDataUrl}
                   qrError={qrError}
                 />
-              ) : project?.design_family === "botanique" || project?.design_family === "penelope" || project?.design_family === "fleurie" || project?.design_family === "provence" || project?.design_family === "lavande" || project?.design_family === "veno" || project?.design_family === "riviera" ? (
+              ) : project?.design_family === "botanique" || project?.design_family === "penelope" || project?.design_family === "fleurie" || project?.design_family === "provence" || project?.design_family === "lavande" || project?.design_family === "veno" || project?.design_family === "riviera" || project?.design_family === "cathedral" ? (
                 <AlternativeStationerySet
                   variant={project.design_family}
                   project={project}

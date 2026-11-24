@@ -19,7 +19,7 @@ const readOrigin = () => window.location.origin
 const serverOrigin = () => ''
 
 const TABS = [['web', 'Svadobný web'], ['editor', 'Editor'], ['dashboard', 'Hostia'], ['accommodation', 'Ubytovanie'], ['stationery', 'Tlačoviny'], ['rsvp', 'Vyskúšať RSVP']]
-const DESIGNS = [['diana', 'Diana'], ['botanique', 'Botanique'], ['penelope', 'Penelope'], ['chloe', 'Chloe'], ['fleurie', 'Fleurie'], ['provence', 'Provence'], ['lavande', 'Lavande'], ['veno', 'Veno'], ['riviera', 'Riviera']]
+const DESIGNS = [['diana', 'Diana'], ['botanique', 'Botanique'], ['penelope', 'Penelope'], ['chloe', 'Chloe'], ['fleurie', 'Fleurie'], ['provence', 'Provence'], ['lavande', 'Lavande'], ['veno', 'Veno'], ['riviera', 'Riviera'], ['cathedral', 'Cathedral']]
 
 export default function WeddingDemo({ initialValues }) {
   const [values, setValues] = useState(() => demoFormValues(readDemoState(initialValues)))

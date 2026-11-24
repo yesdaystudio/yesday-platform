@@ -9,6 +9,7 @@ import "./globals.css";
 import "./chloe.css";
 import "./veno.css";
 import "./riviera.css";
+import "./cathedral.css";
 
 export const metadata = {
   title: "YesDay Studio — Váš digitálny svadobný pomocník",

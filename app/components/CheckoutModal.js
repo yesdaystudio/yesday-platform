@@ -6,6 +6,7 @@ import { getFormRequestKey } from '../../lib/formRequestKey.mjs'
 import Image from 'next/image'
 
 const DESIGNS = {
+  cathedral: { name: 'Cathedral', image: '/templates/cathedral/stained-glass.webp' },
   diana: { name: 'Diana', image: '/templates/diana/diana-anton-hero.png' },
   penelope: { name: 'Penelope', image: '/templates/penelope/hero-v2.jpg' },
   botanique: { name: 'Botanique', image: '/templates/botanique/hero.jpg' },

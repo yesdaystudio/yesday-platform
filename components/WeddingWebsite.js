@@ -37,7 +37,7 @@ export default function WeddingWebsite({ project, websiteContent = {}, scheduleI
     project.reception_venue_address || project.venue_address,
   )
 
-  if (designFamily === 'botanique' || designFamily === 'penelope' || designFamily === 'chloe' || designFamily === 'fleurie' || designFamily === 'provence' || designFamily === 'lavande' || designFamily === 'veno' || designFamily === 'riviera') {
+  if (designFamily === 'botanique' || designFamily === 'penelope' || designFamily === 'chloe' || designFamily === 'fleurie' || designFamily === 'provence' || designFamily === 'lavande' || designFamily === 'veno' || designFamily === 'riviera' || designFamily === 'cathedral') {
     return (
       <AlternativeWeddingWebsite
         variant={designFamily}
@@ -675,6 +675,7 @@ const CLASSIC_LAYOUT_FAMILIES = new Set([
   'lavande',
   'veno',
   'riviera',
+  'cathedral',
   'charlotte',
   'cate',
   'jewel',

@@ -6,6 +6,7 @@ import supabase from "../lib/supabase"
 import { getDianaStationeryData } from "../lib/dianaStationeryData"
 import { downloadStationeryPdf, downloadStationeryPdfBundle } from "../lib/dianaStationeryPdf"
 import { DianaQrCardPrintTemplate } from "./DianaStationeryPrintTemplates"
+import { getCathedralPrintFontCSS } from "./CathedralStationeryPrintTemplates"
 import { AlternativeQrCardPrintTemplate, getAlternativeStationeryConfig } from "./AlternativeStationerySet"
 import { ChloeQrCardPrintTemplate, getChloeStationeryConfig, getChloePrintFontCSS } from "./ChloeStationerySet"
 
@@ -29,7 +30,7 @@ export default function PersonalizedQrManager({ project, weddingWebsiteUrl }) {
     websiteDisplayUrl: weddingWebsiteUrl,
   }), [project, weddingWebsiteUrl])
   const variant = String(project?.design_family || "diana").toLowerCase()
-  const alternativeConfig = variant === "botanique" || variant === "penelope" || variant === "fleurie" || variant === "provence" || variant === "lavande" || variant === "veno" || variant === "riviera"
+  const alternativeConfig = variant === "botanique" || variant === "penelope" || variant === "fleurie" || variant === "provence" || variant === "lavande" || variant === "veno" || variant === "riviera" || variant === "cathedral"
     ? getAlternativeStationeryConfig(variant, project)
     : variant === "chloe" ? getChloeStationeryConfig(project) : null
   const selectedRecipient = recipients.find((recipient) => recipient.id === selectedId) || recipients[0] || null
@@ -131,7 +132,7 @@ export default function PersonalizedQrManager({ project, weddingWebsiteUrl }) {
         filename: `${variant}-qr-${slugify(recipient.recipient_label)}.pdf`,
         title: `QR kartička pre ${recipient.recipient_label}`,
         requireImage: true,
-        fontEmbedCSS: variant === "chloe" ? await getChloePrintFontCSS() : undefined,
+        fontEmbedCSS: variant === "cathedral" ? await getCathedralPrintFontCSS() : variant === "chloe" ? await getChloePrintFontCSS() : undefined,
       })
     } catch {
       setMessage("PDF sa nepodarilo pripraviť. Skúste to znova.")
@@ -152,7 +153,7 @@ export default function PersonalizedQrManager({ project, weddingWebsiteUrl }) {
           filename: `${variant}-personalizovane-qr-${project.slug}.pdf`,
           title: "Personalizované QR kartičky",
           requireImage: true,
-        fontEmbedCSS: variant === "chloe" ? await getChloePrintFontCSS() : undefined,
+        fontEmbedCSS: variant === "cathedral" ? await getCathedralPrintFontCSS() : variant === "chloe" ? await getChloePrintFontCSS() : undefined,
         }
       )
     } catch {
@@ -256,7 +257,7 @@ function PersonalizedCard({ variant, data, config, recipient, qrDataUrl, ref }) 
   if (variant === "chloe") {
     return <ChloeQrCardPrintTemplate ref={ref} data={data} config={config} recipient={recipient} qrDataUrl={qrDataUrl} />
   }
-  if (variant === "botanique" || variant === "penelope" || variant === "fleurie" || variant === "provence" || variant === "lavande" || variant === "veno" || variant === "riviera") {
+  if (variant === "botanique" || variant === "penelope" || variant === "fleurie" || variant === "provence" || variant === "lavande" || variant === "veno" || variant === "riviera" || variant === "cathedral") {
     return <AlternativeQrCardPrintTemplate ref={ref} data={data} config={config} variant={variant} recipient={recipient} qrDataUrl={qrDataUrl} />
   }
   return <DianaQrCardPrintTemplate ref={ref} data={data} recipient={recipient} qrDataUrl={qrDataUrl} />

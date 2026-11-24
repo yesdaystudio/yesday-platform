@@ -6,6 +6,7 @@ import Image from 'next/image'
 import CheckoutModal from './CheckoutModal'
 
 const DESIGNS = {
+  cathedral: { name: 'Cathedral', image: '/templates/cathedral/stained-glass.webp' },
   diana: {
     name: 'Diana',
     image: '/templates/diana/diana-anton-hero.png',

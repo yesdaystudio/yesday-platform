@@ -6,6 +6,7 @@ import { buildGoogleMapsSearchUrl } from '../lib/googleMaps'
 import { getVisibleMenuSections } from '../lib/menuSections.mjs'
 
 const THEMES = {
+  cathedral: { label: 'Cathedral', hero: null, story: null },
   riviera: { label: 'Riviera', hero: '/templates/riviera/sea-oil-painting.webp', story: null },
   veno: { label: 'Veno', hero: null, story: null },
   botanique: {
@@ -138,7 +139,7 @@ export default function AlternativeWeddingWebsite({
               <nav aria-label="Mobilná svadobná navigácia"><a href="#pribeh">Náš príbeh</a><a href="#detaily">Miesta</a><a href="#program">Program</a><a href={rsvpHref}>Potvrdiť účasť</a></nav>
             </details>
           </>
-        ) : variant === 'lavande' || variant === 'veno' ? (
+        ) : variant === 'lavande' || variant === 'veno' || variant === 'cathedral' ? (
           <>
             <nav className="lavandeHeroNav" aria-label={`${theme.label} wedding navigation`}>
               <a href="#pribeh">Náš príbeh</a>
@@ -167,6 +168,7 @@ export default function AlternativeWeddingWebsite({
 
       <section id="top" className="signatureWedding__hero" style={{ '--signature-hero': theme.hero ? `url("${theme.hero}")` : 'none' }}>
         <div className="signatureWedding__heroShade" />
+        {variant === 'cathedral' ? <div className="cathedralHeroWindow" aria-hidden="true" /> : null}
         {variant === 'botanique' ? <BotaniqueHeroDecorations /> : null}
         {variant === 'penelope' ? <PenelopeHeroDecorations /> : null}
         {variant === 'chloe' ? <ChloeDecorations /> : null}
@@ -180,7 +182,8 @@ export default function AlternativeWeddingWebsite({
           {variant === 'provence' ? <p>Náš svadobný deň</p> : null}
           {variant === 'lavande' ? <p>Sous le ciel de Provence</p> : null}
           {variant === 'riviera' ? <p>S vami má leto krajší príbeh</p> : null}
-          <h1 style={{ fontFamily: heroFonts.names }}>
+          {variant === 'cathedral' ? <p>Spoločne s našimi rodinami</p> : null}
+          <h1 style={{ fontFamily: heroFonts.names, ...(variant === 'cathedral' ? { '--cathedral-name-size': `${Math.min(82, Math.max(42, 620 / Math.max(firstPartner.length, secondPartner.length, 1)))}px` } : {}) }}>
             <span>{firstPartner}</span>
             {secondPartner ? <><i style={{ fontFamily: heroFonts.joiner, fontStyle: heroFonts.joinerStyle }}>&amp;</i><span>{secondPartner}</span></> : null}
           </h1>
@@ -215,7 +218,7 @@ export default function AlternativeWeddingWebsite({
             </>
           ) : variant === 'riviera' ? (
             <a className="signatureWedding__heroAction" href={websiteContent.story_text ? '#pribeh' : '#detaily'}>Náš svadobný deň <span aria-hidden="true">↓</span></a>
-          ) : variant === 'lavande' || variant === 'veno' ? (
+          ) : variant === 'lavande' || variant === 'veno' || variant === 'cathedral' ? (
             <>
               <span className="lavandeHeroFlourish" aria-hidden="true" />
               <a className="signatureWedding__heroAction" href={websiteContent.story_text ? '#pribeh' : '#detaily'}>
@@ -235,9 +238,9 @@ export default function AlternativeWeddingWebsite({
       ) : null}
 
       <section className="signatureWedding__welcome signatureWedding__section">
-        <p className="signatureWedding__eyebrow">{variant === 'veno' ? 'Jeden deň. Na celý život.' : variant === 'riviera' ? 'Láska má vôňu leta' : 'Save the date'}</p>
+        <p className="signatureWedding__eyebrow">{variant === 'cathedral' ? 'Náš najkrajší deň' : variant === 'veno' ? 'Jeden deň. Na celý život.' : variant === 'riviera' ? 'Láska má vôňu leta' : 'Save the date'}</p>
         <h2>{websiteContent.welcome_text || 'Tešíme sa, že náš deň oslávite s nami.'}</h2>
-        <div className="signatureWedding__ornament" aria-hidden="true">{variant === 'veno' || variant === 'riviera' ? null : '✦'}</div>
+        <div className="signatureWedding__ornament" aria-hidden="true">{variant === 'veno' || variant === 'riviera' || variant === 'cathedral' ? null : '✦'}</div>
       </section>
 
       <section id="detaily" className="signatureWedding__places signatureWedding__section">
@@ -259,7 +262,8 @@ export default function AlternativeWeddingWebsite({
 
       {websiteContent.story_text ? (
         <section id="pribeh" className="signatureWedding__story signatureWedding__section">
-          {variant !== 'botanique' && variant !== 'penelope' && variant !== 'fleurie' && variant !== 'lavande' && variant !== 'veno' && variant !== 'riviera' ? <div className="signatureWedding__storyImage" style={{ '--signature-hero': `url("${theme.story}")` }} /> : null}
+          {variant !== 'botanique' && variant !== 'penelope' && variant !== 'fleurie' && variant !== 'lavande' && variant !== 'veno' && variant !== 'riviera' && variant !== 'cathedral' ? <div className="signatureWedding__storyImage" style={{ '--signature-hero': `url("${theme.story}")` }} /> : null}
+          {variant === 'cathedral' ? <div className="cathedralStoryArt" aria-hidden="true"><CathedralRosette /></div> : null}
           <div className="signatureWedding__storyCopy">
             <p className="signatureWedding__eyebrow">O nás</p>
             {variant === 'chloe' ? <span className="chloeStoryDivider" aria-hidden="true" /> : null}
@@ -431,4 +435,8 @@ function formatTime(value) {
 function parseParagraphs(value) {
   const text = String(value || 'Informácie doplníme čoskoro.').trim()
   return text.split(/\n+/).map((part) => part.trim()).filter(Boolean)
+}
+
+function CathedralRosette() {
+  return <svg viewBox="0 0 240 240" fill="none" stroke="currentColor" strokeWidth=".8" aria-hidden="true"><circle cx="120" cy="120" r="106" /><circle cx="120" cy="120" r="99" /><circle cx="120" cy="120" r="19" />{Array.from({length:8},(_,i)=><g key={i} transform={`rotate(${i*45} 120 120)`}><path d="M120 100 C86 74 91 33 120 22 C149 33 154 74 120 100Z"/><path d="M120 91 C101 67 106 44 120 33 C134 44 139 67 120 91Z"/></g>)}<circle cx="120" cy="120" r="8" /></svg>
 }

@@ -2,6 +2,7 @@
 
 import { forwardRef, useMemo, useRef, useState } from "react"
 import Image from "next/image"
+import { CathedralInvitation, CathedralReceptionCard, CathedralQrCard, getCathedralPrintFontCSS } from "./CathedralStationeryPrintTemplates"
 import { RivieraInvitation, RivieraReceptionCard, RivieraQrCard, getRivieraPrintFontCSS } from "./RivieraStationeryPrintTemplates"
 import { VenoInvitation, VenoReceptionCard, VenoQrCard } from "./VenoStationeryPrintTemplates"
 import { getDianaStationeryData } from "../lib/dianaStationeryData"
@@ -9,6 +10,7 @@ import { downloadStationeryPdf } from "../lib/dianaStationeryPdf"
 import { getDesignCustomization } from "../lib/designCustomization"
 
 export const ALTERNATIVE_STATIONERY_CONFIG = {
+  cathedral: { name: "Cathedral", ink: "#42658a", accent: "#6d88a3", paper: "#faf7f0", ornament: "/templates/cathedral/invitation-frame.webp" },
   riviera: { name: "Riviera", ink: "#254f78", accent: "#b59843", paper: "#faf7ee", ornament: "/templates/riviera/lemon-branch.png" },
   veno: { name: "Veno", ink: "#71343f", accent: "#927950", paper: "#f5f0e6", ornament: "/templates/veno/embroidery.svg" },
   botanique: { name: "Botanique", ink: "#26362b", accent: "#75836b", paper: "#ffffff", ornament: "/templates/botanique/foliage-top-clean-v5.png" },
@@ -56,6 +58,7 @@ export default function AlternativeStationerySet({ variant, project, weddingWebs
         filename: `${variant}-${filenameKind}-${project?.slug || "svadba"}.pdf`,
         title: `${titleKind} ${config.name}`,
         requireImage: kind === "qr",
+        ...(variant === "cathedral" ? { fontEmbedCSS: await getCathedralPrintFontCSS() } : {}),
         ...(variant === "riviera" ? { fontEmbedCSS: await getRivieraPrintFontCSS() } : {}),
       })
     } catch {
@@ -153,6 +156,7 @@ function LavandeBotanicalDetail({ size }) {
 }
 
 const Invitation = forwardRef(function Invitation({ data, config, variant, invitationVariant = "asymmetric" }, ref) {
+  if (variant === "cathedral") return <CathedralInvitation ref={ref} data={data} config={config} />
   if (variant === "riviera") return <RivieraInvitation ref={ref} data={data} config={config} />
   if (variant === "veno") return <VenoInvitation ref={ref} data={data} config={config} />
   if (variant === "lavande") {
@@ -301,6 +305,7 @@ const Invitation = forwardRef(function Invitation({ data, config, variant, invit
 })
 
 export const AlternativeReceptionCardPrintTemplate = forwardRef(function AlternativeReceptionCardPrintTemplate({ data, config, variant }, ref) {
+  if (variant === "cathedral") return <CathedralReceptionCard ref={ref} data={data} config={config} />
   if (variant === "riviera") return <RivieraReceptionCard ref={ref} data={data} config={config} />
   if (variant === "veno") return <VenoReceptionCard ref={ref} data={data} config={config} />
   if (variant === "lavande") {
@@ -377,6 +382,7 @@ export const AlternativeReceptionCardPrintTemplate = forwardRef(function Alterna
 })
 
 export const AlternativeQrCardPrintTemplate = forwardRef(function AlternativeQrCardPrintTemplate({ data, config, variant, qrDataUrl, recipient = null }, ref) {
+  if (variant === "cathedral") return <CathedralQrCard ref={ref} data={data} config={config} qrDataUrl={qrDataUrl} recipient={recipient} />
   if (variant === "riviera") return <RivieraQrCard ref={ref} data={data} config={config} qrDataUrl={qrDataUrl} recipient={recipient} />
   if (variant === "veno") return <VenoQrCard ref={ref} data={data} config={config} qrDataUrl={qrDataUrl} recipient={recipient} />
   if (variant === "lavande") {

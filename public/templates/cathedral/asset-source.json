@@ -1,0 +1,14 @@
+{
+  "mode": "Built-in image_gen",
+  "date": "2026-11-24",
+  "assets": [
+    {
+      "file": "invitation-frame.webp",
+      "prompt": "Edit the attached approved wedding invitation to create a production background asset. REMOVE ALL TEXT ONLY: remove the opening line, both calligraphic names, ampersand, invitation sentences, date, time, church and city. Fill those removed text areas with exactly matching continuous pale ivory paper grain. Preserve EVERY blue architectural and ornamental line, Gothic pointed arch, rose window, corner flourishes, central upper flourish, small lower divider with quatrefoil, and outer frame in exactly their current placement, size, color and style. Do not simplify, redraw, add or move ornaments. Keep portrait 2:3 composition and full flat front-facing artwork filling image. Output one blank ornate invitation background with NO letters or numbers of any kind. No mockup, no objects, no shadow. The result must be the same approved card with just the text erased."
+    },
+    {
+      "file": "stained-glass.webp",
+      "prompt": "Use case: stylized-concept. Create a refined cathedral stained-glass artwork for an elegant wedding website called Cathedral. Tall portrait 2:3 composition, one complete slender Gothic pointed-arch window with fine ivory stone tracery and a small rose-window rosette at its apex. Translucent antique glass in soft dusty blue, pale blush, warm honey amber and clear milky ivory, delicate lead lines, graceful geometric Gothic floral tracery, beautiful soft light shining through the glass. Fine art editorial quality, tactile luminous glass, airy light palette, elegant rather than dark or dramatic. Flat frontal view, entire pointed window fully visible with generous pale ivory margin around its edges, on a clean warm ivory background. No cathedral interior, no altar, no buildings, no saints, no crosses, no religious figures, no people, no lettering or text, no gold ornament, no dark black background, no photographic room scene. This is an architectural stained-glass decorative panel, to sit beside editable wedding typography, never behind the text. Quiet sophisticated handcrafted detail, avoid cartoon or cartoon outline."
+    }
+  ]
+}
